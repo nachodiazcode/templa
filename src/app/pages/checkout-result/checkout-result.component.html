@@ -1,0 +1,70 @@
+<div class="wrap container">
+  @if (loading()) {
+    <div class="card state">
+      <div class="spinner"></div>
+      <h1>Verificando tu pago...</h1>
+      <p>Un momento, consultando con Transbank.</p>
+    </div>
+  } @else if (notFound()) {
+    <div class="card state">
+      <div class="ic warn">?</div>
+      <h1>Orden no encontrada</h1>
+      <p>No encontramos esta orden. Revisa el código o contáctanos con tu comprobante de Transbank.</p>
+      <a routerLink="/descargas" class="btn ghost">Buscar otra orden</a>
+    </div>
+  } @else {
+    <div
+      class="card state"
+      [class.ok]="status() === 'paid'"
+      [class.bad]="status() === 'rejected' || status() === 'canceled'"
+    >
+      @switch (status()) {
+        @case ('paid') { <div class="ic ok">✓</div> }
+        @case ('pending') { <div class="ic wait">…</div> }
+        @default { <div class="ic bad-x">✕</div> }
+      }
+
+      <h1>{{ meta().title }}</h1>
+      <p class="desc">{{ meta().desc }}</p>
+
+      <p class="order-ref">
+        Orden <b>{{ order()?.orderId }}</b>
+        @if (order()?.authorizationCode) {
+          <span>· código de autorización {{ order()?.authorizationCode }}</span>
+        }
+      </p>
+
+      @if (items().length > 0) {
+        <ul class="items">
+          @for (item of items(); track item.id) {
+            <li>
+              <span class="name">{{ item.name }}</span>
+              <span class="right">
+                <b>{{ item.price === 0 ? 'Gratis' : '$' + item.price }}</b>
+                @if (status() === 'paid') {
+                  <a class="btn sm" [href]="checkout.downloadUrl(order()!.orderId, item.id)">
+                    Descargar
+                  </a>
+                }
+              </span>
+            </li>
+          }
+          <li class="total">
+            <span>Total</span>
+            <b>${{ amount() }}</b>
+          </li>
+        </ul>
+      }
+
+      @if (status() === 'paid') {
+        <p class="tip">También te llegó un email con estos enlaces. Guarda el código de orden para re-descargar en /descargas.</p>
+        <a routerLink="/templates" class="btn primary lg">Seguir explorando</a>
+      } @else if (status() !== 'pending') {
+        <a routerLink="/templates" class="btn primary lg">Reintentar compra</a>
+        <a routerLink="/" class="link">Volver al inicio</a>
+      } @else {
+        <button class="btn ghost" (click)="reload()">Refrescar estado</button>
+      }
+    </div>
+  }
+</div>

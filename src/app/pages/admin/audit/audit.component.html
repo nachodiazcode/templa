@@ -1,0 +1,58 @@
+<div class="head">
+  <span class="kicker">Admin</span>
+  <h1>Auditoría</h1>
+</div>
+
+<div class="toolbar">
+  <div class="filters">
+    @for (e of ['', 'create', 'update', 'delete', 'status_change', 'role_change']; track e) {
+      <button class="filter-btn" [class.active]="entity() === e" (click)="filterEntity(e)">
+        {{ e === '' ? 'Todas' : e === 'create' ? 'Creaciones' : e === 'update' ? 'Ediciones' : e === 'delete' ? 'Eliminaciones' : e === 'status_change' ? 'Status' : 'Roles' }}
+      </button>
+    }
+  </div>
+</div>
+
+@if (loading()) {
+  <div class="loading"><div class="spinner"></div></div>
+} @else {
+  <div class="panel">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Admin</th>
+            <th>Acción</th>
+            <th>Entidad</th>
+            <th>ID</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (l of logs(); track l.id) {
+            <tr>
+              <td class="dim">{{ l.createdAt | date: 'd/MM/yy HH:mm' }}</td>
+              <td>{{ l.adminEmail || '—' }}</td>
+              <td><span class="action-badge" [class]="actionClass(l.action)">{{ actionLabel(l.action) }}</span></td>
+              <td>{{ l.entity }}</td>
+              <td class="mono">{{ l.entityId || '—' }}</td>
+              <td class="dim">{{ l.detail | json | slice: 0 : 60 }}</td>
+            </tr>
+          }
+          @empty {
+            <tr><td colspan="6" class="empty-msg">No hay registros de auditoría</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (pages() > 1) {
+      <div class="pagination">
+        <button class="page-btn" [disabled]="page() <= 1" (click)="prevPage()">← Anterior</button>
+        <span class="page-info">Página {{ page() }} de {{ pages() }}</span>
+        <button class="page-btn" [disabled]="page() >= pages()" (click)="nextPage()">Siguiente →</button>
+      </div>
+    }
+  </div>
+}

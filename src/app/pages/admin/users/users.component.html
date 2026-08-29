@@ -1,0 +1,75 @@
+<div class="head">
+  <span class="kicker">Admin</span>
+  <h1>Usuarios</h1>
+</div>
+
+@if (loading()) {
+  <div class="loading"><div class="spinner"></div></div>
+} @else {
+  <div class="panel">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Registrado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of users(); track u.id) {
+            <tr [class.selected]="selected()?.id === u.id" (click)="selectUser(u)" style="cursor:pointer">
+              <td>{{ u.name || '—' }}</td>
+              <td>{{ u.email }}</td>
+              <td><span class="role-badge" [class.admin]="u.role === 'admin'">{{ u.role }}</span></td>
+              <td class="dim">{{ u.createdAt | date: 'd/MM/yy' }}</td>
+              <td>
+                <button class="btn sm ghost" (click)="$event.stopPropagation(); toggleRole(u)">
+                  {{ u.role === 'admin' ? 'Quitar admin' : 'Hacer admin' }}
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (pages() > 1) {
+      <div class="pagination">
+        <button class="page-btn" [disabled]="page() <= 1" (click)="prevPage()">← Anterior</button>
+        <span class="page-info">Página {{ page() }} de {{ pages() }}</span>
+        <button class="page-btn" [disabled]="page() >= pages()" (click)="nextPage()">Siguiente →</button>
+      </div>
+    }
+  </div>
+}
+
+@if (selected(); as u) {
+  <div class="detail-panel panel">
+    <div class="detail-head">
+      <h2>{{ u.name || u.email }}</h2>
+      <button class="close-btn" (click)="selected.set(null)">✕</button>
+    </div>
+    <div class="detail-grid">
+      <div><small>Email</small><b>{{ u.email }}</b></div>
+      <div><small>Rol</small><span class="role-badge" [class.admin]="u.role === 'admin'">{{ u.role }}</span></div>
+      <div><small>Registrado</small><b>{{ u.createdAt | date: 'd MMM y' : undefined : 'es' }}</b></div>
+      <div><small>Órdenes</small><b>{{ u.orders?.length || 0 }}</b></div>
+    </div>
+    @if (u.orders?.length) {
+      <div class="detail-items">
+        <h3>Órdenes</h3>
+        @for (o of u.orders; track o.orderId) {
+          <div class="item-row">
+            <span class="mono">{{ o.orderId }}</span>
+            <span>{{ o.items?.length }} items</span>
+            <span class="mono">${{ o.amount | number }}</span>
+            <span class="status-chip" [class]="o.status === 'paid' ? 'green' : o.status === 'pending' ? 'yellow' : 'gray'">{{ o.status }}</span>
+          </div>
+        }
+      </div>
+    }
+  </div>
+}

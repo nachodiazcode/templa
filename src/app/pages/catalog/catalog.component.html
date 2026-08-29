@@ -1,0 +1,101 @@
+<header class="page-head">
+  <div class="container">
+    <h1>Catálogo de plantillas</h1>
+    <p>{{ results().length }} resultado{{ results().length === 1 ? '' : 's' }} — calidad verificada, licencia de por vida.</p>
+
+    <div class="filter-panel">
+      <div class="bar">
+        <div class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input
+            type="text"
+            placeholder="Buscar plantilla, stack o categoría..."
+            [value]="q()"
+            (input)="onSearch($any($event.target).value)"
+          />
+          @if (q()) {
+            <button class="search-clear" (click)="onSearch('')" aria-label="Limpiar búsqueda">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          }
+        </div>
+
+        <div class="segmented" role="group" aria-label="Tipo de plantilla">
+          <button class="seg" [class.active]="tipo() === 'todos'" (click)="setTipo('todos')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Todas
+          </button>
+          <button class="seg" [class.active]="tipo() === 'gratis'" (click)="setTipo('gratis')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>
+            Gratis
+          </button>
+          <button class="seg" [class.active]="tipo() === 'premium'" (click)="setTipo('premium')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Premium
+          </button>
+        </div>
+
+        <label class="sort">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5h10M11 9h7M11 13h4M3 17l3 3 3-3M6 18V4"/></svg>
+          <select [value]="orden()" (change)="orden.set($any($event.target).value)">
+            <option value="populares">Más populares</option>
+            <option value="nuevas">Más nuevas</option>
+            <option value="precio-asc">Precio: menor a mayor</option>
+            <option value="valoracion">Mejor valoradas</option>
+          </select>
+        </label>
+
+        @if (hasActiveFilters) {
+          <button class="clear-btn" (click)="clearFilters()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            Limpiar
+          </button>
+        }
+      </div>
+
+      <div class="filter-row">
+        <span class="row-label">Categoría</span>
+        <div class="chips">
+          <button class="chip cat" [class.active]="cat() === 'todas'" (click)="setCat('todas')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/></svg>
+            Todas
+            <span class="badge">{{ totalTemplates }}</span>
+          </button>
+          @for (c of categories; track c) {
+            <button class="chip cat" [class.active]="cat() === c" (click)="setCat(c)">
+              {{ categoryLabels[c] }}
+              <span class="badge">{{ catCounts[c] || 0 }}</span>
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <span class="row-label">Stack</span>
+        <div class="chips">
+          <button class="chip cat" [class.active]="tech() === ''" (click)="setTech('')">Todos</button>
+          @for (t of allTech; track t) {
+            <button class="chip cat" [class.active]="tech() === t" (click)="setTech(t)">{{ t }}</button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="container">
+  @if (results().length > 0) {
+    <div class="grid">
+      @for (t of results(); track t.id) {
+        <app-template-card [t]="t" />
+      }
+    </div>
+  } @else {
+    <div class="empty">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M8 11h6"/></svg>
+      <h3>Sin resultados</h3>
+      <p>Prueba con otros términos o limpia los filtros.</p>
+      <button class="btn ghost sm" (click)="clearFilters()">Limpiar filtros</button>
+    </div>
+  }
+</section>

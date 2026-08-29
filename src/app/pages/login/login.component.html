@@ -1,0 +1,110 @@
+<div class="wrap container">
+  <div class="panel">
+    <aside class="brand-side">
+      <div class="mesh" aria-hidden="true"></div>
+      <span class="logo-mark"></span>
+      <h2>Tus plantillas,<br>en todas partes.</h2>
+      <p>Una cuenta Templa guarda tus compras, licencias y descargas para siempre.</p>
+      <ul>
+        <li>Historial de pedidos y facturas</li>
+        <li>Re-descargas ilimitadas</li>
+        <li>Actualizaciones de por vida</li>
+      </ul>
+    </aside>
+
+    <section class="form-side">
+      <div class="tabs">
+        <div class="indicator" [class.right]="mode() === 'register'"></div>
+        <button type="button" [class.active]="mode() === 'login'" (click)="setMode('login')">
+          Entrar
+        </button>
+        <button type="button" [class.active]="mode() === 'register'" (click)="setMode('register')">
+          Crear cuenta
+        </button>
+      </div>
+
+      <form (submit)="submit($event)">
+        @if (mode() === 'register') {
+          <label>
+            Nombre
+            <input
+              type="text"
+              placeholder="Cómo te llamas"
+              autocomplete="name"
+              [value]="name()"
+              (input)="name.set($any($event.target).value)"
+            />
+          </label>
+        }
+
+        <label>
+          Email
+          <input
+            type="email"
+            placeholder="tu@email.cl"
+            autocomplete="email"
+            [value]="email()"
+            (input)="email.set($any($event.target).value)"
+          />
+        </label>
+
+        <label>
+          Contraseña
+          <span class="pass">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              placeholder="Mínimo 6 caracteres"
+              autocomplete="new-password"
+              [value]="password()"
+              (input)="password.set($any($event.target).value)"
+            />
+            <button
+              type="button"
+              class="eye"
+              (click)="showPassword.set(!showPassword())"
+              [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            >
+              @if (showPassword()) {
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              } @else {
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              }
+            </button>
+          </span>
+        </label>
+
+        @if (mode() === 'register') {
+          <label>
+            Confirmar contraseña
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              placeholder="Repite tu contraseña"
+              autocomplete="new-password"
+              [value]="confirm()"
+              (input)="confirm.set($any($event.target).value)"
+            />
+          </label>
+        }
+
+        @if (error()) {
+          <p class="err">{{ error() }}</p>
+        }
+
+        <button class="btn primary lg block" type="submit" [disabled]="loading()">
+          @if (loading()) {
+            Un momento...
+          } @else if (mode() === 'login') {
+            Iniciar sesión
+          } @else {
+            Crear mi cuenta gratis
+          }
+        </button>
+      </form>
+
+      <p class="fine">
+        Al continuar aceptas los términos de Templa.
+        Tu sesión dura 7 días en este dispositivo.
+      </p>
+    </section>
+  </div>
+</div>

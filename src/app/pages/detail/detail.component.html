@@ -1,0 +1,257 @@
+@if (template(); as t) {
+  <div class="container detail">
+    <nav class="crumbs">
+      <a routerLink="/templates">Plantillas</a>
+      <span>/</span>
+      <b>{{ t.name }}</b>
+    </nav>
+
+    <!-- ===== Capturas reales ===== -->
+    <section class="gallery">
+      <div class="gallery-head">
+        <span class="gallery-title">Capturas reales de la plantilla</span>
+        <div class="gallery-controls">
+          <button [class.active]="shotDevice() === 'desktop'" (click)="setShot('desktop')">Escritorio</button>
+          <button [class.active]="shotDevice() === 'mobile'" (click)="setShot('mobile')">Móvil</button>
+        </div>
+      </div>
+      <div class="gallery-frame">
+        <img
+          class="gallery-img"
+          [src]="screenshotSrc()"
+          [alt]="t.name + ' — captura ' + (shotDevice() === 'desktop' ? 'de escritorio' : 'móvil')"
+          loading="eager"
+          decoding="async"
+          onerror="this.closest('.gallery').style.display='none'"
+        />
+      </div>
+    </section>
+
+    <div class="layout">
+      <!-- ===== Preview en vivo ===== -->
+      <section class="preview-col">
+        <div class="preview-head">
+          <span class="live"><i></i> Vista previa en vivo — navegable</span>
+          <div class="devices">
+            <button [class.active]="device() === 'desktop'" (click)="setDevice('desktop')" aria-label="Escritorio">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            </button>
+            <button [class.active]="device() === 'tablet'" (click)="setDevice('tablet')" aria-label="Tablet">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+            </button>
+            <button [class.active]="device() === 'mobile'" (click)="setDevice('mobile')" aria-label="Móvil">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="frame-wrap">
+          <iframe
+            [srcdoc]="previewHtml()"
+            [style.width]="deviceWidth()"
+            title="Vista previa de {{ t.name }}"
+            sandbox="allow-scripts"
+          ></iframe>
+        </div>
+
+        <p class="hint">
+          Así funciona Templa: antes de comprar, la prueba. El demo es real e
+          interactivo, generado desde la propia plantilla.
+        </p>
+      </section>
+
+      <!-- ===== Info / compra ===== -->
+      <aside class="buy-col">
+        <div class="badges">
+          <span class="cat">{{ categoryLabel() }}</span>
+          @if (t.price === 0) {
+            <span class="badge-free">Gratis para siempre</span>
+          } @else if (t.isNew) {
+            <span class="badge-new">Nuevo</span>
+          }
+        </div>
+
+        <h1>{{ t.name }}</h1>
+        <p class="tagline">{{ t.tagline }}</p>
+
+        <div class="rating">
+          <span class="stars">★ {{ t.rating }}</span>
+          <span>({{ t.reviews }} opiniones)</span>
+          <span class="sep">·</span>
+          <span>{{ t.sales | number }} ventas</span>
+        </div>
+
+        <div class="price-box">
+          @if (t.price === 0) {
+            <div class="price free">$0</div>
+            <span class="note">Descarga inmediata · licencia comercial incluida</span>
+          } @else {
+            <div class="price">
+              ${{ t.price }}
+              @if (t.oldPrice) { <s>${{ t.oldPrice }}</s> }
+            </div>
+            <span class="note">Pago único · sin suscripción · actualizaciones gratis</span>
+          }
+
+          @if (t.price === 0) {
+            <button class="btn primary lg block" (click)="downloadFree()">
+              Descargar gratis
+            </button>
+          } @else {
+            <button class="btn primary lg block" (click)="addToCart()">
+              @if (inCart()) {
+                En el carrito ✓
+              } @else {
+                Añadir al carrito
+              }
+            </button>
+          }
+
+          <ul class="license">
+            <li>Proyectos personales y comerciales ilimitados</li>
+            <li>Código fuente completo en tu email</li>
+            <li>Actualizaciones de por vida</li>
+            <li>Soporte del autor en menos de 24h</li>
+          </ul>
+        </div>
+
+        <div class="tech">
+          @for (tech of t.tech; track tech) {
+            <span class="chip">{{ tech }}</span>
+          }
+          <span class="chip">{{ t.pages }} páginas</span>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ===== Tabs ===== -->
+    <section class="tabs">
+      <div class="tab-bar">
+        <button [class.active]="tab() === 'desc'" (click)="tab.set('desc')">Descripción</button>
+        <button [class.active]="tab() === 'incluye'" (click)="tab.set('incluye')">Qué incluye</button>
+        <button [class.active]="tab() === 'opiniones'" (click)="openReviews()">Opiniones</button>
+      </div>
+
+      @switch (tab()) {
+        @case ('desc') {
+          <p class="desc-text">{{ t.description }}</p>
+        }
+        @case ('incluye') {
+          <ul class="feat-grid">
+            @for (f of t.features; track f) {
+              <li>{{ f }}</li>
+            }
+          </ul>
+        }
+        @case ('opiniones') {
+          <div class="reviews">
+            @if (reviewsLoading()) {
+              <p class="reviews-state">Cargando opiniones…</p>
+            } @else if (reviewsError()) {
+              <p class="reviews-state error">{{ reviewsError() }}</p>
+            } @else {
+              @if (reviewSummary()?.reviews; as total) {
+                <div class="reviews-head">
+                  <div class="score">
+                    <b>{{ reviewSummary()?.rating }}</b>
+                    <div class="stars">{{ starsOf(maxRating()) }}</div>
+                    <span>{{ total }} {{ total === 1 ? 'opinión' : 'opiniones' }}</span>
+                  </div>
+                  <div class="bars">
+                    @for (n of [5, 4, 3, 2, 1]; track n) {
+                      <div class="bar-row">
+                        <span class="bar-label">{{ n }}★</span>
+                        <div class="bar-track"><div class="bar-fill" [style.width.%]="pctOf(n)"></div></div>
+                        <span class="bar-count">{{ reviewSummary()?.distribution?.[n] ?? 0 }}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              <div class="review-cta">
+                @if (reviewSubmitted()) {
+                  <p class="thanks">¡Gracias por dejar tu opinión! ⭐</p>
+                } @else if (!reviewFormOpen()) {
+                  <button class="btn ghost" (click)="openReviewForm()">
+                    Escribir una reseña
+                  </button>
+                }
+              </div>
+
+              @if (reviewFormOpen()) {
+                <form class="review-form" (ngSubmit)="submitReview()">
+                  <div class="form-row">
+                    <span class="label">Tu calificación</span>
+                    <div class="picker">
+                      @for (n of [5, 4, 3, 2, 1]; track n) {
+                        <button type="button" class="star" [class.on]="n <= reviewRating()" (click)="setRating(n)" [attr.aria-label]="STAR_LABELS_LABEL(n)">
+                          ★
+                        </button>
+                      }
+                      <span class="star-text">{{ ratingStars() }}</span>
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Título (opcional)"
+                    [(ngModel)]="reviewTitle"
+                    name="reviewTitle"
+                  />
+                  <textarea
+                    placeholder="Cuéntanos tu experiencia con esta plantilla…"
+                    [(ngModel)]="reviewBody"
+                    name="reviewBody"
+                    rows="3"
+                  ></textarea>
+                  <div class="form-actions">
+                    <button type="button" class="btn ghost" (click)="reviewFormOpen.set(false)">Cancelar</button>
+                    <button type="submit" class="btn primary" [disabled]="reviewSending()">
+                      {{ reviewSending() ? 'Publicando…' : 'Publicar reseña' }}
+                    </button>
+                  </div>
+                </form>
+              }
+
+              @if (reviews().length === 0) {
+                <p class="reviews-state">Aún no hay opiniones. ¡Sé la primera persona en dejar una!</p>
+              } @else {
+                @for (r of reviews(); track r.id) {
+                  <article class="review">
+                    <div class="review-top">
+                      <div class="avatar">{{ r.author[0] }}</div>
+                      <div class="review-meta">
+                        <b>{{ r.author }}</b>
+                        <div class="review-sub">
+                          <span class="stars small">{{ starsOf(r.rating) }}</span>
+                          @if (r.verified) {
+                            <span class="verified">✓ comprador verificado</span>
+                          }
+                        </div>
+                      </div>
+                      <span class="review-date">{{ r.date | date: 'MMM d, yyyy' }}</span>
+                    </div>
+                    @if (r.title) { <h4 class="review-title">{{ r.title }}</h4> }
+                    <p class="review-body">{{ r.body }}</p>
+                  </article>
+                }
+              }
+            }
+          </div>
+        }
+      }
+    </section>
+
+    <!-- ===== Relacionadas ===== -->
+    @if (related().length > 0) {
+      <section class="related">
+        <h2>También te puede encajar</h2>
+        <div class="grid">
+          @for (r of related(); track r.id) {
+            <app-template-card [t]="r" />
+          }
+        </div>
+      </section>
+    }
+  </div>
+}

@@ -1,0 +1,56 @@
+<div class="wrap container">
+  <header class="head">
+    <span class="kicker">Tu cuenta</span>
+    <h1>Mis compras</h1>
+    @if (auth.user(); as u) {
+      <p>Sesión iniciada como {{ u.email }}</p>
+    }
+  </header>
+
+  @if (loading()) {
+    <div class="loading"><div class="spinner"></div>Cargando tus pedidos...</div>
+  } @else if (orders().length === 0) {
+    <div class="empty">
+      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <h3>Aún no tienes compras</h3>
+      <p>Tus pedidos aparecerán aquí automáticamente, incluso si compraste sin cuenta con el mismo email.</p>
+      <a routerLink="/templates" class="btn primary sm">Explorar plantillas</a>
+    </div>
+  } @else {
+    <section class="list">
+      @for (order of orders(); track order.orderId) {
+        <article class="order-card" [class.paid]="order.status === 'paid'">
+          <header>
+            <div>
+              <b class="oid">{{ order.orderId }}</b>
+              <small>{{ order.createdAt | date: "d MMM y, HH:mm" : undefined : 'es' }}</small>
+            </div>
+            <span class="status" [class]="'status ' + order.status">
+              {{ statusLabel(order.status) }}
+            </span>
+          </header>
+
+          <ul>
+            @for (item of order.items; track item.id) {
+              <li>
+                <span>{{ item.name }}</span>
+                <span class="right">
+                  <em>{{ item.price === 0 ? 'Gratis' : '$' + item.price }}</em>
+                  @if (order.status === 'paid') {
+                    <a class="btn sm dl" [href]="checkout.downloadUrl(order.orderId, item.id)">
+                      Descargar
+                    </a>
+                  }
+                </span>
+              </li>
+            }
+            <li class="total">
+              <span>Total pagado</span>
+              <b>${{ order.amount }}</b>
+            </li>
+          </ul>
+        </article>
+      }
+    </section>
+  }
+</div>

@@ -1,0 +1,92 @@
+<div class="head">
+  <span class="kicker">Admin</span>
+  <h1>Pedidos</h1>
+</div>
+
+<div class="toolbar">
+  <div class="filters">
+    @for (s of statusOptions; track s) {
+      <button class="filter-btn" [class.active]="status() === s" (click)="filterStatus(s)">
+        {{ s === 'all' ? 'Todos' : s === 'paid' ? 'Pagados' : s === 'pending' ? 'Pendientes' : s === 'rejected' ? 'Rechazados' : 'Cancelados' }}
+      </button>
+    }
+  </div>
+  <input
+    class="search-input"
+    type="search"
+    placeholder="Buscar por email o ID..."
+    [value]="search()"
+    (input)="onSearch($event)"
+  />
+</div>
+
+@if (loading()) {
+  <div class="loading"><div class="spinner"></div></div>
+} @else {
+  <div class="panel">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Items</th>
+            <th>Monto</th>
+            <th>Status</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (o of orders(); track o.orderId) {
+            <tr [class.selected]="selected()?.orderId === o.orderId" (click)="selectOrder(o)" style="cursor:pointer">
+              <td class="mono">{{ o.orderId }}</td>
+              <td>{{ o.email }}</td>
+              <td>{{ o.items?.length || 0 }}</td>
+              <td class="mono">${{ o.amount | number }}</td>
+              <td><span class="status-chip" [class]="statusClass(o.status)">{{ label(o.status) }}</span></td>
+              <td class="dim">{{ o.createdAt | date: 'd/MM/yy HH:mm' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    @if (pages() > 1) {
+      <div class="pagination">
+        <button class="page-btn" [disabled]="page() <= 1" (click)="prevPage()">← Anterior</button>
+        <span class="page-info">Página {{ page() }} de {{ pages() }} ({{ total() }} total)</span>
+        <button class="page-btn" [disabled]="page() >= pages()" (click)="nextPage()">Siguiente →</button>
+      </div>
+    }
+  </div>
+}
+
+@if (selected(); as o) {
+  <div class="detail-panel panel">
+    <div class="detail-head">
+      <h2>Orden {{ o.orderId }}</h2>
+      <button class="close-btn" (click)="selected.set(null)">✕</button>
+    </div>
+    <div class="detail-grid">
+      <div><small>Email</small><b>{{ o.email }}</b></div>
+      <div><small>Monto</small><b>${{ o.amount | number }}</b></div>
+      <div><small>Status</small><span class="status-chip" [class]="statusClass(o.status)">{{ label(o.status) }}</span></div>
+      <div><small>Creada</small><b>{{ o.createdAt | date: 'd MMM y, HH:mm' : undefined : 'es' }}</b></div>
+    </div>
+    <div class="detail-items">
+      <h3>Items</h3>
+      @for (item of o.items; track item.id) {
+        <div class="item-row">
+          <span>{{ item.name }}</span>
+          <span class="mono">{{ item.price === 0 ? 'Gratis' : '$' + item.price }}</span>
+        </div>
+      }
+    </div>
+    @if (o.status === 'pending') {
+      <div class="detail-actions">
+        <button class="btn green" [disabled]="updating()" (click)="updateStatus(o.orderId, 'paid')">Marcar pagado</button>
+        <button class="btn red" [disabled]="updating()" (click)="updateStatus(o.orderId, 'canceled')">Cancelar</button>
+      </div>
+    }
+  </div>
+}

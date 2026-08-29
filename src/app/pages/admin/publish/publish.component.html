@@ -1,0 +1,237 @@
+<div class="publish-head">
+  <span class="kicker">Admin</span>
+  <h1>Publicar plantilla</h1>
+  <p class="subtitle">Sube tu plantilla en 3 pasos</p>
+</div>
+
+<!-- Stepper -->
+<div class="stepper">
+  <div class="step" [class.active]="step() >= 1" [class.done]="step() > 1">
+    <span class="step-num">1</span>
+    <span class="step-label">Info básica</span>
+  </div>
+  <div class="step-line" [class.active]="step() > 1"></div>
+  <div class="step" [class.active]="step() >= 2" [class.done]="step() > 2">
+    <span class="step-num">2</span>
+    <span class="step-label">Subir ZIP</span>
+  </div>
+  <div class="step-line" [class.active]="step() > 2"></div>
+  <div class="step" [class.active]="step() >= 3">
+    <span class="step-num">3</span>
+    <span class="step-label">Revisar</span>
+  </div>
+</div>
+
+<!-- Step 1: Info básica -->
+@if (step() === 1) {
+  <div class="wizard-card">
+    <h2>Información básica</h2>
+    <p class="card-desc">Datos principales de tu plantilla</p>
+
+    <label class="field">
+      <span class="label">Nombre *</span>
+      <input type="text" placeholder="Mi Plantilla" [ngModel]="form().name" (ngModelChange)="updateField('name', $event)" />
+    </label>
+
+    <label class="field">
+      <span class="label">Tagline</span>
+      <input type="text" placeholder="Una línea que resuma tu plantilla" [ngModel]="form().tagline" (ngModelChange)="updateField('tagline', $event)" />
+    </label>
+
+    <label class="field">
+      <span class="label">Descripción</span>
+      <textarea rows="3" placeholder="Describe tu plantilla en detalle..." [ngModel]="form().description" (ngModelChange)="updateField('description', $event)"></textarea>
+    </label>
+
+    <div class="row-2">
+      <label class="field">
+        <span class="label">Categoría</span>
+        <select [ngModel]="form().category" (ngModelChange)="updateField('category', $event)">
+          <option value="landing">Landing</option>
+          <option value="saas">SaaS</option>
+          <option value="ecommerce">E-commerce</option>
+          <option value="portfolio">Portfolio</option>
+          <option value="blog">Blog</option>
+          <option value="dashboard">Dashboard</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="label">Precio (CLP)</span>
+        <input type="number" min="0" [ngModel]="form().price" (ngModelChange)="updateField('price', $event)" />
+      </label>
+    </div>
+
+    <div class="row-2">
+      <label class="field">
+        <span class="label">Páginas</span>
+        <input type="number" min="1" [ngModel]="form().pages" (ngModelChange)="updateField('pages', $event)" />
+      </label>
+      <label class="field">
+        <span class="label">Tech (separado por coma)</span>
+        <input type="text" placeholder="Angular, Tailwind, SCSS" [ngModel]="form().tech" (ngModelChange)="updateField('tech', $event)" />
+      </label>
+    </div>
+
+    <label class="field">
+      <span class="label">Features (una por línea)</span>
+      <textarea rows="4" placeholder="Feature 1&#10;Feature 2&#10;Feature 3" [ngModel]="form().features" (ngModelChange)="updateField('features', $event)"></textarea>
+    </label>
+
+    <div class="row-2">
+      <label class="field">
+        <span class="label">Colores (hex, separados por coma)</span>
+        <input type="text" placeholder="#7c3aed,#06b6d4" [ngModel]="form().colors" (ngModelChange)="updateField('colors', $event)" />
+      </label>
+      <label class="field">
+        <span class="label">Accent (hex)</span>
+        <div class="color-input">
+          <input type="color" [ngModel]="form().accent" (ngModelChange)="updateField('accent', $event)" />
+          <span class="color-val">{{ form().accent }}</span>
+        </div>
+      </label>
+    </div>
+
+    <div class="checks">
+      <label class="check-label">
+        <input type="checkbox" [ngModel]="form().isFeatured" (ngModelChange)="updateField('isFeatured', $event)" />
+        <span class="check-text">Destacada</span>
+      </label>
+      <label class="check-label">
+        <input type="checkbox" [ngModel]="form().isNew" (ngModelChange)="updateField('isNew', $event)" />
+        <span class="check-text">Nueva</span>
+      </label>
+    </div>
+  </div>
+}
+
+<!-- Step 2: Subir ZIP -->
+@if (step() === 2) {
+  <div class="wizard-card">
+    <h2>Subir archivos</h2>
+    <p class="card-desc">Adjunta un archivo .zip con el código fuente de tu plantilla (HTML, CSS, JS, imágenes)</p>
+
+    @if (!zipFile()) {
+      <div
+        class="dropzone"
+        [class.dragover]="dragOver()"
+        (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave()"
+        (drop)="onDrop($event)"
+        (click)="fileInput.click()"
+      >
+        <input #fileInput type="file" accept=".zip" (change)="onFileSelect($event)" hidden />
+        <div class="drop-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <p class="drop-text">Arrastra tu archivo .zip aquí</p>
+        <p class="drop-sub">o haz click para seleccionar</p>
+      </div>
+    } @else {
+      <div class="file-card">
+        <div class="file-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+        </div>
+        <div class="file-info">
+          <span class="file-name">{{ zipFileName() }}</span>
+          <span class="file-size">{{ formatSize(zipFile()!.size) }}</span>
+        </div>
+        <button class="remove-btn" (click)="removeZip()">✕</button>
+      </div>
+
+      @if (zipPreview().length > 0) {
+        <div class="file-preview">
+          <span class="preview-title">Contenido del ZIP ({{ zipPreview().length }} archivos)</span>
+          <ul>
+            @for (f of zipPreview(); track f) {
+              <li>{{ f }}</li>
+            }
+          </ul>
+        </div>
+      }
+    }
+  </div>
+}
+
+<!-- Step 3: Revisar -->
+@if (step() === 3) {
+  <div class="wizard-card">
+    <h2>Revisar y publicar</h2>
+    <p class="card-desc">Verifica que todo esté correcto antes de publicar</p>
+
+    <div class="review-grid">
+      <div class="review-section">
+        <h3>Información</h3>
+        <div class="review-row"><span class="rl">Nombre</span><span class="rv">{{ form().name }}</span></div>
+        <div class="review-row"><span class="rl">Tagline</span><span class="rv">{{ form().tagline || '—' }}</span></div>
+        <div class="review-row"><span class="rl">Categoría</span><span class="rv badge">{{ form().category }}</span></div>
+        <div class="review-row"><span class="rl">Precio</span><span class="rv">{{ form().price === 0 ? 'Gratis' : '$' + form().price }}</span></div>
+        <div class="review-row"><span class="rl">Páginas</span><span class="rv">{{ form().pages }}</span></div>
+      </div>
+
+      <div class="review-section">
+        <h3>Archivo</h3>
+        <div class="review-row"><span class="rl">Archivo</span><span class="rv mono">{{ zipFileName() }}</span></div>
+        <div class="review-row"><span class="rl">Tamaño</span><span class="rv">{{ formatSize(zipFile()!.size) }}</span></div>
+        @if (zipPreview().length > 0) {
+          <div class="review-row"><span class="rl">Archivos</span><span class="rv">{{ zipPreview().length }}+</span></div>
+        }
+      </div>
+    </div>
+
+    @if (form().tech) {
+      <div class="review-tags">
+        <span class="rl">Tech:</span>
+        @for (t of form().tech.split(','); track t) {
+          <span class="tag">{{ t.trim() }}</span>
+        }
+      </div>
+    }
+
+    @if (form().features) {
+      <div class="review-features">
+        <span class="rl">Features:</span>
+        <ul>
+          @for (f of form().features.split('\n'); track f) {
+            @if (f.trim()) {
+              <li>{{ f.trim() }}</li>
+            }
+          }
+        </ul>
+      </div>
+    }
+
+    <div class="review-flags">
+      @if (form().isFeatured) { <span class="flag">★ Destacada</span> }
+      @if (form().isNew) { <span class="flag">● Nueva</span> }
+    </div>
+  </div>
+}
+
+<!-- Navigation -->
+<div class="wizard-nav">
+  @if (step() > 1) {
+    <button class="btn ghost" (click)="prevStep()">← Anterior</button>
+  } @else {
+    <div></div>
+  }
+
+  @if (step() < 3) {
+    <button class="btn primary" [disabled]="!canProceed()" (click)="nextStep()">Siguiente →</button>
+  } @else {
+    <button class="btn primary publish-btn" [disabled]="saving() || !canProceed()" (click)="publish()">
+      @if (saving()) {
+        <span class="spinner-sm"></span> Publicando...
+      } @else {
+        🚀 Publicar plantilla
+      }
+    </button>
+  }
+</div>
