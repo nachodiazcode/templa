@@ -7,7 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "server": "node server/index.js"
+    "server": "node server/index.js",
+    "sync:assets": "node server/scripts/sync-assets.mjs",
+    "deploy:hosting": "node scripts/deploy-hosting.mjs"
   },
   "private": true,
   "dependencies": {
@@ -20,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
     "rxjs": "~7.8.0",
+    "serverless-http": "^4.0.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
   },

@@ -94,15 +94,15 @@ export class AppComponent {}
 `;
 }
 
-export function buildTemplateBundle(template, { buyerEmail = '', orderId = '' } = {}) {
+export async function buildTemplateBundle(template, { buyerEmail = '', orderId = '' } = {}) {
   const zip = new AdmZip();
   const root = `${template.id}/`;
 
   // Licencia personalizada siempre
   zip.addFile(`${root}LICENSE.txt`, Buffer.from(licenseTxt(template, buyerEmail, orderId), 'utf8'));
 
-  // Si existen archivos reales en templates-src/<id>, se sirven esos (caché en memoria)
-  const assets = listTemplateAssets(template.id);
+  // Si la plantilla tiene assets publicados (Storage o templates-src), se sirven esos
+  const assets = await listTemplateAssets(template.id);
   if (assets) {
     for (const file of assets) zip.addFile(`${root}${file.path}`, file.buffer);
     return zip.toBuffer();

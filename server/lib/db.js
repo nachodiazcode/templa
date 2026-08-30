@@ -465,6 +465,111 @@ export async function listAuditLogs({ page = 1, limit = 30, entity } = {}) {
   };
 }
 
+/* ================================================================
+   REVIEWS — tabla public.reviews (Supabase)
+   Tacita de "fuente": vault.js mantiene la caché en memoria; estas
+   funciones hidratan y persisten writes.
+   ================================================================ */
+export async function loadReviewsDb() {
+  if (!dbEnabled) return {};
+
+  const { data, error } = await client.from('reviews').select('*');
+  if (error) {
+    console.error('[db] reviews:', error.message);
+    return {};
+  }
+
+  const map = {};
+  for (const r of data || []) {
+    const rec = {
+      id: String(r.id),
+      templateId: r.template_id,
+      author: r.author,
+      email: r.email,
+      rating: r.rating,
+      title: r.title,
+      body: r.body,
+      date: r.date,
+      verified: r.verified,
+    };
+    (map[rec.templateId] ||= []).push(rec);
+  }
+  for (const k of Object.keys(map)) {
+    map[k].sort((a, b) => b.date.localeCompare(a.date));
+  }
+  return map;
+}
+
+export async function addReviewDb(review) {
+  if (!dbEnabled) return;
+  const { error } = await client.from('reviews').insert({
+    id: review.id,
+    template_id: review.templateId,
+    author: review.author,
+    email: review.email ?? null,
+    rating: review.rating,
+    title: review.title ?? '',
+    body: review.body ?? '',
+    date: review.date,
+    verified: Boolean(review.verified),
+  });
+  if (error) throw new Error(error.message);
+}
+
+export async function deleteReviewDb(templateId, reviewId) {
+  if (!dbEnabled) return;
+  const { error } = await client.from('reviews').delete().eq('id', reviewId);
+  if (error) throw new Error(error.message);
+}
+
+/* ================================================================
+   CUPONES — tabla public.coupons
+   ================================================================ */
+export async function loadCouponsDb() {
+  if (!dbEnabled) return [];
+
+  const { data, error } = await client.from('coupons').select('*');
+  if (error) {
+    console.error('[db] coupons:', error.message);
+    return [];
+  }
+  return (data || []).map((r) => ({
+    code: r.code,
+    type: r.type,
+    value: r.value,
+    minAmount: r.min_amount,
+    maxUses: r.max_uses,
+    used: r.used,
+    active: r.active,
+    expiresAt: r.expires_at,
+    createdAt: r.created_at,
+  }));
+}
+
+export async function saveCouponDb(coupon) {
+  if (!dbEnabled) return;
+  const { error } = await client.from('coupons').upsert(
+    {
+      code: coupon.code,
+      type: coupon.type,
+      value: coupon.value,
+      min_amount: coupon.minAmount ?? null,
+      max_uses: coupon.maxUses ?? null,
+      used: coupon.used ?? 0,
+      active: coupon.active ?? true,
+      expires_at: coupon.expiresAt ?? null,
+    },
+    { onConflict: 'code' },
+  );
+  if (error) throw new Error(error.message);
+}
+
+export async function deleteCouponDb(code) {
+  if (!dbEnabled) return;
+  const { error } = await client.from('coupons').delete().eq('code', code);
+  if (error) throw new Error(error.message);
+}
+
 /* ---------- seed admin (supabase) ---------- */
 export async function seedSupabaseAdmin() {
   if (!dbEnabled) return;

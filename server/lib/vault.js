@@ -3,6 +3,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { invalidateCatalog } from './catalog.js';
 import { SEED_REVIEWS } from './seed-reviews.js';
+import { dbEnabled } from './db.js';
+import { isServerless } from './env.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = path.join(__dirname, '..', 'data');
@@ -34,7 +36,26 @@ function readJson(file, fallback) {
 }
 
 function writeJson(file, data) {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2));
+  if (isServerless) return;
+  try {
+    fs.writeFileSync(file, JSON.stringify(data, null, 2));
+  } catch (err) {
+    console.error('[vault] writeJson:', err.message);
+  }
+}
+
+/* Hidrata reviews/cupones desde la fuente de verdad (Supabase o disco). */
+export async function loadAllFromSource() {
+  if (dbEnabled) {
+    const { loadReviewsDb, loadCouponsDb } = await import('./db.js');
+    reviewsStore = (await loadReviewsDb()) || {};
+    couponsStore = (await loadCouponsDb()) || [];
+    auditStore = [];
+    return;
+  }
+  reviewsStore = readJson(REVIEWS_FILE, SEED_REVIEWS);
+  couponsStore = readJson(COUPONS_FILE, []);
+  auditStore = readJson(AUDIT_FILE, []);
 }
 
 /* Al cambiar reviews, el catálogo enriquecido (rating) queda obsoleto. */
@@ -68,7 +89,7 @@ export function reviewSummary(templateId) {
   };
 }
 
-export function addReview({ templateId, author, email, rating, title, body }) {
+export async function addReview({ templateId, author, email, rating, title, body }) {
   const store = loadReviews();
   const list = store[templateId] || [];
   const review = {
@@ -84,21 +105,42 @@ export function addReview({ templateId, author, email, rating, title, body }) {
   };
   list.push(review);
   store[templateId] = list;
-  writeJson(REVIEWS_FILE, store);
+
+  if (dbEnabled) {
+    const { addReviewDb } = await import('./db.js');
+    try {
+      await addReviewDb(review);
+    } catch (err) {
+      console.error('[vault] addReviewDb:', err.message);
+    }
+  } else {
+    writeJson(REVIEWS_FILE, store);
+  }
 
   notifyContentChanged();
   const summary = reviewSummary(templateId);
   return { review, summary };
 }
 
-export function deleteReview(templateId, reviewId) {
+export async function deleteReview(templateId, reviewId) {
   const store = loadReviews();
   const list = store[templateId] || [];
   const idx = list.findIndex((r) => r.id === reviewId);
   if (idx === -1) return false;
   list.splice(idx, 1);
   store[templateId] = list;
-  writeJson(REVIEWS_FILE, store);
+
+  if (dbEnabled) {
+    const { deleteReviewDb } = await import('./db.js');
+    try {
+      await deleteReviewDb(templateId, reviewId);
+    } catch (err) {
+      console.error('[vault] deleteReviewDb:', err.message);
+    }
+  } else {
+    writeJson(REVIEWS_FILE, store);
+  }
+
   notifyContentChanged();
   return true;
 }
@@ -129,17 +171,36 @@ export function getCoupon(code) {
   return loadCoupons().find((c) => c.code.toUpperCase() === normalized) || null;
 }
 
-export function saveCoupon(coupon) {
+export async function saveCoupon(coupon) {
   const all = loadCoupons();
   const idx = all.findIndex((c) => c.code.toUpperCase() === coupon.code.toUpperCase());
   if (idx === -1) all.push(coupon);
   else all[idx] = coupon;
-  writeJson(COUPONS_FILE, all);
+
+  if (dbEnabled) {
+    const { saveCouponDb } = await import('./db.js');
+    try {
+      await saveCouponDb(coupon);
+    } catch (err) {
+      console.error('[vault] saveCouponDb:', err.message);
+    }
+  } else {
+    writeJson(COUPONS_FILE, all);
+  }
 }
 
-export function deleteCoupon(code) {
+export async function deleteCoupon(code) {
   const all = loadCoupons().filter((c) => c.code.toUpperCase() !== String(code || '').toUpperCase());
-  writeJson(COUPONS_FILE, all);
+  if (dbEnabled) {
+    const { deleteCouponDb } = await import('./db.js');
+    try {
+      await deleteCouponDb(code);
+    } catch (err) {
+      console.error('[vault] deleteCouponDb:', err.message);
+    }
+  } else {
+    writeJson(COUPONS_FILE, all);
+  }
   couponsStore = all;
 }
 
@@ -160,11 +221,11 @@ export function computeDiscount(coupon, amount) {
   return Math.min(coupon.value, amount);
 }
 
-export function applyCouponUsage(code) {
+export async function applyCouponUsage(code) {
   const c = getCoupon(code);
   if (!c) return;
   c.used = (c.used || 0) + 1;
-  saveCoupon(c);
+  await saveCoupon(c);
 }
 
 /* ---------- audit log (local) ---------- */

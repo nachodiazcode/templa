@@ -47,4 +47,5 @@ server/.env
 server/data/
 server/outbox/
 server/templates-src/
+server/office/assets/
 server/*.log

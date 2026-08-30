@@ -7,7 +7,8 @@ import multer from 'multer';
 import AdmZip from 'adm-zip';
 import { dbEnabled } from './db.js';
 import { adminRequired } from './auth.js';
-import { invalidateTemplateCache } from './template-assets.js';
+import { invalidateTemplateCache, listTemplateAssets } from './template-assets.js';
+import { storageEnabled, saveTemplateZip, deleteTemplateZip } from './storage.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const TEMPLATES_SRC = path.resolve(__dirname, '..', 'templates-src');
@@ -245,26 +246,26 @@ router.post('/templates/publish', upload.single('zipFile'), async (req, res) => 
 
     if (!name) return res.status(400).json({ error: 'Nombre requerido' });
 
-    /* Descomprimir ZIP a templates-src/<id>/ */
-    const destDir = path.join(TEMPLATES_SRC, id);
-    if (fs.existsSync(destDir)) fs.rmSync(destDir, { recursive: true });
-    fs.mkdirSync(destDir, { recursive: true });
-
+    /* Contar páginas (archivos .html) desde el propio zip */
     const zip = new AdmZip(req.file.buffer);
-    zip.extractAllTo(destDir, true);
-
-    /* Nuevos assets en disco: descarta cualquiera cacheado del id. */
-    invalidateTemplateCache(id);
-
-    /* Contar páginas (archivos .html) */
     let pages = 0;
-    const countHtml = (dir) => {
-      for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-        if (entry.isDirectory()) countHtml(path.join(dir, entry.name));
-        else if (entry.name.endsWith('.html')) pages++;
-      }
-    };
-    countHtml(destDir);
+    for (const entry of zip.getEntries()) {
+      if (!entry.isDirectory && entry.entryName.endsWith('.html')) pages++;
+    }
+
+    /* Guardar assets: Storage cuando hay credenciales (serverless), si no a disco. */
+    if (storageEnabled) {
+      const uploaded = await saveTemplateZip(id, req.file.buffer);
+      if (!uploaded) return res.status(500).json({ error: 'No se pudo subir el ZIP al storage' });
+    } else {
+      const destDir = path.join(TEMPLATES_SRC, id);
+      if (fs.existsSync(destDir)) fs.rmSync(destDir, { recursive: true });
+      fs.mkdirSync(destDir, { recursive: true });
+      zip.extractAllTo(destDir, true);
+    }
+
+    /* Nuevos assets: descarta cualquiera cacheado del id. */
+    invalidateTemplateCache(id);
 
     const t = {
       id,
@@ -305,20 +306,15 @@ router.post('/templates/publish', upload.single('zipFile'), async (req, res) => 
 });
 
 /* List files of a published template */
-router.get('/templates/:id/files', (req, res) => {
-  const dir = path.join(TEMPLATES_SRC, req.params.id);
-  if (!fs.existsSync(dir)) return res.json({ files: [] });
-
-  const files = [];
-  const walk = (base, relative) => {
-    for (const entry of fs.readdirSync(base, { withFileTypes: true })) {
-      const rel = path.join(relative, entry.name);
-      if (entry.isDirectory()) walk(path.join(base, entry.name), rel);
-      else files.push(rel);
-    }
-  };
-  walk(dir, '');
-  res.json({ files });
+router.get('/templates/:id/files', async (req, res) => {
+  try {
+    const assets = await listTemplateAssets(req.params.id);
+    if (!assets) return res.json({ files: [] });
+    res.json({ files: assets.map((f) => f.path) });
+  } catch (err) {
+    console.error('[admin/files]', err.message);
+    res.status(500).json({ error: 'Error listando archivos' });
+  }
 });
 
 router.get('/templates', async (_req, res) => {
@@ -410,6 +406,9 @@ router.delete('/templates/:id', async (req, res) => {
   try {
     if (dbEnabled) {
       await deleteTemplate(req.params.id);
+    }
+    if (storageEnabled) {
+      await deleteTemplateZip(req.params.id);
     }
     invalidateTemplateCache(req.params.id);
 
@@ -565,7 +564,7 @@ router.get('/reviews', (_req, res) => {
 
 router.delete('/reviews/:templateId/:reviewId', async (req, res) => {
   try {
-    const ok = deleteReview(req.params.templateId, req.params.reviewId);
+    const ok = await deleteReview(req.params.templateId, req.params.reviewId);
     if (!ok) return res.status(404).json({ error: 'Reseña no encontrada' });
     res.json({ ok: true, summary: reviewSummary(req.params.templateId) });
   } catch (err) {
@@ -579,7 +578,7 @@ router.get('/coupons', (_req, res) => {
   res.json({ items: listCoupons() });
 });
 
-router.post('/coupons', (req, res) => {
+router.post('/coupons', async (req, res) => {
   try {
     const code = String(req.body?.code || '').trim().toUpperCase();
     if (!code) return res.status(400).json({ error: 'Código requerido' });
@@ -599,7 +598,7 @@ router.post('/coupons', (req, res) => {
       active: req.body?.active !== false,
       expiresAt: req.body?.expiresAt || null,
     };
-    saveCoupon(coupon);
+    await saveCoupon(coupon);
     res.status(201).json(coupon);
   } catch (err) {
     console.error('[admin/coupons]', err.message);
@@ -607,7 +606,7 @@ router.post('/coupons', (req, res) => {
   }
 });
 
-router.patch('/coupons/:code', (req, res) => {
+router.patch('/coupons/:code', async (req, res) => {
   try {
     const existing = getCoupon(req.params.code);
     if (!existing) return res.status(404).json({ error: 'Cupón no encontrado' });
@@ -618,7 +617,7 @@ router.patch('/coupons/:code', (req, res) => {
     if (req.body?.maxUses !== undefined) existing.maxUses = req.body.maxUses ? Number(req.body.maxUses) : null;
     if (req.body?.active !== undefined) existing.active = !!req.body.active;
     if (req.body?.expiresAt !== undefined) existing.expiresAt = req.body.expiresAt || null;
-    saveCoupon(existing);
+    await saveCoupon(existing);
     res.json(existing);
   } catch (err) {
     console.error('[admin/coupons]', err.message);
@@ -626,8 +625,8 @@ router.patch('/coupons/:code', (req, res) => {
   }
 });
 
-router.delete('/coupons/:code', (req, res) => {
-  deleteCoupon(req.params.code);
+router.delete('/coupons/:code', async (req, res) => {
+  await deleteCoupon(req.params.code);
   res.json({ ok: true });
 });
 

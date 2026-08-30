@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import nodemailer from 'nodemailer';
+import { isServerless } from './env.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -71,6 +72,11 @@ async function sendViaSmtp(order, links) {
 }
 
 async function saveToOutbox(order, links) {
+  /* En serverless no hay disco persistente: sin SMTP el email se descarta. */
+  if (isServerless) {
+    console.warn('[mailer] SMTP no configurado — outbox no disponible en serverless, email omitido.');
+    return;
+  }
   if (!fs.existsSync(OUTBOX_DIR)) fs.mkdirSync(OUTBOX_DIR, { recursive: true });
   const file = path.join(OUTBOX_DIR, `${order.orderId}.html`);
   fs.writeFileSync(file, deliveryHtml(order, links));

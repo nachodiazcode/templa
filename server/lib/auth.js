@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { isServerless } from './env.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -78,16 +79,34 @@ export function adminRequired(req, res, next) {
 /* ---------- usuarios en modo local (sin Supabase) ---------- */
 const USERS_FILE = path.join(__dirname, '..', 'data', 'users.json');
 
-if (!fs.existsSync(path.dirname(USERS_FILE))) fs.mkdirSync(path.dirname(USERS_FILE), { recursive: true });
-if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, '{}');
+if (!isServerless) {
+  if (!fs.existsSync(path.dirname(USERS_FILE))) fs.mkdirSync(path.dirname(USERS_FILE), { recursive: true });
+  if (!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE, '{}');
+}
+
+function readLocalUsers() {
+  try {
+    return JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+  } catch {
+    return {};
+  }
+}
+
+function writeLocalUsers(users) {
+  if (isServerless) return;
+  try {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+  } catch (err) {
+    console.error('[auth] writeLocalUsers:', err.message);
+  }
+}
 
 export function localFindUserByEmail(email) {
-  const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
-  return users[email.toLowerCase()] || null;
+  return readLocalUsers()[email.toLowerCase()] || null;
 }
 
 export function localInsertUser({ email, name, passwordHash }) {
-  const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+  const users = readLocalUsers();
   const user = {
     id: crypto.randomUUID(),
     email: email.toLowerCase(),
@@ -96,18 +115,17 @@ export function localInsertUser({ email, name, passwordHash }) {
     createdAt: new Date().toISOString(),
   };
   users[user.email] = user;
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+  writeLocalUsers(users);
   return user;
 }
 
 export function localGetUserById(id) {
-  const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+  const users = readLocalUsers();
   return Object.values(users).find((u) => u.id === id) || null;
 }
 
 export function localListUsers() {
-  const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
-  return Object.values(users).map((u) => ({
+  return Object.values(readLocalUsers()).map((u) => ({
     id: u.id,
     email: u.email,
     name: u.name ?? null,
@@ -117,16 +135,20 @@ export function localListUsers() {
 }
 
 export function localSetUserRole(id, role) {
-  const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+  const users = readLocalUsers();
   const user = Object.values(users).find((u) => u.id === id);
   if (!user) return null;
   user.role = role;
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+  writeLocalUsers(users);
   return { id: user.id, email: user.email, name: user.name, role: user.role };
 }
 
 export async function seedLocalAdmin() {
-  const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
+  if (isServerless) {
+    console.warn('[auth] seedLocalAdmin omitido en serverless (usar seedSupabaseAdmin).');
+    return null;
+  }
+  const users = readLocalUsers();
   const hasAdmin = Object.values(users).some((u) => u.role === 'admin');
   if (hasAdmin) return null;
 
@@ -139,7 +161,7 @@ export async function seedLocalAdmin() {
     createdAt: new Date().toISOString(),
   };
   users[admin.email] = admin;
-  fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+  writeLocalUsers(users);
   console.warn('╔══════════════════════════════════════════════╗');
   console.warn('║  ADMIN AUTO-CREADO                           ║');
   console.warn('║  Email:    admin@templa.cl                   ║');
