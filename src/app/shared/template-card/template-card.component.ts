@@ -12,14 +12,6 @@ import { CartService } from '../../core/services/cart.service';
   template: `
     <a [routerLink]="['/templates', t().id]" class="card">
       <div class="thumb" [style.--c1]="t().colors[0]" [style.--c2]="t().colors[1]">
-        <img
-          class="shot"
-          [src]="'previews/' + t().id + '-thumb.webp'"
-          [alt]="t().name + ' — vista previa'"
-          loading="lazy"
-          decoding="async"
-          onerror="this.style.display='none'"
-        />
         <div class="browser">
           <div class="bar"><i></i><i></i><i></i></div>
           <div class="page">
@@ -32,6 +24,14 @@ import { CartService } from '../../core/services/cart.service';
             </div>
           </div>
         </div>
+        <img
+          class="shot"
+          [src]="'previews/' + t().id + '-thumb.webp'"
+          [alt]="t().name + ' — vista previa'"
+          loading="lazy"
+          decoding="async"
+          onerror="this.style.display='none'"
+        />
         @if (t().price === 0) {
           <span class="flag free">Gratis</span>
         } @else if (t().isNew) {
@@ -87,6 +87,7 @@ import { CartService } from '../../core/services/cart.service';
     .shot {
       position: absolute; inset: 0; width: 100%; height: 100%;
       object-fit: cover; object-position: top; display: block;
+      z-index: 1;
     }
     .flag, .open { z-index: 2; }
     .browser {

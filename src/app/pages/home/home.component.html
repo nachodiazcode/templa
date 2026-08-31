@@ -49,6 +49,19 @@
   }
 </section>
 
+<!-- ============ LOGOS DE CONFIANZA ============ -->
+<section class="container trust-bar">
+  <p class="trust-label">Usado por equipos de producto en</p>
+  <div class="trust-logos">
+    <span class="trust-logo">Plannio</span>
+    <span class="trust-logo">Kubit</span>
+    <span class="trust-logo">Nordal</span>
+    <span class="trust-logo">Menta Studio</span>
+    <span class="trust-logo">FlowPay</span>
+    <span class="trust-logo">Datavíz</span>
+  </div>
+</section>
+
 <!-- ============ DESTACADAS ============ -->
 <section class="container section">
   <div class="section-head row">
@@ -64,6 +77,43 @@
     @for (t of featured(); track t.id) {
       <app-template-card [t]="t" />
     }
+  </div>
+</section>
+
+<!-- ============ CÓMO FUNCIONA ============ -->
+<section class="container section">
+  <div class="section-head center">
+    <span class="kicker">Cómo funciona</span>
+    <h2>De cero a producción en tres pasos</h2>
+  </div>
+
+  <div class="steps">
+    <article class="step">
+      <span class="step-n">1</span>
+      <div class="step-icon si-browse">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </div>
+      <h3>Explora y prueba</h3>
+      <p>Navega el catálogo, filtra por categoría, precio o tech stack. Cada plantilla tiene una vista previa en vivo — interactúa con la web real antes de decidir.</p>
+    </article>
+    <div class="step-line"></div>
+    <article class="step">
+      <span class="step-n">2</span>
+      <div class="step-icon si-pay">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg>
+      </div>
+      <h3>Compra o descarga gratis</h3>
+      <p>Pago único con Webpay. Sin suscripciones, sin letra chica. ¿Es gratis? Descarga directa sin registro obligatorio ni demos recortadas.</p>
+    </article>
+    <div class="step-line"></div>
+    <article class="step">
+      <span class="step-n">3</span>
+      <div class="step-icon si-ship">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <h3>Personaliza y lanza</h3>
+      <p>Código limpio, Angular standalone con signals y tipado estricto. Adapta colores, textos y secciones. Despliega en minutos a Vercel, Netlify o donde prefieras.</p>
+    </article>
   </div>
 </section>
 
@@ -91,6 +141,32 @@
       @for (t of freeTemplates().slice(0, 2); track t.id) {
         <app-template-card [t]="t" />
       }
+    </div>
+  </div>
+</section>
+
+<!-- ============ NÚMEROS QUE IMPORTAN ============ -->
+<section class="container section">
+  <div class="numbers-panel">
+    <div class="number-item">
+      <b>{{ totalDownloads | number }}+</b>
+      <span>Descargas totales</span>
+      <p>Equipos de producto y freelancers confían en Templa para lanzar más rápido.</p>
+    </div>
+    <div class="number-item">
+      <b>{{ avgRating }}★</b>
+      <span>Valoración media</span>
+      <p>La calidad del código y el diseño, validada por desarrolladores reales.</p>
+    </div>
+    <div class="number-item">
+      <b>{{ freeTemplates().length }}</b>
+      <span>Plantillas gratuitas</span>
+      <p>Con licencia comercial, código completo y actualizaciones incluidas.</p>
+    </div>
+    <div class="number-item">
+      <b>0</b>
+      <span>Suscripciones</span>
+      <p>Pagas una vez y es tuya para siempre. Sin recurrentes, sin sorpresas.</p>
     </div>
   </div>
 </section>
@@ -134,6 +210,48 @@
   </div>
 </section>
 
+<!-- ============ TECH STACK ============ -->
+<section class="container section">
+  <div class="section-head center">
+    <span class="kicker">Stack tecnológico</span>
+    <h2>Construido con lo que usas en producción</h2>
+    <p class="sub">No reinventamos la rueda. Cada plantilla usa el mismo stack y las mismas prácticas que equipos top aplican en sus productos.</p>
+  </div>
+
+  <div class="tech-grid">
+    <div class="tech-item">
+      <div class="tech-icon ti-angular">Ng</div>
+      <h4>Angular 18+</h4>
+      <p>Standalone components, signals, nueva sintaxis de control de flujo. Zero legacy.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon ti-ts">TS</div>
+      <h4>TypeScript strict</h4>
+      <p>Tipado estricto activado por defecto. Cero any, cero errores en runtime.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon ti-scss">{{ '{ }' }}</div>
+      <h4>SCSS modular</h4>
+      <p>Variables, mixins y design tokens organizados. Personaliza el tema en un solo archivo.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon ti-a11y">A11</div>
+      <h4>Accesibilidad</h4>
+      <p>Roles ARIA, navegación por teclado, contraste WCAG AA en todos los temas.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon ti-perf">100</div>
+      <h4>Lighthouse 95+</h4>
+      <p>Lazy loading, prerender, fuentes optimizadas. Métricas reales, no promesas.</p>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon ti-theme">◐</div>
+      <h4>Dark &amp; Light</h4>
+      <p>Tema claro y oscuro con persistencia automática. Un toggle y listo.</p>
+    </div>
+  </div>
+</section>
+
 <!-- ============ MATCH QUIZ ============ -->
 <section class="container section" id="quiz">
   <app-match-quiz />
@@ -147,17 +265,64 @@
   </div>
   <div class="quotes">
     <blockquote>
+      <div class="q-stars">★★★★★</div>
       <p>"Encontré una plantilla gratuita mejor que otras de pago que había comprado. El live preview me convenció en dos minutos."</p>
-      <footer><b>Marta Ruiz</b><span>Founder, Plannio</span></footer>
+      <footer>
+        <span class="q-avatar">MR</span>
+        <div><b>Marta Ruiz</b><span>Founder, Plannio</span></div>
+      </footer>
     </blockquote>
     <blockquote>
+      <div class="q-stars">★★★★★</div>
       <p>"El código es Angular de verdad: standalone, signals y limpio. Migramos a producción sin tocar nada raro."</p>
-      <footer><b>Diego Ferrer</b><span>Tech Lead, Kubit</span></footer>
+      <footer>
+        <span class="q-avatar">DF</span>
+        <div><b>Diego Ferrer</b><span>Tech Lead, Kubit</span></div>
+      </footer>
     </blockquote>
     <blockquote>
+      <div class="q-stars">★★★★★</div>
       <p>"Compramos Atlas Store un lunes y el viernes ya estábamos vendiendo. La mejor inversión del trimestre."</p>
-      <footer><b>Lucía Peña</b><span>E-commerce Manager, Nordal</span></footer>
+      <footer>
+        <span class="q-avatar">LP</span>
+        <div><b>Lucía Peña</b><span>E-commerce Manager, Nordal</span></div>
+      </footer>
     </blockquote>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="container section">
+  <div class="section-head center">
+    <span class="kicker">Preguntas frecuentes</span>
+    <h2>Lo que necesitas saber antes de empezar</h2>
+  </div>
+
+  <div class="faq-list">
+    <details class="faq-item">
+      <summary>¿Puedo usar las plantillas en proyectos comerciales?</summary>
+      <p>Sí, tanto las de pago como las gratuitas incluyen licencia comercial completa. Puedes usarlas para proyectos propios o de clientes sin restricciones.</p>
+    </details>
+    <details class="faq-item">
+      <summary>¿Qué tecnología usan las plantillas?</summary>
+      <p>Todas usan Angular 18+ con standalone components, signals, tipado estricto y SCSS modular. El código está preparado para producción desde el día uno.</p>
+    </details>
+    <details class="faq-item">
+      <summary>¿Tengo que pagar una suscripción?</summary>
+      <p>No. Pago único, licencia de por vida. Sin suscripciones mensuales, sin costes ocultos. Incluye todas las actualizaciones futuras de la plantilla.</p>
+    </details>
+    <details class="faq-item">
+      <summary>¿Qué incluye la descarga?</summary>
+      <p>Código fuente completo en TypeScript/Angular, archivos SCSS, assets, documentación de personalización y soporte por email del autor durante 24 horas.</p>
+    </details>
+    <details class="faq-item">
+      <summary>¿Las plantillas gratuitas están recortadas?</summary>
+      <p>No. Las gratuitas tienen el mismo nivel de calidad, código completo y licencia comercial que las de pago. Es nuestra forma de ganarnos tu confianza.</p>
+    </details>
+    <details class="faq-item">
+      <summary>¿Cómo pruebo una plantilla antes de comprar?</summary>
+      <p>Cada plantilla tiene una vista previa en vivo integrada. Puedes navegar, hacer clic e interactuar con la web real directamente en la ficha del producto.</p>
+    </details>
   </div>
 </section>
 

@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { moduleDir } from './resolve.js';
 import nodemailer from 'nodemailer';
 import { isServerless } from './env.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = moduleDir();
 
 const SMTP_HOST = process.env.SMTP_HOST || '';
 const SMTP_PORT = Number(process.env.SMTP_PORT || 587);

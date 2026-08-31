@@ -3,10 +3,10 @@ import bcrypt from 'bcryptjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { fileURLToPath } from 'node:url';
+import { moduleDir } from './resolve.js';
 import { isServerless } from './env.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = moduleDir();
 
 const JWT_SECRET = process.env.JWT_SECRET || '';
 const TOKEN_TTL = process.env.JWT_TTL || '7d';

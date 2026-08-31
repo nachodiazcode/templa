@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { moduleDir } from './resolve.js';
 import AdmZip from 'adm-zip';
 import { storageEnabled, getTemplateZipBuffer, clearTemplateZipCache } from './storage.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = moduleDir();
 export const TEMPLATES_SRC = path.join(__dirname, '..', 'templates-src');
 
 /* Los assets se leen UNA vez (de Storage o disco) y se sirven desde memoria.

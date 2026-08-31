@@ -49,3 +49,6 @@ server/outbox/
 server/templates-src/
 server/office/assets/
 server/*.log
+
+# Local Netlify folder
+.netlify

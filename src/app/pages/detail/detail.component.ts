@@ -12,6 +12,7 @@ import { ToastService } from '../../core/services/toast.service';
 import { AuthService } from '../../core/services/auth.service';
 import { ReviewsService, TemplateReview, ReviewSummary } from '../../core/services/reviews.service';
 import { SeoService } from '../../core/services/seo.service';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TemplateCardComponent } from '../../shared/template-card/template-card.component';
 
 const STAR_LABELS = ['', 'Muy malo', 'Malo', 'Regular', 'Bueno', 'Excelente'];
@@ -42,6 +43,8 @@ export class TemplateDetailComponent {
   private reviewsApi = inject(ReviewsService);
   private previewApi = inject(TemplatePreviewService);
   private seo = inject(SeoService);
+
+  private sanitizer = inject(DomSanitizer);
 
   readonly id = input.required<string>();
 
@@ -77,11 +80,11 @@ export class TemplateDetailComponent {
 
   readonly canLeaveReview = computed(() => this.reviewSubmitted() || this.auth.user() !== null);
   readonly realPreviewHtml = signal<string | null>(null);
-  readonly previewHtml = computed(() => {
+  readonly previewHtml = computed<SafeHtml>(() => {
     const real = this.realPreviewHtml();
-    if (real) return real;
+    if (real) return this.sanitizer.bypassSecurityTrustHtml(real);
     const t = this.template();
-    return t ? buildPreviewHtml(t) : '';
+    return t ? this.sanitizer.bypassSecurityTrustHtml(buildPreviewHtml(t)) : '';
   });
 
   readonly inCart = computed(() => {

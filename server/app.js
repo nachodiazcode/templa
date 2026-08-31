@@ -2,7 +2,9 @@ import express from 'express';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { moduleDir } from './lib/resolve.js';
+import catalogJson from './catalog.json' with { type: 'json' };
+import officeCatalogJson from './office/catalog.json' with { type: 'json' };
 import tbkPkg from 'transbank-sdk';
 import { buildTemplateBundle } from './lib/bundle.js';
 import { sendFulfillmentEmail, mailConfigured } from './lib/mailer.js';
@@ -54,7 +56,7 @@ const {
   IntegrationApiKeys,
 } = tbkPkg;
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = moduleDir();
 
 const PORT = process.env.PORT || 8787;
 const WEBPAY_COMMERCE_CODE = process.env.WEBPAY_COMMERCE_CODE || '';
@@ -86,24 +88,7 @@ function makeTransaction() {
   return new WebpayPlus.Transaction(options);
 }
 
-/* ---------- lectura resilient de JSON/archivos del proyecto ---------- */
-function readProjectJson(rel) {
-  const candidates = [
-    path.join(__dirname, rel),
-    path.join(__dirname, 'server', rel),
-    path.join(process.cwd(), 'server', rel),
-    path.join(process.cwd(), rel),
-  ];
-  for (const p of candidates) {
-    try {
-      return JSON.parse(fs.readFileSync(p, 'utf8'));
-    } catch {
-      /* siguiente candidato */
-    }
-  }
-  throw new Error(`No se pudo leer ${rel} (bundle sin assets)`);
-}
-
+/* ---------- lectura resilient de archivos del proyecto ---------- */
 function readFileFromCandidates(rel) {
   const candidates = [
     path.join(__dirname, rel),
@@ -121,9 +106,9 @@ function readFileFromCandidates(rel) {
   return null;
 }
 
-const catalog = readProjectJson('catalog.json');
+const catalog = catalogJson;
 const catalogById = new Map(catalog.map((t) => [t.id, t]));
-const officeCatalog = readProjectJson('office/catalog.json');
+const officeCatalog = Array.isArray(officeCatalogJson) ? officeCatalogJson : officeCatalogJson.items;
 
 export function serverStatus() {
   return {
@@ -220,9 +205,7 @@ export function buildApi() {
     next();
   });
 
-  app.get('/api/health', (_req, res) => {
-    res.json(serverStatus());
-  });
+  app.get('/api/health', (_req, res) => res.json(serverStatus()));
 
   /* ---------- descargas ---------- */
   app.get('/api/download/order/:orderId/:itemId', async (req, res) => {
@@ -315,6 +298,15 @@ export function buildApi() {
       return res.status(404).json({ error: 'Preview real no disponible para esta plantilla' });
     }
     res.json({ id, html });
+  });
+
+  /* ---------- preview directo (HTML servido como página, para screenshots) -- */
+  app.get('/api/templates/:id/preview', async (req, res) => {
+    const html = await getPreviewHtml(req.params.id);
+    if (html === null) {
+      return res.status(404).send('Preview no disponible');
+    }
+    res.type('html').send(html);
   });
 
   /* ---------- reviews ---------- */

@@ -31,15 +31,15 @@ import { ToastService } from '../../core/services/toast.service';
           </div>
           <div>
             <h4>Recursos</h4>
-            <a>Documentación</a>
-            <a>Licencias</a>
-            <a>Guía de marca</a>
+            <a routerLink="/info/soporte">Soporte</a>
+            <a routerLink="/info/licencia">Licencias</a>
+            <a routerLink="/info/soporte">Guía de marca</a>
           </div>
           <div>
             <h4>Compañía</h4>
             <a>Sobre nosotros</a>
-            <a>Contacto</a>
-            <a>Afiliados (30%)</a>
+            <a routerLink="/info/contacto">Contacto</a>
+            <a routerLink="/info/contacto">Afiliados (30%)</a>
           </div>
         </div>
       </div>

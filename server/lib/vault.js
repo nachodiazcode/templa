@@ -1,12 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { moduleDir } from './resolve.js';
 import { invalidateCatalog } from './catalog.js';
 import { SEED_REVIEWS } from './seed-reviews.js';
 import { dbEnabled } from './db.js';
 import { isServerless } from './env.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = moduleDir();
 const DATA_DIR = path.join(__dirname, '..', 'data');
 
 /* ============================================================

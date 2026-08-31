@@ -46,6 +46,11 @@ export const routes: Routes = [
       import('./pages/my-orders/my-orders.component').then((m) => m.MyOrdersComponent),
   },
   {
+    path: 'info/:page',
+    loadComponent: () =>
+      import('./pages/info/info.component').then((m) => m.InfoPageComponent),
+  },
+  {
     path: 'admin',
     canActivate: [adminGuard],
     loadChildren: () =>

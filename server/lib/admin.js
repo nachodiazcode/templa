@@ -2,7 +2,7 @@ import { Router } from 'express';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { moduleDir } from './resolve.js';
 import multer from 'multer';
 import AdmZip from 'adm-zip';
 import { dbEnabled } from './db.js';
@@ -10,7 +10,7 @@ import { adminRequired } from './auth.js';
 import { invalidateTemplateCache, listTemplateAssets } from './template-assets.js';
 import { storageEnabled, saveTemplateZip, deleteTemplateZip } from './storage.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = moduleDir();
 const TEMPLATES_SRC = path.resolve(__dirname, '..', 'templates-src');
 
 const upload = multer({

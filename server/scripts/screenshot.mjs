@@ -89,7 +89,8 @@ async function launchChrome() {
     '--disable-dev-shm-usage', '--mute-audio', '--disable-extensions',
     `--remote-debugging-port=${port}`, `--user-data-dir=${userDir}`, 'about:blank',
   ];
-  const child = execFile(CHROME, args, { stdio: ['ignore', 'ignore', 'ignore'] }).unref();
+  const child = execFile(CHROME, args, { stdio: ['ignore', 'ignore', 'ignore'] });
+  child.unref();
   // esperar a que el endpoint de debugging responda
   for (let i = 0; i < 60; i++) {
     try { const r = await fetch(`http://localhost:${port}/json/list`); if (r.ok) break; } catch {}
@@ -157,7 +158,7 @@ async function main() {
     await cdp.send('Page.enable');
     await cdp.send('Runtime.enable');
     for (const id of ids) {
-      const url = `${API_BASE}/api/templates/${id}/preview-html`;
+      const url = `${API_BASE}/api/templates/${id}/preview`;
       console.log(`→ ${id}: ${url}`);
       try {
         await shoot(cdp, url, DESKTOP, join(OUT_DIR, `${id}-desktop.png`));

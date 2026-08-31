@@ -1,3 +1,23 @@
+<div class="site-head">
+  <div class="utility">
+    <div class="container utility-inner">
+      <div class="utility-left">
+        <a routerLink="/powerpoint">PowerPoint</a>
+        <span class="u-sep"></span>
+        <a routerLink="/word">Word</a>
+        <span class="u-sep"></span>
+        <a routerLink="/info/soporte">Soporte</a>
+      </div>
+      <div class="utility-account">
+        @if (auth.user(); as u) {
+          <span class="u-welcome">Hola, <b>{{ u.name || u.email }}</b></span>
+        } @else {
+          <a routerLink="/login" class="u-login">Iniciar sesión <span class="u-dot"></span></a>
+        }
+      </div>
+    </div>
+  </div>
+
 <header
   class="hdr"
   [class.scrolled]="scrolled()"
@@ -9,7 +29,7 @@
       <span class="mark"></span><span class="word">Templa</span>
     </a>
 
-    <nav class="nav">
+    <nav class="nav" aria-label="Navegación principal">
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         Inicio
       </a>
@@ -70,25 +90,40 @@
 
             <div class="mega-col cats">
               <span class="mega-label">Categorías</span>
-              @for (cat of cats; track cat.id) {
+              @for (cat of catMenu; track cat.id) {
                 <a routerLink="/templates" [queryParams]="{ cat: cat.id }" (click)="closeCatalog()">
                   <span class="cat-dot" style="--i:{{ $index }}"></span>
-                  {{ cat.label }}
+                  <span class="cat-name">{{ cat.label }}</span>
+                  <span class="cat-count">{{ cat.count }}</span>
                 </a>
               }
             </div>
 
-            <aside class="mega-card">
-              <div class="mega-side-glow"></div>
-              <span class="mega-side-kicker">Templa Pro</span>
-              <h4>Necesitas algo a medida</h4>
-              <p>Elegí mejor con nuestro test de 3 pasos.</p>
-              <a routerLink="/" fragment="quiz" (click)="closeCatalog()" class="mega-side-btn">
-                Hacer el quiz
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <div class="mega-col featured">
+              <span class="mega-label">Destacadas</span>
+              @for (t of featuredTemplates(); track t.id) {
+                <a routerLink="/templates/{{ t.id }}" (click)="closeCatalog()" class="mega-feat">
+                  <span class="mf-thumb" [style.background]="'linear-gradient(135deg, ' + t.colors[0] + ', ' + t.colors[1] + ')'">
+                    <span class="mf-init">{{ t.name | slice: 0 : 1 }}</span>
+                  </span>
+                  <span class="mf-t">
+                    <b>{{ t.name }}</b>
+                    <small>{{ t.tagline }}</small>
+                  </span>
+                  @if (t.price > 0) {
+                    <span class="mf-price">${{ t.price }}</span>
+                  } @else {
+                    <span class="mf-free">Gratis</span>
+                  }
+                </a>
+              }
+              <a routerLink="/" fragment="quiz" (click)="closeCatalog()" class="mega-feat mega-feat-cta">
+                <span class="mi-icon" style="--mc:#8b5cf6">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </span>
+                <span class="mi-t"><b>¿No sabes qué elegir?</b><small>Haz el test de 3 pasos</small></span>
               </a>
-              <a routerLink="/descargas" (click)="closeCatalog()" class="mega-side-link">Recuperar una compra</a>
-            </aside>
+            </div>
           </div>
 
           <div class="mega-office">
@@ -109,6 +144,63 @@
           </div>
         </div>
       </div>
+      <div
+        class="nav-office"
+        [class.open]="officeOpen()"
+        (mouseenter)="openOfficeOnHover()"
+        (mouseleave)="closeOfficeDelay()"
+      >
+        <button class="nav-toggle" (click)="toggleOffice()" [attr.aria-expanded]="officeOpen()" [class.active]="officeOpen()">
+          Office
+          <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <div class="mega office-mega">
+          <span class="om-kicker">Plantillas de Office</span>
+          <div class="office-grid">
+            <div class="office-col">
+              <span class="om-label">
+                <span class="mo-ic ppt"></span> PowerPoint
+              </span>
+              @for (o of powerpointTemplates; track o.id) {
+                <a routerLink="/powerpoint" (click)="closeOffice()" class="om-item">
+                  <span class="om-thumb" [style.background]="'linear-gradient(135deg, ' + o.colors[0] + ', ' + o.colors[1] + ')'">
+                    {{ o.name | slice: 0 : 1 }}
+                  </span>
+                  <span class="om-t">
+                    <b>{{ o.name }}</b>
+                    <small>{{ o.slides }} slides · Gratis</small>
+                  </span>
+                </a>
+              }
+              <a routerLink="/powerpoint" (click)="closeOffice()" class="om-all">Ver todos los PowerPoint →</a>
+            </div>
+
+            <div class="office-col">
+              <span class="om-label">
+                <span class="mo-ic word"></span> Word
+              </span>
+              @for (o of wordTemplates; track o.id) {
+                <a routerLink="/word" (click)="closeOffice()" class="om-item">
+                  <span class="om-thumb" [style.background]="'linear-gradient(135deg, ' + o.colors[0] + ', ' + o.colors[1] + ')'">
+                    {{ o.name | slice: 0 : 1 }}
+                  </span>
+                  <span class="om-t">
+                    <b>{{ o.name }}</b>
+                    <small>{{ o.slides }} pág · Gratis</small>
+                  </span>
+                </a>
+              }
+              <a routerLink="/word" (click)="closeOffice()" class="om-all">Ver todos los Word →</a>
+            </div>
+          </div>
+          <div class="om-foot">
+            <span class="om-count">{{ officeCount }} plantillas de Office gratis para siempre</span>
+            <a routerLink="/powerpoint" (click)="closeOffice()" class="om-cta">Explorar</a>
+          </div>
+        </div>
+      </div>
+
       <a routerLink="/descargas" routerLinkActive="active">Descargas</a>
       <a routerLink="/templates" [queryParams]="{ tipo: 'gratis' }" class="free">
         Gratuitas<span class="spark"></span>
@@ -135,9 +227,33 @@
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
               </button>
             }
-            <button class="search-go" (click)="goSearch()">
+            <button class="search-go" (click)="goSearch()" aria-label="Buscar en el catálogo">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
+
+            @if (liveResults().length > 0) {
+              <div class="search-results">
+                @for (r of liveResults(); track r.id) {
+                  <button type="button" class="sr-item" (click)="goToTemplate(r.id)">
+                    <span class="sr-thumb" [style.background]="'linear-gradient(135deg, ' + r.colors[0] + ', ' + r.colors[1] + ')'">
+                      {{ r.name | slice: 0 : 1 }}
+                    </span>
+                    <span class="sr-t">
+                      <b>{{ r.name }}</b>
+                      <small>{{ r.category | slice: 0 : 1 }}{{ r.category | slice: 1 }} · {{ r.price > 0 ? '$' + r.price : 'Gratis' }}</small>
+                    </span>
+                    <span class="sr-arrow">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </span>
+                  </button>
+                }
+                <button type="button" class="sr-all" (click)="goSearch()">
+                  Ver todos los resultados para «{{ searchQ() }}»
+                </button>
+              </div>
+            } @else if (searchQ().trim()) {
+              <div class="search-empty">Sin coincidencias para «{{ searchQ() }}»</div>
+            }
           </div>
         }
       </div>
@@ -211,24 +327,51 @@
   </div>
 
   <div class="mobile" [class.open]="menuOpen()">
-    <a routerLink="/" (click)="closeMenu()">Inicio</a>
-    <a routerLink="/templates" (click)="closeMenu()">Plantillas</a>
-    <div class="m-office">
-      <a routerLink="/powerpoint" (click)="closeMenu()">
-        <span class="mo-ic ppt"></span>PowerPoint
-      </a>
-      <a routerLink="/word" (click)="closeMenu()">
-        <span class="mo-ic word"></span>Word
-      </a>
-    </div>
-    <div class="m-cats">
-      <span class="m-cats-label">Categorías</span>
-      <div class="m-cats-grid">
-        @for (cat of cats; track cat.id) {
-          <a routerLink="/templates" [queryParams]="{ cat: cat.id }" (click)="closeMenu()">{{ cat.label }}</a>
-        }
+    <a routerLink="/" (click)="closeMenu()" class="m-top">Inicio</a>
+
+    <button type="button" class="m-acc" (click)="toggleMobile('catalog')" [attr.aria-expanded]="mobileOpen() === 'catalog'">
+      Plantillas
+      <svg class="m-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="m-panel" [class.open]="mobileOpen() === 'catalog'">
+      <a routerLink="/templates" (click)="closeMenu()">Todas las plantillas</a>
+      <a routerLink="/templates" [queryParams]="{ tipo: 'gratis' }" (click)="closeMenu()">Gratuitas</a>
+      <a routerLink="/templates" [queryParams]="{ orden: 'nuevas' }" (click)="closeMenu()">Nuevas</a>
+      <div class="m-office">
+        <a routerLink="/powerpoint" (click)="closeMenu()">
+          <span class="mo-ic ppt"></span>PowerPoint
+        </a>
+        <a routerLink="/word" (click)="closeMenu()">
+          <span class="mo-ic word"></span>Word
+        </a>
+      </div>
+      <div class="m-cats">
+        <span class="m-cats-label">Categorías</span>
+        <div class="m-cats-grid">
+          @for (cat of cats; track cat.id) {
+            <a routerLink="/templates" [queryParams]="{ cat: cat.id }" (click)="closeMenu()">{{ cat.label }}</a>
+          }
+        </div>
       </div>
     </div>
+
+    <button type="button" class="m-acc" (click)="toggleMobile('extras')" [attr.aria-expanded]="mobileOpen() === 'extras'">
+      Más
+      <svg class="m-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="m-panel" [class.open]="mobileOpen() === 'extras'">
+      <a routerLink="/descargas" (click)="closeMenu()">Descargas</a>
+      <a routerLink="/templates" [queryParams]="{ tipo: 'gratis' }" (click)="closeMenu()">Gratuitas</a>
+      @if (auth.user()) {
+        <a routerLink="/mis-compras" (click)="closeMenu()">Mis compras</a>
+      } @else {
+        <a routerLink="/login" (click)="closeMenu()">Entrar / Crear cuenta</a>
+      }
+      <a routerLink="/info/soporte" (click)="closeMenu()">Soporte</a>
+      <a routerLink="/info/licencia" (click)="closeMenu()">Licencias</a>
+      <a routerLink="/info/contacto" (click)="closeMenu()">Contacto</a>
+    </div>
+
     <div class="m-search">
       <input
         type="search"
@@ -239,15 +382,7 @@
       />
       <button type="button" (click)="goSearch()" class="btn primary sm block">Buscar</button>
     </div>
-    <a routerLink="/descargas" (click)="closeMenu()">Descargas</a>
-    @if (auth.user()) {
-      <a routerLink="/mis-compras" (click)="closeMenu()">Mis compras</a>
-    } @else {
-      <a routerLink="/login" (click)="closeMenu()">Entrar / Crear cuenta</a>
-    }
-    <a routerLink="/templates" [queryParams]="{ tipo: 'gratis' }" (click)="closeMenu()" class="free-m">
-      Gratuitas
-    </a>
     <a routerLink="/templates" class="btn primary sm block" (click)="closeMenu()">Explorar</a>
-  </div>
-</header>
+    </div>
+  </header>
+</div>

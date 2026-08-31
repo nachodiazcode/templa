@@ -1,10 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { moduleDir } from './resolve.js';
 import { reviewSummary } from './vault.js';
+import catalogRaw from '../catalog.json' with { type: 'json' };
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const RAW = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'catalog.json'), 'utf8'));
+const __dirname = moduleDir();
+const RAW = catalogRaw;
 
 /* Campos ricos (marketing/social) que catalog.json no incluye.
    Mantenidos aquí como fuente única para servir un catálogo completo. */
