@@ -179,30 +179,50 @@ export class HeaderComponent {
     this.officeOpen.set(false);
   }
 
+  readonly selectedIndex = signal(0);
+
   toggleSearch(): void {
     this.searchOpen.update((v) => !v);
     this.catalogOpen.set(false);
     this.officeOpen.set(false);
     if (this.searchOpen()) {
       this.searchQ.set('');
-      requestAnimationFrame(() => {
-        document.getElementById('header-search')?.focus();
-      });
+      this.selectedIndex.set(0);
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => {
+        document.getElementById('cmd-search-input')?.focus();
+      }, 50);
+    } else {
+      document.body.style.overflow = '';
     }
+  }
+
+  closeSearch(): void {
+    this.searchOpen.set(false);
+    document.body.style.overflow = '';
+    this.searchQ.set('');
   }
 
   goSearch(): void {
     const term = this.searchQ().trim();
     this.router.navigate(['/templates'], { queryParams: term ? { q: term } : {} });
-    this.searchOpen.set(false);
+    this.closeSearch();
     this.menuOpen.set(false);
-    this.searchQ.set('');
   }
 
   goToTemplate(id: string): void {
     this.router.navigate(['/templates', id]);
-    this.searchOpen.set(false);
-    this.searchQ.set('');
+    this.closeSearch();
+  }
+
+  quickSearchCategory(catId: string): void {
+    this.router.navigate(['/templates'], { queryParams: { cat: catId } });
+    this.closeSearch();
+  }
+
+  quickSearchTag(tipo: string): void {
+    this.router.navigate(['/templates'], { queryParams: { tipo } });
+    this.closeSearch();
   }
 
   toggleMenu(): void {
@@ -240,23 +260,46 @@ export class HeaderComponent {
     if (!target.closest('.nav-office')) {
       this.officeOpen.set(false);
     }
-    if (!target.closest('.header-search')) {
-      this.searchOpen.set(false);
-    }
   }
 
   @HostListener('document:keydown', ['$event'])
   onKeydown(e: KeyboardEvent): void {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
-      if (!this.searchOpen()) {
+      if (this.searchOpen()) {
+        this.closeSearch();
+      } else {
         this.toggleSearch();
       }
+      return;
     }
-    if (e.key === 'Escape') {
+
+    if (this.searchOpen()) {
+      const results = this.liveResults();
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (results.length > 0) {
+          this.selectedIndex.update((i) => (i + 1) % results.length);
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (results.length > 0) {
+          this.selectedIndex.update((i) => (i - 1 + results.length) % results.length);
+        }
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (results.length > 0 && results[this.selectedIndex()]) {
+          this.goToTemplate(results[this.selectedIndex()].id);
+        } else {
+          this.goSearch();
+        }
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        this.closeSearch();
+      }
+    } else if (e.key === 'Escape') {
       this.catalogOpen.set(false);
       this.officeOpen.set(false);
-      this.searchOpen.set(false);
       this.userMenuOpen.set(false);
     }
   }

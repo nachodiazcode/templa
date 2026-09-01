@@ -210,59 +210,11 @@
     </nav>
 
     <div class="actions">
-      <div class="header-search" [class.open]="searchOpen()">
-        <button class="search-btn" (click)="toggleSearch()" [attr.aria-label]="'Buscar plantillas'" [attr.aria-expanded]="searchOpen()">
-          <span class="sb-left">
-            <svg class="ico-search" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <svg class="ico-close" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-            <span class="sb-text">Buscar...</span>
-          </span>
-          <span class="sb-key">Ctrl K</span>
-        </button>
-        @if (searchOpen()) {
-          <div class="search-drop" (keydown.enter)="goSearch()">
-            <input
-              id="header-search"
-              type="text"
-              placeholder="Buscar plantillas..."
-              [value]="searchQ()"
-              (input)="searchQ.set($any($event.target).value)"
-            />
-            @if (searchQ()) {
-              <button class="search-clear" (click)="searchQ.set('')" aria-label="Limpiar búsqueda">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-              </button>
-            }
-            <button class="search-go" (click)="goSearch()" aria-label="Buscar en el catálogo">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-
-            @if (liveResults().length > 0) {
-              <div class="search-results">
-                @for (r of liveResults(); track r.id) {
-                  <button type="button" class="sr-item" (click)="goToTemplate(r.id)">
-                    <span class="sr-thumb" [style.background]="'linear-gradient(135deg, ' + r.colors[0] + ', ' + r.colors[1] + ')'">
-                      {{ r.name | slice: 0 : 1 }}
-                    </span>
-                    <span class="sr-t">
-                      <b>{{ r.name }}</b>
-                      <small>{{ r.category | slice: 0 : 1 }}{{ r.category | slice: 1 }} · {{ r.price > 0 ? '$' + r.price : 'Gratis' }}</small>
-                    </span>
-                    <span class="sr-arrow">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                    </span>
-                  </button>
-                }
-                <button type="button" class="sr-all" (click)="goSearch()">
-                  Ver todos los resultados para «{{ searchQ() }}»
-                </button>
-              </div>
-            } @else if (searchQ().trim()) {
-              <div class="search-empty">Sin coincidencias para «{{ searchQ() }}»</div>
-            }
-          </div>
-        }
-      </div>
+      <button class="search-trigger" (click)="toggleSearch()" aria-label="Buscar plantillas (Ctrl K)">
+        <svg class="st-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span class="st-text">Buscar en Templa...</span>
+        <kbd class="st-kbd">⌘K</kbd>
+      </button>
 
       <button
         class="theme-toggle"
@@ -391,4 +343,132 @@
     <a routerLink="/templates" class="btn primary sm block" (click)="closeMenu()">Explorar</a>
     </div>
   </header>
+
+  @if (searchOpen()) {
+    <div class="cmd-overlay" (click)="closeSearch()">
+      <div class="cmd-dialog" (click)="$event.stopPropagation()">
+        <div class="cmd-header">
+          <svg class="cmd-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input
+            id="cmd-search-input"
+            type="text"
+            placeholder="Buscar por nombre, categoría, tecnología (ej: saas, angular, landing)..."
+            [value]="searchQ()"
+            (input)="searchQ.set($any($event.target).value); selectedIndex.set(0)"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          @if (searchQ()) {
+            <button class="cmd-clear" (click)="searchQ.set(''); selectedIndex.set(0)" aria-label="Limpiar búsqueda">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          }
+          <button class="cmd-esc-btn" (click)="closeSearch()" aria-label="Cerrar modal de búsqueda">ESC</button>
+        </div>
+
+        <div class="cmd-body">
+          @if (!searchQ().trim()) {
+            <div class="cmd-zero">
+              <div class="cmd-section">
+                <span class="cmd-label">Búsqueda rápida por tipo</span>
+                <div class="cmd-chips">
+                  <button type="button" class="cmd-chip" (click)="quickSearchTag('gratis')">
+                    <span class="chip-dot free"></span> Plantillas Gratis
+                  </button>
+                  <button type="button" class="cmd-chip" (click)="quickSearchTag('nuevas')">
+                    <span class="chip-dot hot"></span> Nuevas
+                  </button>
+                  <button type="button" class="cmd-chip" (click)="quickSearchCategory('saas')">
+                    SaaS & Apps
+                  </button>
+                  <button type="button" class="cmd-chip" (click)="quickSearchCategory('ecommerce')">
+                    E-Commerce
+                  </button>
+                  <button type="button" class="cmd-chip" (click)="quickSearchCategory('portfolio')">
+                    Portfolios
+                  </button>
+                  <button type="button" class="cmd-chip" (click)="quickSearchCategory('landing')">
+                    Landings
+                  </button>
+                </div>
+              </div>
+
+              <div class="cmd-section">
+                <span class="cmd-label">Favoritas de la comunidad</span>
+                <div class="cmd-featured-list">
+                  @for (t of featuredTemplates(); track t.id) {
+                    <button type="button" class="cmd-feat-item" (click)="goToTemplate(t.id)">
+                      <span class="cf-thumb" [style.background]="'linear-gradient(135deg, ' + t.colors[0] + ', ' + t.colors[1] + ')'">
+                        {{ t.name | slice: 0 : 1 }}
+                      </span>
+                      <div class="cf-info">
+                        <b>{{ t.name }}</b>
+                        <small>{{ t.tagline }}</small>
+                      </div>
+                      <span class="cf-price" [class.free]="t.price === 0">{{ t.price > 0 ? '$' + t.price : 'Gratis' }}</span>
+                    </button>
+                  }
+                </div>
+              </div>
+            </div>
+          } @else if (liveResults().length > 0) {
+            <div class="cmd-results">
+              <div class="cmd-results-head">
+                <span>Coincidencias ({{ liveResults().length }})</span>
+              </div>
+              @for (r of liveResults(); track r.id; let idx = $index) {
+                <button
+                  type="button"
+                  class="cmd-item"
+                  [class.selected]="selectedIndex() === idx"
+                  (mouseenter)="selectedIndex.set(idx)"
+                  (click)="goToTemplate(r.id)"
+                >
+                  <span class="ci-thumb" [style.background]="'linear-gradient(135deg, ' + r.colors[0] + ', ' + r.colors[1] + ')'">
+                    {{ r.name | slice: 0 : 1 }}
+                  </span>
+                  <div class="ci-details">
+                    <div class="ci-title-row">
+                      <b>{{ r.name }}</b>
+                      <span class="ci-cat">{{ r.category }}</span>
+                    </div>
+                    <small class="ci-sub">{{ r.tagline }}</small>
+                    <div class="ci-techs">
+                      @for (tech of r.tech; track tech) {
+                        <span class="ci-tag">{{ tech }}</span>
+                      }
+                    </div>
+                  </div>
+                  <div class="ci-end">
+                    <span class="ci-price" [class.free]="r.price === 0">
+                      {{ r.price > 0 ? '$' + r.price : 'Gratis' }}
+                    </span>
+                    <span class="ci-enter">↵</span>
+                  </div>
+                </button>
+              }
+            </div>
+          } @else {
+            <div class="cmd-empty">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M8 11h6"/></svg>
+              <p>No encontramos plantillas que coincidan con <b>«{{ searchQ() }}»</b></p>
+              <small>Intenta buscar por categorías como <i>saas</i>, <i>tienda</i>, <i>landing</i> o <i>blog</i>.</small>
+            </div>
+          }
+        </div>
+
+        <div class="cmd-footer">
+          <div class="cmd-keys">
+            <span><kbd>↑</kbd> <kbd>↓</kbd> Navegar</span>
+            <span><kbd>↵</kbd> Seleccionar</span>
+            <span><kbd>ESC</kbd> Cerrar</span>
+          </div>
+          <button type="button" class="cmd-all-btn" (click)="goSearch()">
+            Ver catálogo completo →
+          </button>
+        </div>
+      </div>
+    </div>
+  }
 </div>
+
