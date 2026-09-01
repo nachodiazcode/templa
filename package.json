@@ -7,6 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "format": "prettier --write \"src/**/*.{ts,html,scss}\"",
     "server": "node server/index.js",
     "sync:assets": "node server/scripts/sync-assets.mjs",
     "deploy:hosting": "node scripts/deploy-hosting.mjs"
@@ -21,6 +22,8 @@
     "@angular/platform-browser": "^18.2.0",
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
+    "compression": "^1.8.1",
+    "helmet": "^8.3.0",
     "rxjs": "~7.8.0",
     "serverless-http": "^4.0.0",
     "tslib": "^2.3.0",
@@ -37,6 +40,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "prettier": "^3.9.6",
+    "puppeteer-core": "^25.9.0",
     "sharp": "^0.35.4",
     "typescript": "~5.5.2"
   }

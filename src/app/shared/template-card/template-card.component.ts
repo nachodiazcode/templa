@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CATEGORY_LABELS, TemplateCategory, TemplateItem } from '../../core/models/template.model';
 import { CartService } from '../../core/services/cart.service';
@@ -8,7 +8,7 @@ import { CartService } from '../../core/services/cart.service';
   selector: 'app-template-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [RouterLink, DecimalPipe],
+  imports: [RouterLink, DecimalPipe, NgOptimizedImage],
   template: `
     <a [routerLink]="['/templates', t().id]" class="card">
       <div class="thumb" [style.--c1]="t().colors[0]" [style.--c2]="t().colors[1]">
@@ -26,10 +26,9 @@ import { CartService } from '../../core/services/cart.service';
         </div>
         <img
           class="shot"
-          [src]="'previews/' + t().id + '-thumb.webp'"
+          [ngSrc]="'previews/' + t().id + '-thumb.webp'"
           [alt]="t().name + ' — vista previa'"
-          loading="lazy"
-          decoding="async"
+          fill
           onerror="this.style.display='none'"
         />
         @if (t().price === 0) {

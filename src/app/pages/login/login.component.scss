@@ -21,8 +21,8 @@
   position: relative;
   padding: 44px 38px;
   background:
-    radial-gradient(120% 90% at 100% 0%, rgba(34, 211, 238, 0.25), transparent 55%),
-    radial-gradient(110% 90% at 0% 100%, rgba(139, 92, 246, 0.35), transparent 60%),
+    radial-gradient(120% 90% at 100% 0%, rgba(245, 158, 11, 0.25), transparent 55%),
+    radial-gradient(110% 90% at 0% 100%, rgba(244, 63, 94, 0.35), transparent 60%),
     #12101f;
   color: #fff;
   overflow: hidden;
@@ -94,7 +94,7 @@
   height: 42px;
   border-radius: 13px;
   background: var(--grad);
-  box-shadow: 0 10px 30px -6px rgba(139, 92, 246, 0.7);
+  box-shadow: 0 10px 30px -6px rgba(244, 63, 94, 0.7);
 
   &::after {
     content: '';
@@ -182,7 +182,7 @@ label {
 
     &:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+      box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15);
     }
 
     &::placeholder { color: var(--text-faint); }

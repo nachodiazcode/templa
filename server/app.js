@@ -10,6 +10,8 @@ import { buildTemplateBundle } from './lib/bundle.js';
 import { sendFulfillmentEmail, mailConfigured } from './lib/mailer.js';
 import { getCatalog, getCatalogItem } from './lib/catalog.js';
 import { getPreviewHtml } from './lib/template-assets.js';
+import helmet from 'helmet';
+import compression from 'compression';
 import { compressGzip } from './lib/compress.js';
 import { rateLimit } from './lib/rate-limit.js';
 import {
@@ -183,9 +185,18 @@ export function buildApi() {
   const orders = {};
 
   const app = express();
+  
+  // Security and performance middlewares
+  app.use(helmet({
+    contentSecurityPolicy: false, // Too restrictive for embedded Angular app by default
+    crossOriginEmbedderPolicy: false
+  }));
+  app.use(compression()); // Use standard compression middleware
+
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
-  app.use(compressGzip());
+  // Kept legacy manual gzip just in case some logic relies on it, or we can replace it:
+  // app.use(compressGzip()); 
 
   /* CORS con allowlist */
   app.use((req, res, next) => {

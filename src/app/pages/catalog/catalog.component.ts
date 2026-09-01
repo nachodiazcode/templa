@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TEMPLATES } from '../../core/data/templates.data';
 import { CATEGORY_LABELS, TemplateCategory } from '../../core/models/template.model';
 import { TemplateCardComponent } from '../../shared/template-card/template-card.component';
+import { SeoService } from '../../core/services/seo.service';
 
 type TypeFilter = 'todos' | 'gratis' | 'premium';
 type SortKey = 'populares' | 'nuevas' | 'precio-asc' | 'valoracion';
@@ -19,6 +20,7 @@ type SortKey = 'populares' | 'nuevas' | 'precio-asc' | 'valoracion';
 export class CatalogComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private seo = inject(SeoService);
 
   readonly categories = Object.keys(CATEGORY_LABELS) as TemplateCategory[];
   readonly categoryLabels = CATEGORY_LABELS;
@@ -91,6 +93,16 @@ export class CatalogComponent {
       if (cat && this.categories.includes(cat)) this.cat.set(cat);
       if (tipo === 'gratis' || tipo === 'premium' || tipo === 'todos') this.tipo.set(tipo);
       if (orden) this.orden.set(orden);
+
+      let title = 'Catálogo de plantillas';
+      if (this.cat() !== 'todas') title = `${this.categoryLabels[this.cat() as TemplateCategory]} - Catálogo`;
+      if (this.tipo() === 'gratis') title = `Plantillas Gratuitas - ${title}`;
+      
+      this.seo.set({
+        title,
+        description: 'Explora nuestro catálogo completo de plantillas premium y gratuitas para Angular. Encuentra el diseño perfecto para tu próximo proyecto.',
+        path: this.router.url
+      });
     });
   }
 

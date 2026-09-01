@@ -6,7 +6,7 @@ export function previewBaseCSS(): string {
   return `
     *{margin:0;padding:0;box-sizing:border-box}
     html{scroll-behavior:smooth}
-    body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;background:#0b0d12;color:#e7eaf2}
+    body{background:#0b0d12;color:#e7eaf2}
     a{text-decoration:none;color:inherit}
     img{max-width:100%;display:block}
   `;
@@ -27,8 +27,9 @@ export function previewFooter(name: string): string {
   return `<footer>© 2026 ${name} — vista previa generada desde Templa</footer>`;
 }
 
-export function previewSharedStyles(c1: string, c2: string, accent: string): string {
+export function previewSharedStyles(c1: string, c2: string, accent: string, bodyFont: string = "-apple-system,'Segoe UI',Roboto,sans-serif"): string {
   return `
+    body{font-family:${bodyFont}}
     nav{display:flex;justify-content:space-between;align-items:center;padding:18px 34px;position:sticky;top:0;
         backdrop-filter:blur(14px);background:rgba(11,13,18,.75);border-bottom:1px solid #ffffff12;z-index:9}
     .brand{font-weight:800;font-size:17px;display:flex;gap:9px;align-items:center}
@@ -54,10 +55,25 @@ export function previewSharedStyles(c1: string, c2: string, accent: string): str
   `;
 }
 
-export function previewWrap(t: { name: string; colors: [string, string]; accent: string }, bodyContent: string, extraCSS: string = ''): string {
+/**
+ * Genera el wrapper HTML completo para un preview.
+ * @param fontImport - URL de Google Fonts para el @import (sin quotes)
+ * @param bodyFont - familia CSS a aplicar al body
+ */
+export function previewWrap(
+  t: { name: string; colors: [string, string]; accent: string },
+  bodyContent: string,
+  extraCSS: string = '',
+  fontImport?: string,
+  bodyFont?: string
+): string {
   const [c1, c2] = t.colors;
+  const fontLink = fontImport
+    ? `<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="${fontImport}" rel="stylesheet">`
+    : '';
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"/>
-  <style>${previewBaseCSS()}${previewSharedStyles(c1, c2, t.accent)}${extraCSS}</style></head><body>
+  ${fontLink}
+  <style>${previewBaseCSS()}${previewSharedStyles(c1, c2, t.accent, bodyFont)}${extraCSS}</style></head><body>
   ${bodyContent}
   </body></html>`;
 }

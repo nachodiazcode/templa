@@ -41,7 +41,7 @@
   width: 22px;
   height: 22px;
   border-radius: 7px;
-  background: linear-gradient(135deg, #8b5cf6, #22d3ee, #8b5cf6);
+  background: linear-gradient(135deg, #f43f5e, #f59e0b, #f43f5e);
   background-size: 220% 220%;
   animation: hue-drift 7s ease infinite;
   position: relative;
@@ -67,9 +67,9 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: #c084fc;
-  background: rgba(139, 92, 246, 0.12);
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #fb7185;
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.3);
   padding: 3px 9px;
   border-radius: 6px;
 }
@@ -102,9 +102,9 @@
     }
 
     &.active {
-      background: rgba(139, 92, 246, 0.12);
-      color: #c084fc;
-      svg { opacity: 1; color: #c084fc; }
+      background: rgba(244, 63, 94, 0.12);
+      color: #fb7185;
+      svg { opacity: 1; color: #fb7185; }
     }
   }
 }
@@ -160,7 +160,7 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+  background: linear-gradient(135deg, #f43f5e, #d97706);
   display: grid;
   place-items: center;
   color: #fff;

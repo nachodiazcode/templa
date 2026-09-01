@@ -2,6 +2,33 @@ import { TemplateItem } from '../models/template.model';
 
 export const TEMPLATES: TemplateItem[] = [
   {
+    id: 'storefront-gatsby',
+    name: 'Storefront Pro',
+    tagline: 'Premium Headless WooCommerce',
+    description:
+      'Storefront Pro es una plantilla premium para WooCommerce creada de forma headless con Gatsby. Ofrece velocidades de carga ultrarrápidas, SEO optimizado y una experiencia de usuario increíble. Integración perfecta con WordPress backend.',
+    category: 'ecommerce',
+    price: 149,
+    rating: 5.0,
+    reviews: 42,
+    sales: 320,
+    tech: ['Gatsby', 'React', 'WooCommerce', 'GraphQL'],
+    features: [
+      'PWA Ready (carga instantánea)',
+      'Checkout optimizado sin recargas',
+      'Integración con Stripe y PayPal',
+      'Búsqueda y filtros ultra rápidos',
+      'Panel de control en WordPress',
+      'Soporte premium 6 meses',
+    ],
+    pages: 35,
+    colors: ['#8b5cf6', '#ec4899'],
+    accent: '#d946ef',
+    isFeatured: true,
+    isNew: true,
+    releasedAt: '2026-09-01',
+  },
+  {
     id: 'aurora',
     name: 'Aurora',
     tagline: 'Landing HTML5 pura — cero frameworks',

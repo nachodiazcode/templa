@@ -52,3 +52,8 @@ server/*.log
 
 # Local Netlify folder
 .netlify
+
+# Previews build output
+/preview-outputs
+gen-previews.ts
+

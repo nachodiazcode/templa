@@ -1,39 +1,540 @@
-import { TemplateItem } from '../models/template.model';
-import { CATEGORY_LABELS } from '../models/template.model';
-import { previewNav, previewFooter, previewWrap } from './preview-shared';
-
-/**
- * Router principal: despacha al renderer específico según ID de template.
- */
-export function buildPreviewHtml(t: TemplateItem): string {
-  switch (t.id) {
-    case 'aurora':           return buildAuroraPreview(t);
-    case 'nova-saas':        return buildNovaSaasPreview(t);
-    case 'atlas-store':      return buildAtlasStorePreview(t);
-    case 'lumen-landing':    return buildLumenPreview(t);
-    case 'monogram':         return buildMonogramPreview(t);
-    case 'pulse-dashboard':  return buildPulsePreview(t);
-    case 'ink-blog':         return buildInkBlogPreview(t);
-    case 'orbit-startup':    return buildOrbitPreview(t);
-    case 'crate-shop':       return buildCrateShopPreview(t);
-    case 'frame-folio':      return buildFrameFolioPreview(t);
-    case 'launch-one':       return buildLaunchOnePreview(t);
-    case 'ledger-finance':   return buildLedgerPreview(t);
-    case 'journal-minimal':  return buildJournalPreview(t);
-    case 'solaris-portfolio':return buildSolarisPreview(t);
-    case 'nexa-saas':        return buildNexaPreview(t);
-    case 'storefront-gatsby':return buildStorefrontPreview(t);
-    default:                 return buildGenericPreview(t);
+"use strict";
+var __create = Object.create;
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
   }
+  return to;
+};
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
+
+// src/app/core/data/templates.data.ts
+var TEMPLATES = [
+  {
+    id: "storefront-gatsby",
+    name: "Storefront Pro",
+    tagline: "Premium Headless WooCommerce",
+    description: "Storefront Pro es una plantilla premium para WooCommerce creada de forma headless con Gatsby. Ofrece velocidades de carga ultrarr\xE1pidas, SEO optimizado y una experiencia de usuario incre\xEDble. Integraci\xF3n perfecta con WordPress backend.",
+    category: "ecommerce",
+    price: 149,
+    rating: 5,
+    reviews: 42,
+    sales: 320,
+    tech: ["Gatsby", "React", "WooCommerce", "GraphQL"],
+    features: [
+      "PWA Ready (carga instant\xE1nea)",
+      "Checkout optimizado sin recargas",
+      "Integraci\xF3n con Stripe y PayPal",
+      "B\xFAsqueda y filtros ultra r\xE1pidos",
+      "Panel de control en WordPress",
+      "Soporte premium 6 meses"
+    ],
+    pages: 35,
+    colors: ["#8b5cf6", "#ec4899"],
+    accent: "#d946ef",
+    isFeatured: true,
+    isNew: true,
+    releasedAt: "2026-09-01"
+  },
+  {
+    id: "aurora",
+    name: "Aurora",
+    tagline: "Landing HTML5 pura \u2014 cero frameworks",
+    description: "Aurora es una landing hecha solo con HTML5 y CSS moderno: sin build, sin dependencias y con Lighthouse perfecto. Incluye tema dual persistente, bento grid responsive, animaciones de scroll accesibles y un CSS de 14 KB comentado por secciones. La plantilla perfecta para entender c\xF3mo se construye la web r\xE1pida.",
+    category: "landing",
+    price: 0,
+    rating: 4.9,
+    reviews: 41,
+    sales: 1870,
+    tech: ["HTML5", "CSS3", "Vanilla JS"],
+    features: [
+      "100/100 Lighthouse, sin build",
+      "Tema claro y oscuro con persistencia",
+      "Bento grid responsive fluido",
+      "Reveal on scroll con IntersectionObserver",
+      "14 KB de CSS comentado y ordenado",
+      "Gratis para proyectos personales y comerciales"
+    ],
+    pages: 1,
+    colors: ["#c084fc", "#67e8f9"],
+    accent: "#c084fc",
+    isFeatured: true,
+    isNew: true,
+    releasedAt: "2026-08-24"
+  },
+  {
+    id: "nova-saas",
+    name: "Nova SaaS",
+    tagline: "Landing + app para productos de software",
+    description: "Nova SaaS es la plantilla definitiva para lanzar tu producto digital. Incluye landing de alta conversi\xF3n, pricing din\xE1mico, blog integrado y panel de cliente. Dise\xF1ada con un sistema de dise\xF1o completo y animaciones fluidas.",
+    category: "saas",
+    price: 79,
+    oldPrice: 129,
+    rating: 4.9,
+    reviews: 214,
+    sales: 1830,
+    tech: ["Angular", "Tailwind", "TypeScript"],
+    features: [
+      "Landing de alta conversi\xF3n",
+      "Pricing con toggle mensual/anual",
+      "Blog y documentaci\xF3n integrados",
+      "Modo oscuro incluido",
+      "Animaciones con scroll",
+      "SEO y Open Graph listos"
+    ],
+    pages: 18,
+    colors: ["#7c3aed", "#06b6d4"],
+    accent: "#8b5cf6",
+    isFeatured: true,
+    isNew: true,
+    releasedAt: "2026-07-02"
+  },
+  {
+    id: "atlas-store",
+    name: "Atlas Store",
+    tagline: "E-commerce moderno que convierte",
+    description: "Tienda online completa con fichas de producto inmersivas, checkout optimizado, filtros instant\xE1neos y wishlist. Pensada para marcas que quieren destacar con una experiencia de compra premium.",
+    category: "ecommerce",
+    price: 89,
+    rating: 4.8,
+    reviews: 167,
+    sales: 1420,
+    tech: ["Angular", "Signals", "SCSS"],
+    features: [
+      "Fichas de producto inmersivas",
+      "Checkout en un paso",
+      "Filtros y b\xFAsqueda instant\xE1nea",
+      "Wishlist y comparador",
+      "Micro-interacciones en todo el flujo",
+      "Integraci\xF3n pasarela de pago"
+    ],
+    pages: 22,
+    colors: ["#f59e0b", "#ef4444"],
+    accent: "#f97316",
+    isFeatured: true,
+    releasedAt: "2026-05-18"
+  },
+  {
+    id: "lumen-landing",
+    name: "Lumen",
+    tagline: "Landing page minimalista de alto impacto",
+    description: "Una landing limpia y directa: hero cinematogr\xE1fico, secciones que cuentan tu historia y CTAs que convierten. Perfecta para apps m\xF3viles, cursos o campa\xF1as.",
+    category: "landing",
+    price: 0,
+    rating: 4.7,
+    reviews: 98,
+    sales: 5210,
+    tech: ["Angular", "CSS Grid"],
+    features: [
+      "Hero cinematogr\xE1fico",
+      "100% responsive",
+      "Formulario conectable a cualquier API",
+      "Puntuaci\xF3n Lighthouse 98+",
+      "Gratis para proyectos personales y comerciales"
+    ],
+    pages: 3,
+    colors: ["#3b82f6", "#22d3ee"],
+    accent: "#38bdf8",
+    releasedAt: "2026-04-10"
+  },
+  {
+    id: "monogram",
+    name: "Monogram",
+    tagline: "Portfolio para dise\xF1adores y estudios",
+    description: "Portfolio editorial con transiciones de p\xE1gina suaves, casos de estudio a pantalla completa y una galer\xEDa que hace que tu trabajo hable por ti.",
+    category: "portfolio",
+    price: 49,
+    oldPrice: 69,
+    rating: 4.9,
+    reviews: 143,
+    sales: 980,
+    tech: ["Angular", "GSAP-ready"],
+    features: [
+      "Casos de estudio fullscreen",
+      "Transiciones entre p\xE1ginas",
+      "Cursor personalizado",
+      "Galer\xEDa con lazy loading",
+      "CMS-ready"
+    ],
+    pages: 8,
+    colors: ["#111827", "#6b7280"],
+    accent: "#e11d48",
+    isFeatured: true,
+    releasedAt: "2026-03-22"
+  },
+  {
+    id: "pulse-dashboard",
+    name: "Pulse",
+    tagline: "Dashboard anal\xEDtico con gr\xE1ficas vivas",
+    description: "Panel de administraci\xF3n con m\xE1s de 30 componentes: gr\xE1ficas animadas, tablas inteligentes, calendario y sistema de roles. Todo con datos reactivos desde el primer segundo.",
+    category: "dashboard",
+    price: 99,
+    rating: 4.8,
+    reviews: 189,
+    sales: 1240,
+    tech: ["Angular", "Signals", "SVG Charts"],
+    features: [
+      "30+ componentes listos",
+      "Gr\xE1ficas SVG animadas sin dependencias",
+      "Tablas con orden y filtrado",
+      "Sistema de roles y permisos",
+      "Layout colapsable multi-panel"
+    ],
+    pages: 26,
+    colors: ["#10b981", "#0ea5e9"],
+    accent: "#14b8a6",
+    isNew: true,
+    releasedAt: "2026-07-28"
+  },
+  {
+    id: "ink-blog",
+    name: "Ink",
+    tagline: "Blog editorial centrado en la lectura",
+    description: "Tipograf\xEDa cuidada, modo lectura y newsletter integrada. Ink convierte visitantes en lectores fieles con una experiencia de blog impecable.",
+    category: "blog",
+    price: 0,
+    rating: 4.6,
+    reviews: 76,
+    sales: 3980,
+    tech: ["Angular", "RSS"],
+    features: [
+      "Tipograf\xEDa optimizada para lectura",
+      "Newsletter integrada",
+      "Etiquetas y b\xFAsqueda",
+      "RSS autom\xE1tico",
+      "Gratis para siempre"
+    ],
+    pages: 6,
+    colors: ["#f43f5e", "#fb923c"],
+    accent: "#fb7185",
+    releasedAt: "2026-02-14"
+  },
+  {
+    id: "orbit-startup",
+    name: "Orbit",
+    tagline: "Site corporativo para startups tech",
+    description: "Web completa para startups: producto, equipo, careers y blog. Con animaciones profesionales y un sistema de contenido f\xE1cil de mantener.",
+    category: "saas",
+    price: 69,
+    rating: 4.7,
+    reviews: 112,
+    sales: 860,
+    tech: ["Angular", "Tailwind"],
+    features: [
+      "P\xE1ginas producto/equipo/careers",
+      "Animaciones profesionales",
+      "Multi-idioma ready",
+      "Formularios validados",
+      "CI/CD friendly"
+    ],
+    pages: 14,
+    colors: ["#6366f1", "#a855f7"],
+    accent: "#818cf8",
+    releasedAt: "2026-01-30"
+  },
+  {
+    id: "crate-shop",
+    name: "Crate",
+    tagline: "Mini-tienda para creadores y productos digitales",
+    description: "Vende ebooks, cursos o assets digitales con una tienda ligera y elegante. P\xE1gina de producto con previews, rese\xF1as y entrega autom\xE1tica.",
+    category: "ecommerce",
+    price: 0,
+    rating: 4.5,
+    reviews: 64,
+    sales: 2760,
+    tech: ["Angular", "Stripe-ready"],
+    features: [
+      "Productos digitales con preview",
+      "Rese\xF1as verificadas",
+      "Entrega tras compra",
+      "Cupones de descuento",
+      "Gratis para empezar a vender hoy"
+    ],
+    pages: 7,
+    colors: ["#84cc16", "#16a34a"],
+    accent: "#a3e635",
+    isNew: true,
+    releasedAt: "2026-08-05"
+  },
+  {
+    id: "frame-folio",
+    name: "Frame",
+    tagline: "Portfolio fotogr\xE1fico a pantalla completa",
+    description: "Galer\xEDas inmersivas con navegaci\xF3n por gestos, lightbox cinematogr\xE1fico y modo exposici\xF3n. Para fot\xF3grafos y artistas visuales.",
+    category: "portfolio",
+    price: 39,
+    rating: 4.6,
+    reviews: 58,
+    sales: 430,
+    tech: ["Angular", "WebGL-lite"],
+    features: [
+      "Lightbox cinematogr\xE1fico",
+      "Navegaci\xF3n por gestos",
+      "Precarga inteligente de im\xE1genes",
+      "Protecci\xF3n de im\xE1genes",
+      "Modo exposici\xF3n p\xFAblica"
+    ],
+    pages: 5,
+    colors: ["#0ea5e9", "#8b5cf6"],
+    accent: "#60a5fa",
+    releasedAt: "2025-12-12"
+  },
+  {
+    id: "launch-one",
+    name: "Launch One",
+    tagline: "Coming soon + waitlist que genera expectativa",
+    description: "La plantilla perfecta antes del lanzamiento: cuenta atr\xE1s, waitlist viral con posici\xF3n en cola y actualizaciones por email.",
+    category: "landing",
+    price: 19,
+    rating: 4.5,
+    reviews: 41,
+    sales: 620,
+    tech: ["Angular"],
+    features: [
+      "Cuenta atr\xE1s animada",
+      "Waitlist con posici\xF3n en cola",
+      "Compartir en redes sube posiciones",
+      "Panel simple de suscriptores",
+      "Despliegue en 5 minutos"
+    ],
+    pages: 2,
+    colors: ["#f472b6", "#c084fc"],
+    accent: "#e879f9",
+    releasedAt: "2025-11-08"
+  },
+  {
+    id: "ledger-finance",
+    name: "Ledger",
+    tagline: "Dashboard financiero con reportes claros",
+    description: "Visualiza KPIs financieros, flujos de caja y proyecciones con un dashboard serio y elegante. Exportaci\xF3n a PDF incluida.",
+    category: "dashboard",
+    price: 89,
+    oldPrice: 119,
+    rating: 4.7,
+    reviews: 87,
+    sales: 540,
+    tech: ["Angular", "Signals"],
+    features: [
+      "KPIs y proyecciones",
+      "Exportaci\xF3n a PDF",
+      "Multi-divisa",
+      "Tema claro/oscuro",
+      "Datos mock realistas"
+    ],
+    pages: 15,
+    colors: ["#334155", "#0ea5e9"],
+    accent: "#0284c7",
+    releasedAt: "2026-06-15"
+  },
+  {
+    id: "journal-minimal",
+    name: "Journal",
+    tagline: "Blog minimalista de una columna",
+    description: "Menos es m\xE1s: un blog ultra r\xE1pido, sin distracciones, con tipograf\xEDa serif moderna y RSS. Ideal para escritores.",
+    category: "blog",
+    price: 29,
+    rating: 4.4,
+    reviews: 33,
+    sales: 310,
+    tech: ["Angular"],
+    features: [
+      "Ultra r\xE1pido (<50KB JS)",
+      "Tipograf\xEDa serif moderna",
+      "Dark mode autom\xE1tico",
+      "Archivo por a\xF1os",
+      "Sin dependencias externas"
+    ],
+    pages: 4,
+    colors: ["#78716c", "#fbbf24"],
+    accent: "#d6d3d1",
+    releasedAt: "2026-03-03"
+  },
+  {
+    id: "solaris-portfolio",
+    name: "Solaris",
+    tagline: "Portfolio fotogr\xE1fico inmersivo con lightbox y filtros",
+    description: "Solaris es el portfolio definitivo para fot\xF3grafos y artistas visuales. Galer\xEDa masonry con filtros por categor\xEDa, lightbox cinematogr\xE1fico, secci\xF3n about personal y testimonios de clientes. Todo con tema dual, animaciones de scroll y una est\xE9tica que pone tu trabajo en el centro.",
+    category: "portfolio",
+    price: 0,
+    rating: 4.8,
+    reviews: 92,
+    sales: 1340,
+    tech: ["HTML5", "CSS3", "Vanilla JS"],
+    features: [
+      "Galer\xEDa masonry con filtros por categor\xEDa",
+      "Lightbox cinematogr\xE1fico con navegaci\xF3n",
+      "Secci\xF3n about con herramientas",
+      "Testimonios de clientes",
+      "Tema dual con persistencia",
+      "Animaciones reveal on scroll",
+      "Gratis para siempre"
+    ],
+    pages: 1,
+    colors: ["#e879f9", "#fbbf24"],
+    accent: "#e879f9",
+    isNew: true,
+    releasedAt: "2026-08-27"
+  },
+  {
+    id: "nexa-saas",
+    name: "Nexa",
+    tagline: "SaaS landing con pricing, mockup y automatizaciones IA",
+    description: "Nexa es la plantilla de landing SaaS m\xE1s completa del mercado. Hero con mockup interactivo de la app, bento grid de features, pricing tiers, FAQ accordion, logos de clientes animados y secci\xF3n de testimonials. Dise\xF1ada para convertir visitantes en usuarios.",
+    category: "saas",
+    price: 49,
+    oldPrice: 79,
+    rating: 4.9,
+    reviews: 156,
+    sales: 720,
+    tech: ["HTML5", "CSS3", "Vanilla JS"],
+    features: [
+      "Hero con mockup interactivo de la app",
+      "Bento grid de features",
+      "Pricing tiers con badge popular",
+      "FAQ accordion nativo",
+      "Logos de clientes animados",
+      "Testimonials grid",
+      "Footer completo multi-columna",
+      "Tema dual con persistencia"
+    ],
+    pages: 1,
+    colors: ["#22d3ee", "#8b5cf6"],
+    accent: "#22d3ee",
+    isNew: true,
+    releasedAt: "2026-08-27"
+  }
+];
+
+// src/app/core/models/template.model.ts
+var CATEGORY_LABELS = {
+  saas: "SaaS",
+  ecommerce: "E-commerce",
+  landing: "Landing",
+  portfolio: "Portfolio",
+  blog: "Blog",
+  dashboard: "Dashboard",
+  agency: "Agency",
+  education: "Education",
+  documentation: "Documentation",
+  "admin-panel": "Admin Panel"
+};
+
+// src/app/core/services/preview-shared.ts
+function previewBaseCSS() {
+  return `
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background:#0b0d12;color:#e7eaf2}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+  `;
+}
+function previewNav(name, c1, c2, links = ["Inicio", "Producto", "Precios", "Contacto"]) {
+  const linkHtml = links.map((l, i) => `<a${i === 0 ? ' class="active"' : ""}>${l}</a>`).join("");
+  return `
+    <nav>
+      <div class="brand"><span class="dot"></span>${name}</div>
+      <div class="links">${linkHtml}
+        <button class="cta">Empezar</button>
+      </div>
+    </nav>`;
+}
+function previewFooter(name) {
+  return `<footer>\xA9 2026 ${name} \u2014 vista previa generada desde Templa</footer>`;
+}
+function previewSharedStyles(c1, c2, accent, bodyFont = "-apple-system,'Segoe UI',Roboto,sans-serif") {
+  return `
+    body{font-family:${bodyFont}}
+    nav{display:flex;justify-content:space-between;align-items:center;padding:18px 34px;position:sticky;top:0;
+        backdrop-filter:blur(14px);background:rgba(11,13,18,.75);border-bottom:1px solid #ffffff12;z-index:9}
+    .brand{font-weight:800;font-size:17px;display:flex;gap:9px;align-items:center}
+    .dot{width:22px;height:22px;border-radius:7px;background:linear-gradient(135deg,${c1},${c2});box-shadow:0 4px 14px ${c1}66}
+    .links{display:flex;gap:20px;align-items:center;font-size:13.5px;color:#98a1b3}
+    .links a{cursor:pointer;transition:.2s}.links a:hover,.links a.active{color:#fff}
+    .cta{background:linear-gradient(135deg,${c1},${c2});border:none;color:#fff;padding:9px 16px;border-radius:10px;
+         font-weight:700;cursor:pointer;font-size:13px;transition:.2s}
+    .cta:hover{transform:translateY(-1px);filter:brightness(1.1)}
+    .pill{font-size:12px;color:${accent};border:1px solid ${accent}55;padding:5px 13px;border-radius:99px;
+          background:${accent}14;font-weight:600;display:inline-block}
+    h1{font-size:clamp(28px,5vw,48px);line-height:1.08;margin:22px 0 16px;font-weight:850;letter-spacing:-1.5px;
+       background:linear-gradient(120deg,#fff 30%,#aab3c5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .primary{background:linear-gradient(135deg,${c1},${c2});color:#fff;border:none;padding:13px 26px;border-radius:12px;
+             font-weight:700;cursor:pointer;font-size:15px;box-shadow:0 8px 30px ${c1}44;transition:.25s}
+    .primary:hover{transform:translateY(-2px);box-shadow:0 14px 40px ${c1}66}
+    .ghost{background:transparent;color:#c6cddc;border:1px solid #ffffff26;padding:13px 26px;border-radius:12px;
+           cursor:pointer;font-size:15px;transition:.2s}
+    .ghost:hover{border-color:#ffffff55}
+    footer{padding:30px;text-align:center;color:#565e70;font-size:12px;border-top:1px solid #ffffff10;margin-top:20px}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    @keyframes up{to{opacity:1;transform:none}}
+  `;
+}
+function previewWrap(t, bodyContent, extraCSS = "", fontImport, bodyFont) {
+  const [c1, c2] = t.colors;
+  const fontLink = fontImport ? `<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="${fontImport}" rel="stylesheet">` : "";
+  return `<!doctype html><html lang="es"><head><meta charset="utf-8"/>
+  ${fontLink}
+  <style>${previewBaseCSS()}${previewSharedStyles(c1, c2, t.accent, bodyFont)}${extraCSS}</style></head><body>
+  ${bodyContent}
+  </body></html>`;
 }
 
-/* ═══════════════════════════════════════════
-   AURORA — Bento grid + Syne
-   ═══════════════════════════════════════════ */
-function buildAuroraPreview(t: TemplateItem): string {
+// src/app/core/services/preview.builder.ts
+function buildPreviewHtml(t) {
+  switch (t.id) {
+    case "aurora":
+      return buildAuroraPreview(t);
+    case "nova-saas":
+      return buildNovaSaasPreview(t);
+    case "atlas-store":
+      return buildAtlasStorePreview(t);
+    case "lumen-landing":
+      return buildLumenPreview(t);
+    case "monogram":
+      return buildMonogramPreview(t);
+    case "pulse-dashboard":
+      return buildPulsePreview(t);
+    case "ink-blog":
+      return buildInkBlogPreview(t);
+    case "orbit-startup":
+      return buildOrbitPreview(t);
+    case "crate-shop":
+      return buildCrateShopPreview(t);
+    case "frame-folio":
+      return buildFrameFolioPreview(t);
+    case "launch-one":
+      return buildLaunchOnePreview(t);
+    case "ledger-finance":
+      return buildLedgerPreview(t);
+    case "journal-minimal":
+      return buildJournalPreview(t);
+    case "solaris-portfolio":
+      return buildSolarisPreview(t);
+    case "nexa-saas":
+      return buildNexaPreview(t);
+    case "storefront-gatsby":
+      return buildStorefrontPreview(t);
+    default:
+      return buildGenericPreview(t);
+  }
+}
+function buildAuroraPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap';
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap";
   const nav = `
     <nav>
       <div class="brand"><span class="dot"></span>${t.name}</div>
@@ -41,59 +542,55 @@ function buildAuroraPreview(t: TemplateItem): string {
         <button class="cta">Descargar</button>
       </div>
     </nav>`;
-
   const hero = `
     <div class="mesh"></div>
     <header>
-      <span class="pill">HTML5 puro · Sin frameworks · Lighthouse 100</span>
+      <span class="pill">HTML5 puro \xB7 Sin frameworks \xB7 Lighthouse 100</span>
       <h1>${t.tagline}</h1>
-      <p class="lead">${t.description.split('.')[0]}.</p>
+      <p class="lead">${t.description.split(".")[0]}.</p>
       <div class="ctas">
-        <button class="primary">Descargar gratis →</button>
+        <button class="primary">Descargar gratis \u2192</button>
         <button class="ghost">Ver demo</button>
       </div>
     </header>`;
-
   const bento = `
     <div class="bento">
       <div class="b-card b-big" style="background:linear-gradient(135deg,${c1}22,${c2}12);border-color:${c1}33">
-        <div class="b-icon" style="background:linear-gradient(135deg,${c1},${c2})">⚡</div>
+        <div class="b-icon" style="background:linear-gradient(135deg,${c1},${c2})">\u26A1</div>
         <b>Lighthouse 100/100</b>
-        <small>Performance · Accesibilidad · SEO · Best Practices — todo perfecto, sin trampa.</small>
+        <small>Performance \xB7 Accesibilidad \xB7 SEO \xB7 Best Practices \u2014 todo perfecto, sin trampa.</small>
         <div class="b-score"><span style="color:${c1};font-size:42px;font-weight:800;letter-spacing:-2px">100</span><span style="color:#6b7385;font-size:13px;margin-left:6px">/ 100</span></div>
       </div>
       <div class="b-card" style="background:linear-gradient(135deg,${c2}18,transparent)">
-        <div class="b-icon" style="background:linear-gradient(135deg,${c2},${c1})">🌗</div>
+        <div class="b-icon" style="background:linear-gradient(135deg,${c2},${c1})">\u{1F317}</div>
         <b>Tema dual</b>
         <small>Modo claro y oscuro con persistencia en localStorage.</small>
       </div>
       <div class="b-card">
-        <div class="b-icon" style="background:linear-gradient(135deg,${c1},${c2})">📐</div>
+        <div class="b-icon" style="background:linear-gradient(135deg,${c1},${c2})">\u{1F4D0}</div>
         <b>Bento Grid</b>
         <small>Layout responsive con CSS Grid moderno y sin media queries extras.</small>
       </div>
       <div class="b-card">
-        <div class="b-icon" style="background:linear-gradient(135deg,${c2},${c1})">👁</div>
+        <div class="b-icon" style="background:linear-gradient(135deg,${c2},${c1})">\u{1F441}</div>
         <b>Scroll reveal</b>
         <small>Animaciones con IntersectionObserver. Accesibles y performantes.</small>
       </div>
       <div class="b-card b-wide" style="background:linear-gradient(90deg,${c1}15,${c2}10)">
         <div style="display:flex;gap:24px;align-items:center">
-          <div class="b-icon" style="background:linear-gradient(135deg,${c1},${c2});flex-shrink:0">📦</div>
+          <div class="b-icon" style="background:linear-gradient(135deg,${c1},${c2});flex-shrink:0">\u{1F4E6}</div>
           <div><b>14 KB de CSS comentado</b><small style="display:block;margin-top:4px">Todo el estilo en un solo archivo ordenado por secciones. Sin build, sin dependencias.</small></div>
           <div style="margin-left:auto;font-size:36px;font-weight:800;color:${c1};opacity:.6">14<span style="font-size:16px">KB</span></div>
         </div>
       </div>
     </div>`;
-
   const stats = `
     <div class="aurora-stats">
-      <div><b>${t.sales.toLocaleString('es')}+</b><span>descargas</span></div>
-      <div><b>★ ${t.rating}</b><span>valoración</span></div>
+      <div><b>${t.sales.toLocaleString("es")}+</b><span>descargas</span></div>
+      <div><b>\u2605 ${t.rating}</b><span>valoraci\xF3n</span></div>
       <div><b>14 KB</b><span>CSS total</span></div>
       <div><b>0</b><span>dependencias</span></div>
     </div>`;
-
   const extra = `
     .mesh{position:fixed;inset:-20%;z-index:-1;filter:blur(70px);
       background:radial-gradient(40% 36% at 15% 10%,${c1}50,transparent 70%),
@@ -117,32 +614,25 @@ function buildAuroraPreview(t: TemplateItem): string {
     .aurora-stats b{font-size:26px;display:block;color:#fff;font-weight:800}
     .aurora-stats span{color:#6b7385;font-size:11px;text-transform:uppercase;letter-spacing:1.4px}
     @media(max-width:700px){.bento{grid-template-columns:1fr;padding:0 20px 30px}.b-big,.b-wide{grid-column:span 1}.aurora-stats{gap:28px}}`;
-
   return previewWrap(t, `${nav}${hero}${bento}${stats}${previewFooter(t.name)}`, extra, gFont, "'Syne', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   NOVA SAAS — Hero split + mockup · Plus Jakarta Sans
-   ═══════════════════════════════════════════ */
-function buildNovaSaasPreview(t: TemplateItem): string {
+function buildNovaSaasPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap';
-
-  const nav = previewNav(t.name, c1, c2, ['Producto', 'Precios', 'Blog', 'Docs']);
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap";
+  const nav = previewNav(t.name, c1, c2, ["Producto", "Precios", "Blog", "Docs"]);
   const hero = `
     <div class="mesh"></div>
     <section class="hero-split">
       <div class="hero-text">
-        <span class="pill">SaaS · v2.4 · Premium</span>
+        <span class="pill">SaaS \xB7 v2.4 \xB7 Premium</span>
         <h1>${t.tagline}</h1>
-        <p class="lead">${t.description.split('.')[0]}.</p>
-        <div class="ctas"><button class="primary">Empezar gratis →</button><button class="ghost">Ver demo</button></div>
+        <p class="lead">${t.description.split(".")[0]}.</p>
+        <div class="ctas"><button class="primary">Empezar gratis \u2192</button><button class="ghost">Ver demo</button></div>
         <div class="trust">
           <div class="avatars">
-            ${[c1, c2, '#8b5cf6', '#06b6d4'].map(c => `<div class="av" style="background:linear-gradient(135deg,${c},${c1})"></div>`).join('')}
+            ${[c1, c2, "#8b5cf6", "#06b6d4"].map((c) => `<div class="av" style="background:linear-gradient(135deg,${c},${c1})"></div>`).join("")}
           </div>
-          <span>+${t.sales.toLocaleString('es')} equipos confían en ${t.name}</span>
+          <span>+${t.sales.toLocaleString("es")} equipos conf\xEDan en ${t.name}</span>
         </div>
       </div>
       <div class="hero-mockup">
@@ -150,11 +640,11 @@ function buildNovaSaasPreview(t: TemplateItem): string {
           <div class="mock-bar"><i></i><i></i><i></i></div>
           <div class="mock-body">
             <div class="mock-sidebar">
-              ${['Dashboard', 'Analytics', 'Usuarios', 'Config'].map((l, i) => `<div class="mock-nav-item${i === 0 ? ' active' : ''}" style="${i === 0 ? `background:linear-gradient(135deg,${c1}33,${c2}22);color:#fff` : ''}">${l}</div>`).join('')}
+              ${["Dashboard", "Analytics", "Usuarios", "Config"].map((l, i) => `<div class="mock-nav-item${i === 0 ? " active" : ""}" style="${i === 0 ? `background:linear-gradient(135deg,${c1}33,${c2}22);color:#fff` : ""}">${l}</div>`).join("")}
             </div>
             <div class="mock-content">
               <div class="mock-kpis">
-                ${['$48K', '2.4K', '98%', '4.9★'].map((v, i) => `<div class="mock-kpi"><div class="mk-val" style="color:${i === 0 ? c1 : '#e7eaf2'}">${v}</div><div class="mk-lbl">${['Ingresos', 'Usuarios', 'Uptime', 'Rating'][i]}</div></div>`).join('')}
+                ${["$48K", "2.4K", "98%", "4.9\u2605"].map((v, i) => `<div class="mock-kpi"><div class="mk-val" style="color:${i === 0 ? c1 : "#e7eaf2"}">${v}</div><div class="mk-lbl">${["Ingresos", "Usuarios", "Uptime", "Rating"][i]}</div></div>`).join("")}
               </div>
               <div class="mock-chart">
                 <svg viewBox="0 0 200 60" style="width:100%;height:auto">
@@ -168,19 +658,16 @@ function buildNovaSaasPreview(t: TemplateItem): string {
         </div>
       </div>
     </section>`;
-
   const logos = `
     <div class="logos-bar">
       <span class="logos-label">Usado por equipos en</span>
-      ${['Stripe', 'Vercel', 'Linear', 'Notion', 'Figma'].map(l => `<span class="logo-name">${l}</span>`).join('')}
+      ${["Stripe", "Vercel", "Linear", "Notion", "Figma"].map((l) => `<span class="logo-name">${l}</span>`).join("")}
     </div>`;
-
   const features = t.features.slice(0, 6).map((f, i) => `
     <div class="feat-card" style="--i:${i}">
-      <div class="feat-ic" style="background:linear-gradient(135deg,${c1},${c2})">✦</div>
+      <div class="feat-ic" style="background:linear-gradient(135deg,${c1},${c2})">\u2726</div>
       <b>${f}</b>
-    </div>`).join('');
-
+    </div>`).join("");
   const extra = `
     .mesh{position:fixed;inset:-20%;z-index:-1;filter:blur(80px);
       background:radial-gradient(38% 36% at 70% 20%,${c1}44,transparent 70%),
@@ -217,24 +704,17 @@ function buildNovaSaasPreview(t: TemplateItem): string {
     .feat-ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:16px;flex-shrink:0;color:#fff}
     .feat-card b{font-size:13.5px;line-height:1.4}
     @media(max-width:900px){.hero-split{grid-template-columns:1fr;padding:50px 24px 30px}.feats{grid-template-columns:1fr 1fr;padding:24px}}`;
-
   return previewWrap(t, `${nav}${hero}${logos}<div class="feats">${features}</div>${previewFooter(t.name)}`, extra, gFont, "'Plus Jakarta Sans', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   ATLAS STORE — E-commerce grid · DM Sans
-   ═══════════════════════════════════════════ */
-function buildAtlasStorePreview(t: TemplateItem): string {
+function buildAtlasStorePreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap';
-
+  const gFont = "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap";
   const products = [
-    { name: 'Varsity Jacket', price: '$129', old: '$179', badge: 'Best seller', cat: 'Moda' },
-    { name: 'Minimal Watch', price: '$249', old: '', badge: 'Nuevo', cat: 'Accesorios' },
-    { name: 'Canvas Tote', price: '$49', old: '$69', badge: '', cat: 'Bolsas' },
-    { name: 'Air Sneakers', price: '$189', old: '', badge: 'Popular', cat: 'Calzado' },
+    { name: "Varsity Jacket", price: "$129", old: "$179", badge: "Best seller", cat: "Moda" },
+    { name: "Minimal Watch", price: "$249", old: "", badge: "Nuevo", cat: "Accesorios" },
+    { name: "Canvas Tote", price: "$49", old: "$69", badge: "", cat: "Bolsas" },
+    { name: "Air Sneakers", price: "$189", old: "", badge: "Popular", cat: "Calzado" }
   ];
-
   const nav = `
     <nav>
       <div class="brand"><span class="dot"></span>${t.name}</div>
@@ -247,16 +727,15 @@ function buildAtlasStorePreview(t: TemplateItem): string {
         <button class="cta">Mi cuenta</button>
       </div>
     </nav>`;
-
   const hero = `
     <section class="shop-hero">
       <div class="shop-hero-text">
-        <div class="hero-badge" style="background:${c1}18;border:1px solid ${c1}44;color:${c1}">✦ Nueva colección 2026</div>
+        <div class="hero-badge" style="background:${c1}18;border:1px solid ${c1}44;color:${c1}">\u2726 Nueva colecci\xF3n 2026</div>
         <h1 style="font-size:clamp(32px,5vw,58px);line-height:1.0;letter-spacing:-2px">${t.tagline}</h1>
-        <p style="color:#8a93a8;font-size:16px;line-height:1.6;max-width:420px">${t.description.split('.')[0]}.</p>
+        <p style="color:#8a93a8;font-size:16px;line-height:1.6;max-width:420px">${t.description.split(".")[0]}.</p>
         <div style="display:flex;gap:12px;margin-top:28px">
-          <button class="primary">Ver colección</button>
-          <button class="ghost">Ofertas ↓</button>
+          <button class="primary">Ver colecci\xF3n</button>
+          <button class="ghost">Ofertas \u2193</button>
         </div>
       </div>
       <div class="shop-hero-visual">
@@ -270,30 +749,27 @@ function buildAtlasStorePreview(t: TemplateItem): string {
         </div>
       </div>
     </section>`;
-
-  const filters = ['Todos', 'Moda', 'Accesorios', 'Calzado', 'Bolsas'].map((f, i) =>
-    `<button class="filter-btn${i === 0 ? ' active' : ''}" style="${i === 0 ? `background:linear-gradient(135deg,${c1},${c2});color:#fff;border-color:transparent` : ''}">${f}</button>`
-  ).join('');
-
+  const filters = ["Todos", "Moda", "Accesorios", "Calzado", "Bolsas"].map(
+    (f, i) => `<button class="filter-btn${i === 0 ? " active" : ""}" style="${i === 0 ? `background:linear-gradient(135deg,${c1},${c2});color:#fff;border-color:transparent` : ""}">${f}</button>`
+  ).join("");
   const productCards = products.map((p, i) => `
     <div class="prod-card" style="--i:${i}">
       <div class="prod-img" style="background:linear-gradient(${140 + i * 25}deg,color-mix(in srgb,${c1} ${30 - i * 4}%,#12151e),#0c0e15)">
-        ${p.badge ? `<span class="prod-badge" style="background:linear-gradient(135deg,${c1},${c2})">${p.badge}</span>` : ''}
-        <button class="prod-wish">♡</button>
+        ${p.badge ? `<span class="prod-badge" style="background:linear-gradient(135deg,${c1},${c2})">${p.badge}</span>` : ""}
+        <button class="prod-wish">\u2661</button>
       </div>
       <div class="prod-info">
         <div style="font-size:11px;color:#6b7385;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">${p.cat}</div>
         <b style="font-size:15px;display:block;margin-bottom:8px">${p.name}</b>
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div style="display:flex;align-items:baseline;gap:6px">
-            ${p.old ? `<s style="color:#4b5568;font-size:12px">${p.old}</s>` : ''}
+            ${p.old ? `<s style="color:#4b5568;font-size:12px">${p.old}</s>` : ""}
             <span style="font-size:18px;font-weight:800;color:${c1}">${p.price}</span>
           </div>
           <button class="add-btn" style="background:linear-gradient(135deg,${c1},${c2})">+</button>
         </div>
       </div>
-    </div>`).join('');
-
+    </div>`).join("");
   const extra = `
     .shop-hero{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;padding:60px 48px 40px;max-width:1100px;margin:0 auto}
     .hero-badge{display:inline-block;font-size:12px;font-weight:700;padding:6px 14px;border-radius:99px;margin-bottom:16px}
@@ -314,47 +790,38 @@ function buildAtlasStorePreview(t: TemplateItem): string {
     .cart-btn{position:relative;cursor:pointer;color:#98a1b3;display:flex;align-items:center}
     .cart-count{position:absolute;top:-6px;right:-8px;font-size:9px;font-weight:800;color:#fff;width:15px;height:15px;border-radius:50%;display:grid;place-items:center}
     @media(max-width:900px){.shop-hero{grid-template-columns:1fr;padding:40px 24px}.prod-grid{grid-template-columns:1fr 1fr;padding:0 20px 30px}}`;
-
   return previewWrap(t, `${nav}${hero}<div class="filters">${filters}</div><div class="prod-grid">${productCards}</div>${previewFooter(t.name)}`, extra, gFont, "'DM Sans', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   LUMEN — Hero cinematográfico · Outfit
-   ═══════════════════════════════════════════ */
-function buildLumenPreview(t: TemplateItem): string {
+function buildLumenPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap';
-
-  const nav = previewNav(t.name, c1, c2, ['Inicio', 'Features', 'Precios', 'Contacto']);
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap";
+  const nav = previewNav(t.name, c1, c2, ["Inicio", "Features", "Precios", "Contacto"]);
   const hero = `
     <div class="mesh"></div>
     <section class="lumen-hero">
-      <span class="pill">Landing · Lighthouse 98+ · Gratis</span>
+      <span class="pill">Landing \xB7 Lighthouse 98+ \xB7 Gratis</span>
       <h1 class="lumen-h1">${t.tagline}</h1>
       <div class="lumen-line" style="background:linear-gradient(90deg,transparent,${c1},${c2},transparent)"></div>
-      <p class="lead">${t.description.split('.')[0]}.</p>
+      <p class="lead">${t.description.split(".")[0]}.</p>
       <div class="ctas">
-        <button class="primary">Usar gratis →</button>
+        <button class="primary">Usar gratis \u2192</button>
         <button class="ghost">Ver demo en vivo</button>
       </div>
       <div class="lumen-meta">
-        <div class="lumen-stat"><span style="color:${c1};font-weight:700">${t.sales.toLocaleString('es')}+</span> descargas</div>
+        <div class="lumen-stat"><span style="color:${c1};font-weight:700">${t.sales.toLocaleString("es")}+</span> descargas</div>
         <div class="lumen-dot"></div>
-        <div class="lumen-stat"><span style="color:${c1};font-weight:700">★ ${t.rating}</span> valoración</div>
+        <div class="lumen-stat"><span style="color:${c1};font-weight:700">\u2605 ${t.rating}</span> valoraci\xF3n</div>
         <div class="lumen-dot"></div>
         <div class="lumen-stat"><span style="color:${c1};font-weight:700">98+</span> Lighthouse</div>
       </div>
     </section>`;
-
   const features = t.features.slice(0, 5).map((f, i) => `
     <div class="lumen-feat" style="--i:${i}">
       <div class="lf-num" style="color:${c1}">0${i + 1}</div>
       <div class="lf-text">
         <b>${f}</b>
       </div>
-    </div>`).join('');
-
+    </div>`).join("");
   const showcase = `
     <section class="lumen-showcase">
       <div class="ls-screen" style="background:#0a0c14">
@@ -407,7 +874,6 @@ function buildLumenPreview(t: TemplateItem): string {
         </div>
       </div>
     </section>`;
-
   const extra = `
     .mesh{position:fixed;inset:-25%;z-index:-1;filter:blur(90px);
       background:radial-gradient(36% 32% at 50% 10%,${c1}50,transparent 70%),
@@ -432,50 +898,40 @@ function buildLumenPreview(t: TemplateItem): string {
     .ls-content{padding:24px}
     .ls-p{height:8px;border-radius:4px;background:#ffffff10;margin-bottom:8px}
     @media(max-width:700px){.lumen-feats,.lumen-showcase{padding:20px}.lumen-meta{flex-wrap:wrap}}`;
-
   return previewWrap(t, `${nav}${hero}<div class="lumen-feats">${features}</div>${showcase}${previewFooter(t.name)}`, extra, gFont, "'Outfit', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   MONOGRAM — Portfolio editorial · Fraunces + DM Sans
-   ═══════════════════════════════════════════ */
-function buildMonogramPreview(t: TemplateItem): string {
+function buildMonogramPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@400;500;600&display=swap';
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@400;500;600&display=swap";
   const nav = `
     <nav>
       <div class="brand" style="font-family:'Fraunces',serif;font-weight:700;font-style:italic;letter-spacing:-0.5px;font-size:20px">${t.name}</div>
-      <div class="links"><a class="active">Trabajo</a><a>Proceso</a><a>Sobre mí</a>
+      <div class="links"><a class="active">Trabajo</a><a>Proceso</a><a>Sobre m\xED</a>
         <button class="cta">Contactar</button>
       </div>
     </nav>`;
-
   const hero = `
     <section class="mono-hero">
-      <div class="mono-tag" style="border-color:${c1}44;color:${c1}">Portfolio · Diseño & Dirección</div>
-      <h1 class="mono-title">Diseño que<br><em style="color:${c1};font-style:italic">habla</em> por ti</h1>
-      <p class="mono-sub">Casos de estudio a pantalla completa. Transiciones de página fluidas. Un portfolio que hace que tu trabajo brille.</p>
+      <div class="mono-tag" style="border-color:${c1}44;color:${c1}">Portfolio \xB7 Dise\xF1o & Direcci\xF3n</div>
+      <h1 class="mono-title">Dise\xF1o que<br><em style="color:${c1};font-style:italic">habla</em> por ti</h1>
+      <p class="mono-sub">Casos de estudio a pantalla completa. Transiciones de p\xE1gina fluidas. Un portfolio que hace que tu trabajo brille.</p>
     </section>`;
-
   const projects = [
-    { name: 'Branding App Móvil', cat: 'Branding', year: '2026', span: 'col-span-2' },
-    { name: 'Rediseño Fintech', cat: 'UI/UX', year: '2026', span: '' },
-    { name: 'Campaña Social', cat: 'Social Media', year: '2025', span: '' },
-    { name: 'Dashboard Analytics', cat: 'UI/UX', year: '2025', span: 'col-span-2' },
+    { name: "Branding App M\xF3vil", cat: "Branding", year: "2026", span: "col-span-2" },
+    { name: "Redise\xF1o Fintech", cat: "UI/UX", year: "2026", span: "" },
+    { name: "Campa\xF1a Social", cat: "Social Media", year: "2025", span: "" },
+    { name: "Dashboard Analytics", cat: "UI/UX", year: "2025", span: "col-span-2" }
   ];
-
   const grid = projects.map((p, i) => `
     <div class="mono-proj ${p.span}" style="--i:${i}">
       <div class="mono-proj-img" style="background:linear-gradient(${135 + i * 30}deg,color-mix(in srgb,${c1} ${35 - i * 6}%,#0f111a),#090b12)">
         <div class="mono-proj-info">
-          <div class="mono-proj-cat" style="color:${c1}">${p.cat} · ${p.year}</div>
+          <div class="mono-proj-cat" style="color:${c1}">${p.cat} \xB7 ${p.year}</div>
           <div class="mono-proj-name">${p.name}</div>
-          <div class="mono-proj-arrow" style="color:${c1}">→</div>
+          <div class="mono-proj-arrow" style="color:${c1}">\u2192</div>
         </div>
       </div>
-    </div>`).join('');
-
+    </div>`).join("");
   const extra = `
     .mono-hero{text-align:center;padding:80px 48px 50px}
     .mono-tag{display:inline-block;font-size:12px;font-weight:500;padding:6px 16px;border-radius:99px;border:1px solid;margin-bottom:24px;letter-spacing:.5px}
@@ -496,87 +952,74 @@ function buildMonogramPreview(t: TemplateItem): string {
     .mono-stats b{font-family:'Fraunces',serif;font-size:32px;display:block;color:#fff}
     .mono-stats span{font-size:11px;color:#6b7385;letter-spacing:1.2px;text-transform:uppercase}
     @media(max-width:700px){.mono-grid{grid-template-columns:1fr;padding:0 20px}.col-span-2{grid-column:span 1}.mono-hero{padding:60px 24px 30px}}`;
-
   const stats = `
     <div class="mono-stats">
-      <div><b>${t.sales.toLocaleString('es')}+</b><span>Proyectos entregados</span></div>
-      <div><b>★ ${t.rating}</b><span>Valoración</span></div>
-      <div><b>${t.pages}</b><span>Páginas incluidas</span></div>
+      <div><b>${t.sales.toLocaleString("es")}+</b><span>Proyectos entregados</span></div>
+      <div><b>\u2605 ${t.rating}</b><span>Valoraci\xF3n</span></div>
+      <div><b>${t.pages}</b><span>P\xE1ginas incluidas</span></div>
     </div>`;
-
   return previewWrap(t, `${nav}${hero}<div class="mono-grid">${grid}</div>${stats}${previewFooter(t.name)}`, extra, gFont, "'DM Sans', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   PULSE DASHBOARD — Dashboard analítico · Inter
-   ═══════════════════════════════════════════ */
-function buildPulsePreview(t: TemplateItem): string {
+function buildPulsePreview(t) {
   const [c1, c2] = t.colors;
   const accent = t.accent;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap';
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap";
   const kpis = [
-    { label: 'Ingresos', value: '$48,290', change: '+12.5%', up: true, spark: 'M10,22 L18,18 L26,20 L34,14 L42,10 L50,12 L58,6' },
-    { label: 'Usuarios', value: '2,847', change: '+8.2%', up: true, spark: 'M10,20 L18,22 L26,16 L34,18 L42,12 L50,14 L58,8' },
-    { label: 'Órdenes', value: '1,394', change: '+23.1%', up: true, spark: 'M10,24 L18,20 L26,22 L34,16 L42,14 L50,10 L58,6' },
-    { label: 'Churn', value: '2.4%', change: '-0.8%', up: false, spark: 'M10,8 L18,10 L26,12 L34,14 L42,16 L50,18 L58,20' },
+    { label: "Ingresos", value: "$48,290", change: "+12.5%", up: true, spark: "M10,22 L18,18 L26,20 L34,14 L42,10 L50,12 L58,6" },
+    { label: "Usuarios", value: "2,847", change: "+8.2%", up: true, spark: "M10,20 L18,22 L26,16 L34,18 L42,12 L50,14 L58,8" },
+    { label: "\xD3rdenes", value: "1,394", change: "+23.1%", up: true, spark: "M10,24 L18,20 L26,22 L34,16 L42,14 L50,10 L58,6" },
+    { label: "Churn", value: "2.4%", change: "-0.8%", up: false, spark: "M10,8 L18,10 L26,12 L34,14 L42,16 L50,18 L58,20" }
   ];
-
   const kpiCards = kpis.map((k, i) => `
     <div class="kpi" style="--i:${i}">
-      <div class="kpi-top"><span class="kpi-label">${k.label}</span><span class="kpi-change ${k.up ? 'up' : 'down'}">${k.change}</span></div>
+      <div class="kpi-top"><span class="kpi-label">${k.label}</span><span class="kpi-change ${k.up ? "up" : "down"}">${k.change}</span></div>
       <div class="kpi-value">${k.value}</div>
-      <svg class="spark" viewBox="0 0 68 28"><polyline points="${k.spark}" fill="none" stroke="${k.up ? '#22c55e' : '#ef4444'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>`).join('');
-
-  const linePoints = '0,140 40,120 80,130 120,90 160,100 200,60 240,70 280,40 320,50 360,20 400,30 440,10';
-  const lineArea = linePoints + ' 440,160 0,160';
+      <svg class="spark" viewBox="0 0 68 28"><polyline points="${k.spark}" fill="none" stroke="${k.up ? "#22c55e" : "#ef4444"}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>`).join("");
+  const linePoints = "0,140 40,120 80,130 120,90 160,100 200,60 240,70 280,40 320,50 360,20 400,30 440,10";
+  const lineArea = linePoints + " 440,160 0,160";
   const barData = [65, 45, 80, 55, 70, 90, 60, 75, 85, 50, 95, 70];
-  const months = ['E','F','M','A','M','J','J','A','S','O','N','D'];
-  const bars = barData.map((v, i) => `<rect x="${i * 37 + 4}" y="${160 - v * 1.5}" width="24" height="${v * 1.5}" rx="4" fill="url(#barGrad)" opacity="0.85"><animate attributeName="height" from="0" to="${v * 1.5}" dur="0.6s" begin="${i * 0.05}s" fill="freeze"/><animate attributeName="y" from="160" to="${160 - v * 1.5}" dur="0.6s" begin="${i * 0.05}s" fill="freeze"/></rect>`).join('');
-
+  const months = ["E", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
+  const bars = barData.map((v, i) => `<rect x="${i * 37 + 4}" y="${160 - v * 1.5}" width="24" height="${v * 1.5}" rx="4" fill="url(#barGrad)" opacity="0.85"><animate attributeName="height" from="0" to="${v * 1.5}" dur="0.6s" begin="${i * 0.05}s" fill="freeze"/><animate attributeName="y" from="160" to="${160 - v * 1.5}" dur="0.6s" begin="${i * 0.05}s" fill="freeze"/></rect>`).join("");
   const donutSegments = [
-    { pct: 35, color: c1, label: 'Premium' },
-    { pct: 25, color: c2, label: 'Pro' },
-    { pct: 20, color: accent, label: 'Enterprise' },
-    { pct: 20, color: '#64748b', label: 'Free' },
+    { pct: 35, color: c1, label: "Premium" },
+    { pct: 25, color: c2, label: "Pro" },
+    { pct: 20, color: accent, label: "Enterprise" },
+    { pct: 20, color: "#64748b", label: "Free" }
   ];
   let cumPct = 0;
-  const donutPaths = donutSegments.map(s => {
+  const donutPaths = donutSegments.map((s) => {
     const start = cumPct;
     cumPct += s.pct;
     const r = 54, cx = 70, cy = 70;
-    const startAngle = (start / 100) * 2 * Math.PI - Math.PI / 2;
-    const endAngle = (cumPct / 100) * 2 * Math.PI - Math.PI / 2;
+    const startAngle = start / 100 * 2 * Math.PI - Math.PI / 2;
+    const endAngle = cumPct / 100 * 2 * Math.PI - Math.PI / 2;
     const largeArc = s.pct > 50 ? 1 : 0;
     const x1 = cx + r * Math.cos(startAngle), y1 = cy + r * Math.sin(startAngle);
     const x2 = cx + r * Math.cos(endAngle), y2 = cy + r * Math.sin(endAngle);
-    return `<path d="M${x1},${y1} A${r},${r} 0 ${largeArc},1 ${x2},${y2}" fill="none" stroke="${s.color}" stroke-width="18" stroke-linecap="round" opacity="0.9"><animate attributeName="stroke-dasharray" from="0,400" to="${(s.pct / 100) * 340},400" dur="0.8s" begin="${cumPct * 8}ms" fill="freeze"/></path>`;
-  }).join('');
-  const donutLegend = donutSegments.map(s => `<div class="legend-item"><span class="legend-dot" style="background:${s.color}"></span>${s.label} <b>${s.pct}%</b></div>`).join('');
-
+    return `<path d="M${x1},${y1} A${r},${r} 0 ${largeArc},1 ${x2},${y2}" fill="none" stroke="${s.color}" stroke-width="18" stroke-linecap="round" opacity="0.9"><animate attributeName="stroke-dasharray" from="0,400" to="${s.pct / 100 * 340},400" dur="0.8s" begin="${cumPct * 8}ms" fill="freeze"/></path>`;
+  }).join("");
+  const donutLegend = donutSegments.map((s) => `<div class="legend-item"><span class="legend-dot" style="background:${s.color}"></span>${s.label} <b>${s.pct}%</b></div>`).join("");
   const orders = [
-    { id: '#38291', client: 'María García', amount: '$2,450', status: 'Completado', date: 'Hace 2h' },
-    { id: '#38290', client: 'Carlos Ruiz', amount: '$890', status: 'Pendiente', date: 'Hace 4h' },
-    { id: '#38289', client: 'Ana López', amount: '$3,200', status: 'Completado', date: 'Hace 6h' },
+    { id: "#38291", client: "Mar\xEDa Garc\xEDa", amount: "$2,450", status: "Completado", date: "Hace 2h" },
+    { id: "#38290", client: "Carlos Ruiz", amount: "$890", status: "Pendiente", date: "Hace 4h" },
+    { id: "#38289", client: "Ana L\xF3pez", amount: "$3,200", status: "Completado", date: "Hace 6h" }
   ];
-  const statusClass: Record<string, string> = { Completado: 'st-ok', Pendiente: 'st-warn', Procesando: 'st-proc' };
-  const orderRows = orders.map(o => `
+  const statusClass = { Completado: "st-ok", Pendiente: "st-warn", Procesando: "st-proc" };
+  const orderRows = orders.map((o) => `
     <tr>
       <td class="mono">${o.id}</td><td>${o.client}</td>
       <td class="mono">${o.amount}</td>
       <td><span class="st ${statusClass[o.status]}">${o.status}</span></td>
       <td class="dim">${o.date}</td>
-    </tr>`).join('');
-
+    </tr>`).join("");
   const sidebarItems = [
-    { icon: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>', label: 'Dashboard', active: true },
-    { icon: '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>', label: 'Analytics', active: false },
-    { icon: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>', label: 'Usuarios', active: false },
-    { icon: '<rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/>', label: 'Pagos', active: false },
-    { icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>', label: 'Reportes', active: false },
+    { icon: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>', label: "Dashboard", active: true },
+    { icon: '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>', label: "Analytics", active: false },
+    { icon: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>', label: "Usuarios", active: false },
+    { icon: '<rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/>', label: "Pagos", active: false },
+    { icon: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>', label: "Reportes", active: false }
   ];
-
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="${gFont}" rel="stylesheet">
   <style>
@@ -648,12 +1091,12 @@ function buildPulsePreview(t: TemplateItem): string {
   <aside class="sidebar">
     <div class="sb-brand"><div class="sb-dot"></div><span class="sb-name">${t.name}</span></div>
     <nav class="sb-nav">
-      ${sidebarItems.map(item => `
-      <div class="sb-item${item.active ? ' active' : ''}">
+      ${sidebarItems.map((item) => `
+      <div class="sb-item${item.active ? " active" : ""}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${item.icon}</svg>${item.label}
-      </div>`).join('')}
+      </div>`).join("")}
     </nav>
-    <div class="sb-footer"><div class="sb-avatar">JD</div><div><div class="sb-user">Juan Díaz</div><div class="sb-role">Admin</div></div></div>
+    <div class="sb-footer"><div class="sb-avatar">JD</div><div><div class="sb-user">Juan D\xEDaz</div><div class="sb-role">Admin</div></div></div>
   </aside>
   <div class="main">
     <header class="topbar"><h2>Dashboard</h2><div style="display:flex;align-items:center;gap:12px">
@@ -674,7 +1117,7 @@ function buildPulsePreview(t: TemplateItem): string {
           <div class="chart-labels"><span>Ene</span><span>Feb</span><span>Mar</span><span>Abr</span><span>May</span><span>Jun</span><span>Jul</span><span>Ago</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dic</span></div>
         </div>
         <div class="chart-card">
-          <div class="chart-title">Distribución</div>
+          <div class="chart-title">Distribuci\xF3n</div>
           <div class="donut-wrap">
             <svg class="donut-svg" viewBox="0 0 140 140">
               <circle cx="70" cy="70" r="54" fill="none" stroke="#ffffff08" stroke-width="18"/>
@@ -687,17 +1130,17 @@ function buildPulsePreview(t: TemplateItem): string {
         </div>
       </div>
       <div class="chart-card">
-        <div class="chart-title">Órdenes por mes</div>
+        <div class="chart-title">\xD3rdenes por mes</div>
         <svg viewBox="0 0 450 175" style="width:100%;height:auto">
           <defs><linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${c2}"/><stop offset="100%" stop-color="${c1}"/></linearGradient></defs>
           <g class="chart-grid"><line x1="0" y1="40" x2="450" y2="40"/><line x1="0" y1="80" x2="450" y2="80"/><line x1="0" y1="120" x2="450" y2="120"/><line x1="0" y1="160" x2="450" y2="160"/></g>
           ${bars}
         </svg>
-        <div class="bar-labels">${months.map(m => `<span>${m}</span>`).join('')}</div>
+        <div class="bar-labels">${months.map((m) => `<span>${m}</span>`).join("")}</div>
       </div>
       <div class="bottom">
         <div class="table-wrap">
-          <div class="chart-title">Órdenes recientes</div>
+          <div class="chart-title">\xD3rdenes recientes</div>
           <table><thead><tr><th>ID</th><th>Cliente</th><th>Monto</th><th>Estado</th><th>Fecha</th></tr></thead>
           <tbody>${orderRows}</tbody></table>
         </div>
@@ -705,68 +1148,58 @@ function buildPulsePreview(t: TemplateItem): string {
     </div>
   </div></body></html>`;
 }
-
-/* ═══════════════════════════════════════════
-   INK BLOG — Editorial una columna · Lora
-   ═══════════════════════════════════════════ */
-function buildInkBlogPreview(t: TemplateItem): string {
+function buildInkBlogPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&display=swap';
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600&display=swap";
   const nav = `
     <nav style="display:flex;justify-content:space-between;align-items:center;padding:18px 34px;position:sticky;top:0;backdrop-filter:blur(14px);background:rgba(11,13,18,.8);border-bottom:1px solid #ffffff12;z-index:9">
       <div style="font-family:'Lora',serif;font-weight:700;font-size:20px;font-style:italic;color:#fff">${t.name}</div>
       <div style="display:flex;gap:20px;align-items:center;font-size:13px;color:#98a1b3">
-        <a style="cursor:pointer;color:#fff">Artículos</a><a style="cursor:pointer">Categorías</a><a style="cursor:pointer">Sobre</a>
+        <a style="cursor:pointer;color:#fff">Art\xEDculos</a><a style="cursor:pointer">Categor\xEDas</a><a style="cursor:pointer">Sobre</a>
         <button style="background:linear-gradient(135deg,${c1},${c2});border:none;color:#fff;padding:8px 16px;border-radius:99px;font-weight:600;cursor:pointer;font-size:12px">Newsletter</button>
       </div>
     </nav>`;
-
   const featured = `
     <div class="ink-featured">
       <div class="ink-feat-img" style="background:radial-gradient(circle at 70% 30%, ${c1}, transparent 70%), radial-gradient(circle at 20% 80%, ${c2}, transparent 70%), #0c0e15; box-shadow: inset 0 0 60px rgba(0,0,0,0.5)">
         <div class="ink-feat-overlay">
-          <div class="ink-tag" style="background:rgba(11,13,18,0.7);backdrop-filter:blur(8px);color:${c1};border-color:${c1}44">Artículo destacado</div>
+          <div class="ink-tag" style="background:rgba(11,13,18,0.7);backdrop-filter:blur(8px);color:${c1};border-color:${c1}44">Art\xEDculo destacado</div>
         </div>
       </div>
       <div class="ink-feat-text">
-        <div class="ink-meta" style="color:${c1}">Angular · 12 min lectura · Hace 2 días</div>
+        <div class="ink-meta" style="color:${c1}">Angular \xB7 12 min lectura \xB7 Hace 2 d\xEDas</div>
         <h1 class="ink-h1">${t.tagline}</h1>
-        <p class="ink-lead">${t.description.split('.')[0]}.</p>
+        <p class="ink-lead">${t.description.split(".")[0]}.</p>
         <div class="ink-author">
           <div class="ink-av" style="background:linear-gradient(135deg,${c1},${c2})"></div>
-          <div><span class="ink-an">Admin Ink</span><br><span class="ink-ad">Editor · ${t.sales.toLocaleString('es')} lectores</span></div>
+          <div><span class="ink-an">Admin Ink</span><br><span class="ink-ad">Editor \xB7 ${t.sales.toLocaleString("es")} lectores</span></div>
         </div>
       </div>
     </div>`;
-
   const posts = [
-    { title: 'Guía completa de Angular Signals', cat: 'Angular', time: '12 min', date: 'Hace 3 días', bg: `linear-gradient(145deg, ${c2}, #0c0e15 80%)` },
-    { title: '10 tips de UI/UX que transformarán tu SaaS', cat: 'Diseño', time: '6 min', date: 'Hace 5 días', bg: `conic-gradient(from 180deg at 50% 50%, ${c1}44, ${c2}66, #0c0e15 60%)` },
-    { title: 'Cómo elegir la plantilla correcta para tu proyecto', cat: 'Guías', time: '8 min', date: 'Hace 1 semana', bg: `radial-gradient(circle at 10% 10%, ${c1}88, #0c0e15 60%)` },
+    { title: "Gu\xEDa completa de Angular Signals", cat: "Angular", time: "12 min", date: "Hace 3 d\xEDas", bg: `linear-gradient(145deg, ${c2}, #0c0e15 80%)` },
+    { title: "10 tips de UI/UX que transformar\xE1n tu SaaS", cat: "Dise\xF1o", time: "6 min", date: "Hace 5 d\xEDas", bg: `conic-gradient(from 180deg at 50% 50%, ${c1}44, ${c2}66, #0c0e15 60%)` },
+    { title: "C\xF3mo elegir la plantilla correcta para tu proyecto", cat: "Gu\xEDas", time: "8 min", date: "Hace 1 semana", bg: `radial-gradient(circle at 10% 10%, ${c1}88, #0c0e15 60%)` }
   ];
-
   const postList = posts.map((p, i) => `
     <article class="ink-post" style="--i:${i}">
       <div class="ink-post-thumb" style="background:${p.bg}; box-shadow: inset 0 0 20px rgba(0,0,0,0.4)"></div>
       <div class="ink-post-body">
         <div class="ink-tag" style="color:${c1};border-color:${c1}44">${p.cat}</div>
         <h3 class="ink-post-title">${p.title}</h3>
-        <div class="ink-post-meta">${p.date} · ${p.time} lectura</div>
+        <div class="ink-post-meta">${p.date} \xB7 ${p.time} lectura</div>
       </div>
-    </article>`).join('');
-
+    </article>`).join("");
   const newsletter = `
     <div class="ink-nl" style="background:linear-gradient(135deg,${c1}18,${c2}12);border:1px solid ${c1}33">
-      <div class="ink-nl-icon" style="color:${c1}">✉</div>
-      <h3 class="ink-nl-title">Suscríbete a ${t.name}</h3>
-      <p class="ink-nl-sub">Recibe los mejores artículos cada semana. Sin spam, siempre.</p>
+      <div class="ink-nl-icon" style="color:${c1}">\u2709</div>
+      <h3 class="ink-nl-title">Suscr\xEDbete a ${t.name}</h3>
+      <p class="ink-nl-sub">Recibe los mejores art\xEDculos cada semana. Sin spam, siempre.</p>
       <div class="ink-nl-form">
         <input placeholder="tu@email.com" class="ink-input"/>
-        <button style="background:linear-gradient(135deg,${c1},${c2});border:none;color:#fff;padding:10px 20px;border-radius:99px;font-weight:600;cursor:pointer;font-size:13px">Suscribirme →</button>
+        <button style="background:linear-gradient(135deg,${c1},${c2});border:none;color:#fff;padding:10px 20px;border-radius:99px;font-weight:600;cursor:pointer;font-size:13px">Suscribirme \u2192</button>
       </div>
     </div>`;
-
   const extra = `
     .ink-featured{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;padding:50px 48px 40px;max-width:1000px;margin:0 auto}
     .ink-feat-img{aspect-ratio:16/10;border-radius:18px;position:relative;border:1px solid #ffffff14;overflow:hidden}
@@ -795,26 +1228,19 @@ function buildInkBlogPreview(t: TemplateItem): string {
     .ink-nl-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
     .ink-input{background:#0b0d12;border:1px solid #ffffff18;border-radius:99px;padding:10px 18px;color:#e7eaf2;font-size:13px;width:220px}
     @media(max-width:800px){.ink-featured{grid-template-columns:1fr;padding:30px 24px}.ink-posts-section,.ink-nl{padding:0 20px;margin:20px 20px 0}}`;
-
-  return previewWrap(t, `${nav}${featured}<div class="ink-posts-section"><div class="ink-posts-title">Últimos artículos</div>${postList}</div>${newsletter}${previewFooter(t.name)}`, extra, gFont, "'Inter', sans-serif");
+  return previewWrap(t, `${nav}${featured}<div class="ink-posts-section"><div class="ink-posts-title">\xDAltimos art\xEDculos</div>${postList}</div>${newsletter}${previewFooter(t.name)}`, extra, gFont, "'Inter', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   ORBIT STARTUP — Startup tech · Space Grotesk
-   ═══════════════════════════════════════════ */
-function buildOrbitPreview(t: TemplateItem): string {
+function buildOrbitPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap';
-
-  const nav = previewNav(t.name, c1, c2, ['Producto', 'Equipo', 'Careers', 'Blog']);
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap";
+  const nav = previewNav(t.name, c1, c2, ["Producto", "Equipo", "Careers", "Blog"]);
   const hero = `
     <div class="orbit-bg"></div>
     <section class="orbit-hero">
-      <span class="pill">Startup · ${t.name} · v2.0</span>
+      <span class="pill">Startup \xB7 ${t.name} \xB7 v2.0</span>
       <h1>${t.tagline}</h1>
-      <p class="lead">${t.description.split('.')[0]}.</p>
-      <div class="ctas"><button class="primary">Ver producto →</button><button class="ghost">Hablar con ventas</button></div>
+      <p class="lead">${t.description.split(".")[0]}.</p>
+      <div class="ctas"><button class="primary">Ver producto \u2192</button><button class="ghost">Hablar con ventas</button></div>
       <div class="orbit-ring">
         <div class="orbit-circle" style="border-color:${c1}22"></div>
         <div class="orbit-circle orbit-c2" style="border-color:${c2}18"></div>
@@ -823,30 +1249,26 @@ function buildOrbitPreview(t: TemplateItem): string {
         <div class="orbit-dot orbit-d3" style="background:${c1};width:6px;height:6px"></div>
       </div>
     </section>`;
-
-  const services = ['Producto', 'Plataforma', 'Equipo', 'Careers'].map((s, i) => `
+  const services = ["Producto", "Plataforma", "Equipo", "Careers"].map((s, i) => `
     <div class="orbit-feat" style="--i:${i}">
       <div class="of-ic" style="background:linear-gradient(135deg,${c1},${c2})">
-        <span>${['🚀','⚡','👥','💼'][i]}</span>
+        <span>${["\u{1F680}", "\u26A1", "\u{1F465}", "\u{1F4BC}"][i]}</span>
       </div>
       <b>${s}</b>
-      <small>${t.features[i] || 'Tecnología de vanguardia para tu empresa'}</small>
-    </div>`).join('');
-
+      <small>${t.features[i] || "Tecnolog\xEDa de vanguardia para tu empresa"}</small>
+    </div>`).join("");
   const team = [
-    { name: 'Ana García', role: 'CEO & Co-fundadora', initial: 'A' },
-    { name: 'Carlos Ruiz', role: 'CTO', initial: 'C' },
-    { name: 'María López', role: 'Head of Design', initial: 'M' },
-    { name: 'Pedro Sánchez', role: 'Head of Growth', initial: 'P' },
+    { name: "Ana Garc\xEDa", role: "CEO & Co-fundadora", initial: "A" },
+    { name: "Carlos Ruiz", role: "CTO", initial: "C" },
+    { name: "Mar\xEDa L\xF3pez", role: "Head of Design", initial: "M" },
+    { name: "Pedro S\xE1nchez", role: "Head of Growth", initial: "P" }
   ];
-
   const teamCards = team.map((m, i) => `
     <div class="orbit-team-card" style="--i:${i}">
       <div class="otm-av" style="background:linear-gradient(135deg,color-mix(in srgb,${c1} ${60 - i * 12}%,${c2}),${c2})">${m.initial}</div>
       <b>${m.name}</b>
       <small>${m.role}</small>
-    </div>`).join('');
-
+    </div>`).join("");
   const extra = `
     .orbit-bg{position:fixed;inset:-30%;z-index:-1;filter:blur(100px);
       background:radial-gradient(32% 30% at 30% 20%,${c1}40,transparent 70%),
@@ -878,45 +1300,35 @@ function buildOrbitPreview(t: TemplateItem): string {
     .orbit-team-card b{display:block;font-size:14px;font-weight:700;margin-bottom:4px}
     .orbit-team-card small{color:#6b7385;font-size:12px}
     @media(max-width:800px){.orbit-feats,.orbit-team{grid-template-columns:1fr 1fr;padding:0 20px}}`;
-
   return previewWrap(t, `${nav}${hero}<div class="orbit-feats">${services}</div><div class="orbit-section-title">El equipo</div><div class="orbit-team">${teamCards}</div>${previewFooter(t.name)}`, extra, gFont, "'Space Grotesk', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   CRATE SHOP — Productos digitales · Nunito
-   ═══════════════════════════════════════════ */
-function buildCrateShopPreview(t: TemplateItem): string {
+function buildCrateShopPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap';
-
-  const nav = previewNav(t.name, c1, c2, ['Explorar', 'Tendencias', 'Gratis', 'Creadores']);
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap";
+  const nav = previewNav(t.name, c1, c2, ["Explorar", "Tendencias", "Gratis", "Creadores"]);
   const hero = `
     <section class="crate-hero">
       <div class="crate-hero-bg" style="background:radial-gradient(60% 60% at 50% 0%,${c1}30,transparent 70%)"></div>
-      <span class="pill">Mini-tienda · Productos digitales · Gratis</span>
+      <span class="pill">Mini-tienda \xB7 Productos digitales \xB7 Gratis</span>
       <h1 style="font-size:clamp(30px,5vw,52px);font-weight:900;letter-spacing:-1.5px;line-height:1.05;margin:16px 0 14px">${t.tagline}</h1>
-      <p style="color:#8a93a8;font-size:15.5px;line-height:1.65;max-width:480px;margin:0 auto 28px">${t.description.split('.')[0]}.</p>
+      <p style="color:#8a93a8;font-size:15.5px;line-height:1.65;max-width:480px;margin:0 auto 28px">${t.description.split(".")[0]}.</p>
       <div style="display:flex;gap:12px;justify-content:center">
         <button class="primary">Explorar productos</button>
-        <button class="ghost">Vender aquí</button>
+        <button class="ghost">Vender aqu\xED</button>
       </div>
     </section>`;
-
-  const categories = ['Ebooks', 'Cursos', 'Templates', 'Assets', 'Plugins'].map((c, i) => `
-    <div class="crate-cat" style="--i:${i};background:${i === 0 ? `linear-gradient(135deg,${c1},${c2})` : '#12151e'};border-color:${i === 0 ? 'transparent' : '#ffffff14'};color:${i === 0 ? '#fff' : '#98a1b3'}">
-      ${['📖','🎓','🎨','🖼','🔌'][i]} ${c}
-    </div>`).join('');
-
+  const categories = ["Ebooks", "Cursos", "Templates", "Assets", "Plugins"].map((c, i) => `
+    <div class="crate-cat" style="--i:${i};background:${i === 0 ? `linear-gradient(135deg,${c1},${c2})` : "#12151e"};border-color:${i === 0 ? "transparent" : "#ffffff14"};color:${i === 0 ? "#fff" : "#98a1b3"}">
+      ${["\u{1F4D6}", "\u{1F393}", "\u{1F3A8}", "\u{1F5BC}", "\u{1F50C}"][i]} ${c}
+    </div>`).join("");
   const products = [
-    { name: 'Angular UI Kit Pro', type: 'Template', price: 'Gratis', emoji: '🎨', reviews: '4.9', bg: `linear-gradient(135deg, ${c1}88, ${c2}88, #111 70%)` },
-    { name: 'SaaS Launchpad', type: 'Curso', price: '$29', emoji: '🚀', reviews: '4.8', bg: `radial-gradient(circle at top right, ${c2}88, #111 70%)` },
-    { name: 'Icon Pack 2026', type: 'Asset', price: '$9', emoji: '⭐', reviews: '4.7', bg: `conic-gradient(from 90deg, ${c1}44, ${c2}44, #111)` },
-    { name: 'CSS Animation Guide', type: 'Ebook', price: 'Gratis', emoji: '📖', reviews: '4.9', bg: `linear-gradient(to bottom, ${c1}66, #111)` },
-    { name: 'TypeScript Mastery', type: 'Curso', price: '$49', emoji: '🔷', reviews: '4.8', bg: `radial-gradient(ellipse at bottom, ${c2}aa, #111 60%)` },
-    { name: 'Figma Component Set', type: 'Asset', price: '$19', emoji: '🎯', reviews: '5.0', bg: `linear-gradient(45deg, ${c1}55, ${c2}55, #111)` },
+    { name: "Angular UI Kit Pro", type: "Template", price: "Gratis", emoji: "\u{1F3A8}", reviews: "4.9", bg: `linear-gradient(135deg, ${c1}88, ${c2}88, #111 70%)` },
+    { name: "SaaS Launchpad", type: "Curso", price: "$29", emoji: "\u{1F680}", reviews: "4.8", bg: `radial-gradient(circle at top right, ${c2}88, #111 70%)` },
+    { name: "Icon Pack 2026", type: "Asset", price: "$9", emoji: "\u2B50", reviews: "4.7", bg: `conic-gradient(from 90deg, ${c1}44, ${c2}44, #111)` },
+    { name: "CSS Animation Guide", type: "Ebook", price: "Gratis", emoji: "\u{1F4D6}", reviews: "4.9", bg: `linear-gradient(to bottom, ${c1}66, #111)` },
+    { name: "TypeScript Mastery", type: "Curso", price: "$49", emoji: "\u{1F537}", reviews: "4.8", bg: `radial-gradient(ellipse at bottom, ${c2}aa, #111 60%)` },
+    { name: "Figma Component Set", type: "Asset", price: "$19", emoji: "\u{1F3AF}", reviews: "5.0", bg: `linear-gradient(45deg, ${c1}55, ${c2}55, #111)` }
   ];
-
   const productCards = products.map((p, i) => `
     <div class="crate-prod" style="--i:${i}">
       <div class="cp-cover" style="height:120px; border-radius:12px; margin-bottom:16px; background:${p.bg}; display:grid; place-items:center; font-size:40px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5)">
@@ -925,11 +1337,10 @@ function buildCrateShopPreview(t: TemplateItem): string {
       <div class="cp-type" style="color:${c1}; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px">${p.type}</div>
       <b class="cp-name" style="display:block; font-size:15px; margin-bottom:12px">${p.name}</b>
       <div class="cp-footer" style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #ffffff10; padding-top:12px; margin-top:auto">
-        <span class="cp-price" style="font-weight:700; color:${p.price === 'Gratis' ? '#22c55e' : '#fff'}">${p.price}</span>
-        <span class="cp-rating" style="font-size:12px; color:#98a1b3">★ ${p.reviews}</span>
+        <span class="cp-price" style="font-weight:700; color:${p.price === "Gratis" ? "#22c55e" : "#fff"}">${p.price}</span>
+        <span class="cp-rating" style="font-size:12px; color:#98a1b3">\u2605 ${p.reviews}</span>
       </div>
-    </div>`).join('');
-
+    </div>`).join("");
   const extra = `
     .crate-hero{text-align:center;padding:70px 24px 40px;max-width:760px;margin:0 auto;position:relative}
     .crate-hero-bg{position:absolute;inset:0;z-index:-1;pointer-events:none}
@@ -946,50 +1357,40 @@ function buildCrateShopPreview(t: TemplateItem): string {
     .cp-price{font-size:17px;font-weight:800}
     .cp-rating{font-size:12px;color:#6b7385}
     @media(max-width:800px){.crate-grid{grid-template-columns:1fr 1fr;padding:0 20px}.crate-cats{padding:0 20px 20px}}`;
-
   return previewWrap(t, `${nav}${hero}<div class="crate-cats">${categories}</div><div class="crate-grid">${productCards}</div>${previewFooter(t.name)}`, extra, gFont, "'Nunito', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   FRAME FOLIO — Portfolio fotográfico · Cormorant Garamond
-   ═══════════════════════════════════════════ */
-function buildFrameFolioPreview(t: TemplateItem): string {
+function buildFrameFolioPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=Inter:wght@400;500&display=swap';
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,300;1,600&family=Inter:wght@400;500&display=swap";
   const nav = `
     <nav>
       <div class="brand" style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;font-style:italic;letter-spacing:.5px">${t.name}</div>
-      <div class="links"><a class="active">Galería</a><a>Series</a><a>Sobre</a><a>Contacto</a></div>
+      <div class="links"><a class="active">Galer\xEDa</a><a>Series</a><a>Sobre</a><a>Contacto</a></div>
     </nav>`;
-
   const hero = `
     <section class="frame-hero">
-      <div class="fh-label" style="color:${c1}">Portfolio fotográfico · ${t.sales.toLocaleString('es')} descargas</div>
+      <div class="fh-label" style="color:${c1}">Portfolio fotogr\xE1fico \xB7 ${t.sales.toLocaleString("es")} descargas</div>
       <h1 class="frame-h1">${t.tagline}</h1>
-      <p class="frame-sub">${t.description.split('.')[0]}.</p>
-      <button class="primary" style="margin-top:20px">Explorar galería →</button>
+      <p class="frame-sub">${t.description.split(".")[0]}.</p>
+      <button class="primary" style="margin-top:20px">Explorar galer\xEDa \u2192</button>
     </section>`;
-
   const photos = [
-    { aspect: 'portrait', span: '' },
-    { aspect: 'landscape', span: 'grid-col-2' },
-    { aspect: 'portrait', span: '' },
-    { aspect: 'portrait', span: '' },
-    { aspect: 'landscape', span: 'grid-col-2' },
-    { aspect: 'portrait', span: '' },
+    { aspect: "portrait", span: "" },
+    { aspect: "landscape", span: "grid-col-2" },
+    { aspect: "portrait", span: "" },
+    { aspect: "portrait", span: "" },
+    { aspect: "landscape", span: "grid-col-2" },
+    { aspect: "portrait", span: "" }
   ];
-
   const gallery = photos.map((p, i) => `
     <div class="frame-photo ${p.span}" style="--i:${i}">
-      <div class="fp-img" style="background:linear-gradient(${130 + i * 30}deg,color-mix(in srgb,${c1} ${30 - i * 3}%,#0a0c15),#070810);aspect-ratio:${p.aspect === 'portrait' ? '3/4' : '16/9'}">
+      <div class="fp-img" style="background:linear-gradient(${130 + i * 30}deg,color-mix(in srgb,${c1} ${30 - i * 3}%,#0a0c15),#070810);aspect-ratio:${p.aspect === "portrait" ? "3/4" : "16/9"}">
         <div class="fp-overlay">
           <span class="fp-cat" style="color:${c1}">Serie ${String.fromCharCode(65 + i)}</span>
           <span class="fp-num" style="font-family:'Cormorant Garamond',serif">0${i + 1}</span>
         </div>
       </div>
-    </div>`).join('');
-
+    </div>`).join("");
   const extra = `
     .frame-hero{text-align:center;padding:80px 24px 40px;max-width:680px;margin:0 auto}
     .fh-label{font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
@@ -1009,40 +1410,32 @@ function buildFrameFolioPreview(t: TemplateItem): string {
     .frame-stats b{font-family:'Cormorant Garamond',serif;font-size:30px;display:block;color:#fff;font-style:italic}
     .frame-stats span{font-size:11px;color:#6b7385;text-transform:uppercase;letter-spacing:1.5px}
     @media(max-width:700px){.frame-gallery{grid-template-columns:1fr 1fr;padding:10px 16px 30px}.grid-col-2{grid-column:span 2}}`;
-
   const stats = `
     <div class="frame-stats">
-      <div><b>${t.pages}</b><span>Páginas</span></div>
-      <div><b>★ ${t.rating}</b><span>Rating</span></div>
+      <div><b>${t.pages}</b><span>P\xE1ginas</span></div>
+      <div><b>\u2605 ${t.rating}</b><span>Rating</span></div>
       <div><b>${t.sales}+</b><span>Descargas</span></div>
     </div>`;
-
   return previewWrap(t, `${nav}${hero}<div class="frame-gallery">${gallery}</div>${stats}${previewFooter(t.name)}`, extra, gFont, "'Inter', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   LAUNCH ONE — Countdown + waitlist · Bebas Neue
-   ═══════════════════════════════════════════ */
-function buildLaunchOnePreview(t: TemplateItem): string {
+function buildLaunchOnePreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&display=swap';
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&display=swap";
   const nav = `
     <nav>
       <div class="brand" style="font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px">${t.name}</div>
       <div class="links"><a class="active">Inicio</a><a>Actualizaciones</a>
-        <button class="cta">Unirme →</button>
+        <button class="cta">Unirme \u2192</button>
       </div>
     </nav>`;
-
   const hero = `
     <div class="launch-bg"></div>
     <section class="launch-hero">
-      <span class="pill">Coming soon · Lanzamiento próximo</span>
+      <span class="pill">Coming soon \xB7 Lanzamiento pr\xF3ximo</span>
       <h1 class="launch-h1">${t.tagline}</h1>
-      <p class="launch-sub">${t.description.split('.')[0]}.</p>
+      <p class="launch-sub">${t.description.split(".")[0]}.</p>
       <div class="countdown">
-        <div class="cd-unit"><div class="cd-num" style="color:${c1}">14</div><div class="cd-lbl">días</div></div>
+        <div class="cd-unit"><div class="cd-num" style="color:${c1}">14</div><div class="cd-lbl">d\xEDas</div></div>
         <div class="cd-sep" style="color:${c1}">:</div>
         <div class="cd-unit"><div class="cd-num" style="color:${c1}">08</div><div class="cd-lbl">horas</div></div>
         <div class="cd-sep" style="color:${c1}">:</div>
@@ -1052,22 +1445,20 @@ function buildLaunchOnePreview(t: TemplateItem): string {
       </div>
       <div class="waitlist-form">
         <input class="wl-input" placeholder="tu@email.com"/>
-        <button class="primary" style="padding:14px 28px">Reservar mi lugar →</button>
+        <button class="primary" style="padding:14px 28px">Reservar mi lugar \u2192</button>
       </div>
       <div class="wl-social">
         <div class="wl-avatars">
-          ${[c1, c2, '#8b5cf6', '#06b6d4', c1].map(c => `<div class="wl-av" style="background:linear-gradient(135deg,${c},${c2})"></div>`).join('')}
+          ${[c1, c2, "#8b5cf6", "#06b6d4", c1].map((c) => `<div class="wl-av" style="background:linear-gradient(135deg,${c},${c2})"></div>`).join("")}
         </div>
-        <span><b style="color:#fff">${t.sales.toLocaleString('es')}+</b> personas ya en lista</span>
+        <span><b style="color:#fff">${t.sales.toLocaleString("es")}+</b> personas ya en lista</span>
       </div>
     </section>`;
-
   const features = t.features.slice(0, 4).map((f, i) => `
     <div class="launch-feat" style="--i:${i}">
       <div class="lf-dot" style="background:linear-gradient(135deg,${c1},${c2})"></div>
       <span>${f}</span>
-    </div>`).join('');
-
+    </div>`).join("");
   const extra = `
     .launch-bg{position:fixed;inset:-20%;z-index:-1;filter:blur(80px);
       background:radial-gradient(40% 38% at 50% 50%,${c1}50,transparent 70%),
@@ -1092,35 +1483,26 @@ function buildLaunchOnePreview(t: TemplateItem): string {
     .lf-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
     .launch-feat span{font-size:13.5px;color:#c6cddc}
     @media(max-width:600px){.countdown{gap:6px}.cd-unit{min-width:58px;padding:10px 14px}.launch-feats{grid-template-columns:1fr;padding:20px}}`;
-
   return previewWrap(t, `${nav}${hero}<div class="launch-feats">${features}</div>${previewFooter(t.name)}`, extra, gFont, "'Outfit', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   LEDGER FINANCE — Dashboard financiero · IBM Plex Mono + Inter
-   ═══════════════════════════════════════════ */
-function buildLedgerPreview(t: TemplateItem): string {
+function buildLedgerPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap';
-
+  const gFont = "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap";
   const kpis = [
-    { label: 'Ingresos netos', value: '$284,390', change: '+12.5%', up: true },
-    { label: 'Gastos totales', value: '$98,240', change: '+3.2%', up: false },
-    { label: 'Flujo de caja', value: '$186,150', change: '+18.7%', up: true },
-    { label: 'ROI anual', value: '34.8%', change: '+4.1pp', up: true },
+    { label: "Ingresos netos", value: "$284,390", change: "+12.5%", up: true },
+    { label: "Gastos totales", value: "$98,240", change: "+3.2%", up: false },
+    { label: "Flujo de caja", value: "$186,150", change: "+18.7%", up: true },
+    { label: "ROI anual", value: "34.8%", change: "+4.1pp", up: true }
   ];
-
   const kpiCards = kpis.map((k, i) => `
     <div class="ledger-kpi" style="--i:${i}">
       <div class="lk-label">${k.label}</div>
       <div class="lk-value" style="font-family:'IBM Plex Mono',monospace">${k.value}</div>
-      <div class="lk-change ${k.up ? 'up' : 'down'}">${k.up ? '▲' : '▼'} ${k.change}</div>
-    </div>`).join('');
-
-  const linePoints = '0,90 50,80 100,85 150,60 200,70 250,40 300,50 350,25 400,35 450,10';
-  const lineArea = linePoints + ' 450,100 0,100';
-
-  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct'];
+      <div class="lk-change ${k.up ? "up" : "down"}">${k.up ? "\u25B2" : "\u25BC"} ${k.change}</div>
+    </div>`).join("");
+  const linePoints = "0,90 50,80 100,85 150,60 200,70 250,40 300,50 350,25 400,35 450,10";
+  const lineArea = linePoints + " 450,100 0,100";
+  const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct"];
   const cashflow = [42, 38, 55, 47, 68, 72, 61, 80, 75, 92];
   const bars = cashflow.map((v, i) => `
     <g>
@@ -1132,24 +1514,21 @@ function buildLedgerPreview(t: TemplateItem): string {
         <animate attributeName="height" from="0" to="${v * 0.7}" dur="0.5s" begin="${i * 0.06 + 0.1}s" fill="freeze"/>
         <animate attributeName="y" from="100" to="${100 - v * 0.7}" dur="0.5s" begin="${i * 0.06 + 0.1}s" fill="freeze"/>
       </rect>
-    </g>`).join('');
-
+    </g>`).join("");
   const transactions = [
-    { date: '2026-08-28', desc: 'Pago cliente Enterprise A', amount: '+$12,400', type: 'Ingreso' },
-    { date: '2026-08-27', desc: 'Nómina agosto', amount: '-$8,200', type: 'Gasto' },
-    { date: '2026-08-26', desc: 'Licencias software', amount: '-$1,340', type: 'Gasto' },
-    { date: '2026-08-25', desc: 'Pago cliente Pro B', amount: '+$4,890', type: 'Ingreso' },
-    { date: '2026-08-24', desc: 'Marketing digital', amount: '-$2,100', type: 'Gasto' },
+    { date: "2026-08-28", desc: "Pago cliente Enterprise A", amount: "+$12,400", type: "Ingreso" },
+    { date: "2026-08-27", desc: "N\xF3mina agosto", amount: "-$8,200", type: "Gasto" },
+    { date: "2026-08-26", desc: "Licencias software", amount: "-$1,340", type: "Gasto" },
+    { date: "2026-08-25", desc: "Pago cliente Pro B", amount: "+$4,890", type: "Ingreso" },
+    { date: "2026-08-24", desc: "Marketing digital", amount: "-$2,100", type: "Gasto" }
   ];
-
-  const txRows = transactions.map(tx => `
+  const txRows = transactions.map((tx) => `
     <tr>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#6b7385">${tx.date}</td>
       <td style="font-size:13px">${tx.desc}</td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:${tx.amount.startsWith('+') ? '#22c55e' : '#ef4444'}">${tx.amount}</td>
-      <td><span style="font-size:11px;padding:3px 10px;border-radius:5px;font-weight:600;background:${tx.type === 'Ingreso' ? '#22c55e18' : '#ef444418'};color:${tx.type === 'Ingreso' ? '#22c55e' : '#ef4444'}">${tx.type}</span></td>
-    </tr>`).join('');
-
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:${tx.amount.startsWith("+") ? "#22c55e" : "#ef4444"}">${tx.amount}</td>
+      <td><span style="font-size:11px;padding:3px 10px;border-radius:5px;font-weight:600;background:${tx.type === "Ingreso" ? "#22c55e18" : "#ef444418"};color:${tx.type === "Ingreso" ? "#22c55e" : "#ef4444"}">${tx.type}</span></td>
+    </tr>`).join("");
   return `<!doctype html><html lang="es"><head><meta charset="utf-8"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="${gFont}" rel="stylesheet">
   <style>
@@ -1198,12 +1577,12 @@ function buildLedgerPreview(t: TemplateItem): string {
   <aside class="sidebar">
     <div class="sb-brand"><div class="sb-dot"></div><span class="sb-name">${t.name}</span></div>
     <nav class="sb-nav">
-      ${['Dashboard','Ingresos','Gastos','Proyecciones','Reportes','Config'].map((l, i) => `
-      <div class="sb-item${i === 0 ? ' active' : ''}">
+      ${["Dashboard", "Ingresos", "Gastos", "Proyecciones", "Reportes", "Config"].map((l, i) => `
+      <div class="sb-item${i === 0 ? " active" : ""}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-        ${l}</div>`).join('')}
+        ${l}</div>`).join("")}
     </nav>
-    <div style="padding:14px;border-top:1px solid #ffffff10;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#4b5568">v1.4.2 · Ledger Finance</div>
+    <div style="padding:14px;border-top:1px solid #ffffff10;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#4b5568">v1.4.2 \xB7 Ledger Finance</div>
   </aside>
   <div class="main">
     <header class="topbar"><h2>Dashboard financiero</h2>
@@ -1225,7 +1604,7 @@ function buildLedgerPreview(t: TemplateItem): string {
             <g class="chart-grid"><line x1="0" y1="25" x2="460" y2="25"/><line x1="0" y1="50" x2="460" y2="50"/><line x1="0" y1="75" x2="460" y2="75"/><line x1="0" y1="100" x2="460" y2="100"/></g>
             ${bars}
           </svg>
-          <div class="months">${months.map(m => `<span>${m}</span>`).join('')}</div>
+          <div class="months">${months.map((m) => `<span>${m}</span>`).join("")}</div>
         </div>
         <div class="chart-box">
           <div class="chart-box-title">Tendencia ingresos</div>
@@ -1235,25 +1614,20 @@ function buildLedgerPreview(t: TemplateItem): string {
             <polygon points="${lineArea}" fill="url(#lg2)"/>
             <polyline points="${linePoints}" fill="none" stroke="${c1}" stroke-width="2" stroke-linecap="round"><animate attributeName="stroke-dasharray" from="0,600" to="600,0" dur="1.2s" fill="freeze"/></polyline>
           </svg>
-          <div class="months">${months.map(m => `<span>${m}</span>`).join('')}</div>
+          <div class="months">${months.map((m) => `<span>${m}</span>`).join("")}</div>
         </div>
       </div>
       <div class="table-box">
         <div class="table-box-title">Transacciones recientes</div>
-        <table><thead><tr><th>Fecha</th><th>Descripción</th><th>Monto</th><th>Tipo</th></tr></thead>
+        <table><thead><tr><th>Fecha</th><th>Descripci\xF3n</th><th>Monto</th><th>Tipo</th></tr></thead>
         <tbody>${txRows}</tbody></table>
       </div>
     </div>
   </div></body></html>`;
 }
-
-/* ═══════════════════════════════════════════
-   JOURNAL MINIMAL — Blog minimalista · Playfair Display
-   ═══════════════════════════════════════════ */
-function buildJournalPreview(t: TemplateItem): string {
+function buildJournalPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Source+Serif+4:wght@300;400;600&display=swap';
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Source+Serif+4:wght@300;400;600&display=swap";
   const nav = `
     <nav style="display:flex;justify-content:space-between;align-items:center;padding:20px 48px;position:sticky;top:0;backdrop-filter:blur(12px);background:rgba(11,13,18,.9);border-bottom:1px solid #ffffff08;z-index:9">
       <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:22px;font-style:italic;color:#fff">${t.name}</div>
@@ -1264,45 +1638,40 @@ function buildJournalPreview(t: TemplateItem): string {
         <a style="cursor:pointer">RSS</a>
       </div>
     </nav>`;
-
   const hero = `
     <section style="max-width:680px;margin:0 auto;padding:60px 24px 50px;border-bottom:1px solid #ffffff0d">
-      <div style="font-size:11px;color:${c1};text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:16px">Artículo destacado</div>
+      <div style="font-size:11px;color:${c1};text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:16px">Art\xEDculo destacado</div>
       <h1 style="font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,46px);font-weight:700;line-height:1.15;color:#fff;margin-bottom:16px;-webkit-text-fill-color:#fff">${t.tagline}</h1>
-      <p style="font-family:'Source Serif 4',serif;font-size:17px;color:#8a93a8;line-height:1.8;margin-bottom:24px;font-weight:300">${t.description.split('.')[0]}.</p>
+      <p style="font-family:'Source Serif 4',serif;font-size:17px;color:#8a93a8;line-height:1.8;margin-bottom:24px;font-weight:300">${t.description.split(".")[0]}.</p>
       <div style="display:flex;align-items:center;gap:14px">
         <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,${c1},${c2})"></div>
         <div>
           <div style="font-size:13.5px;font-weight:600;color:#fff">Admin Journal</div>
-          <div style="font-size:12px;color:#6b7385">Hace 2 días · 8 min lectura</div>
+          <div style="font-size:12px;color:#6b7385">Hace 2 d\xEDas \xB7 8 min lectura</div>
         </div>
-        <div style="margin-left:auto;font-size:13px;color:${c1};font-weight:500">Leer →</div>
+        <div style="margin-left:auto;font-size:13px;color:${c1};font-weight:500">Leer \u2192</div>
       </div>
     </section>`;
-
   const posts = [
-    { title: 'Tipografía serif en la web moderna: guía completa', date: 'Hace 4 días', time: '10 min', cat: 'Diseño' },
-    { title: '¿Por qué los blogs minimalistas convierten más?', date: 'Hace 6 días', time: '7 min', cat: 'Marketing' },
-    { title: 'El arte de escribir un titular que engancha', date: 'Hace 1 semana', time: '5 min', cat: 'Escritura' },
-    { title: 'Dark mode sin JavaScript: puro CSS moderno', date: 'Hace 10 días', time: '6 min', cat: 'CSS' },
+    { title: "Tipograf\xEDa serif en la web moderna: gu\xEDa completa", date: "Hace 4 d\xEDas", time: "10 min", cat: "Dise\xF1o" },
+    { title: "\xBFPor qu\xE9 los blogs minimalistas convierten m\xE1s?", date: "Hace 6 d\xEDas", time: "7 min", cat: "Marketing" },
+    { title: "El arte de escribir un titular que engancha", date: "Hace 1 semana", time: "5 min", cat: "Escritura" },
+    { title: "Dark mode sin JavaScript: puro CSS moderno", date: "Hace 10 d\xEDas", time: "6 min", cat: "CSS" }
   ];
-
   const postList = posts.map((p, i) => `
     <article style="padding:28px 0;border-bottom:1px solid #ffffff0d;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start;cursor:pointer;opacity:0;animation:up .5s forwards ${i * 80}ms">
       <div>
         <div style="font-size:11px;color:${c1};text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:10px">${p.cat}</div>
         <h2 style="font-family:'Playfair Display',serif;font-size:clamp(16px,2.5vw,22px);font-weight:700;color:#e7eaf2;line-height:1.25;margin-bottom:8px;transition:.2s">${p.title}</h2>
-        <div style="font-size:12px;color:#6b7385">${p.date} · ${p.time} lectura</div>
+        <div style="font-size:12px;color:#6b7385">${p.date} \xB7 ${p.time} lectura</div>
       </div>
-      <div style="font-size:20px;color:#ffffff18;padding-top:4px">→</div>
-    </article>`).join('');
-
-  const archive = ['2026', '2025', '2024'].map((y, i) => `
+      <div style="font-size:20px;color:#ffffff18;padding-top:4px">\u2192</div>
+    </article>`).join("");
+  const archive = ["2026", "2025", "2024"].map((y, i) => `
     <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #ffffff08;cursor:pointer">
       <span style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:#fff">${y}</span>
-      <span style="font-size:12px;color:#6b7385">${[14, 22, 18][i]} artículos</span>
-    </div>`).join('');
-
+      <span style="font-size:12px;color:#6b7385">${[14, 22, 18][i]} art\xEDculos</span>
+    </div>`).join("");
   const extra = `
     .journal-layout{display:grid;grid-template-columns:1.5fr 1fr;gap:0;max-width:1000px;margin:0 auto}
     .journal-main{padding:20px 48px 40px;border-right:1px solid #ffffff08}
@@ -1310,7 +1679,6 @@ function buildJournalPreview(t: TemplateItem): string {
     .journal-section{margin-bottom:32px}
     .journal-section-title{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:#6b7385;margin-bottom:16px;text-transform:lowercase;letter-spacing:.5px}
     @media(max-width:768px){.journal-layout{grid-template-columns:1fr}.journal-main{padding:20px 24px}.journal-aside{display:none}}`;
-
   const aside = `
     <div class="journal-section">
       <div class="journal-section-title">archivo</div>
@@ -1318,45 +1686,35 @@ function buildJournalPreview(t: TemplateItem): string {
     </div>
     <div class="journal-section">
       <div class="journal-section-title">newsletter</div>
-      <p style="font-family:'Source Serif 4',serif;font-size:14px;color:#7a859a;line-height:1.7;margin-bottom:14px;font-weight:300">Recibe mis artículos cuando los escriba. Sin algoritmos.</p>
+      <p style="font-family:'Source Serif 4',serif;font-size:14px;color:#7a859a;line-height:1.7;margin-bottom:14px;font-weight:300">Recibe mis art\xEDculos cuando los escriba. Sin algoritmos.</p>
       <div style="display:flex;flex-direction:column;gap:8px">
         <input style="background:#11141c;border:1px solid #ffffff12;border-radius:8px;padding:10px 14px;color:#e7eaf2;font-size:13px;font-family:'Source Serif 4',serif" placeholder="tu@email.com"/>
         <button style="background:linear-gradient(135deg,${c1},${c2});border:none;color:#fff;padding:10px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Suscribirme</button>
       </div>
     </div>`;
-
   return previewWrap(t, `${nav}${hero}<div class="journal-layout"><div class="journal-main">${postList}</div><aside class="journal-aside">${aside}</aside></div>${previewFooter(t.name)}`, extra, gFont, "'Source Serif 4', serif");
 }
-
-/* ═══════════════════════════════════════════
-   SOLARIS — Portfolio masonry · Syncopate + Raleway
-   ═══════════════════════════════════════════ */
-function buildSolarisPreview(t: TemplateItem): string {
+function buildSolarisPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Raleway:wght@300;400;500;600;700&display=swap';
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Raleway:wght@300;400;500;600;700&display=swap";
   const nav = `
     <nav>
       <div class="brand" style="font-family:'Syncopate',sans-serif;font-weight:700;letter-spacing:2px;font-size:14px;text-transform:uppercase">${t.name}</div>
       <div class="links">
-        <a class="active">Galería</a><a>Filtros</a><a>About</a><a>Contacto</a>
+        <a class="active">Galer\xEDa</a><a>Filtros</a><a>About</a><a>Contacto</a>
       </div>
     </nav>`;
-
-  const filters = ['Todos', 'Naturaleza', 'Urbano', 'Retrato', 'Abstracto'].map((f, i) => `
-    <button class="sol-filter${i === 0 ? ' active' : ''}" style="${i === 0 ? `background:linear-gradient(135deg,${c1},${c2});color:#fff;border-color:transparent` : ''}">${f}</button>`).join('');
-
+  const filters = ["Todos", "Naturaleza", "Urbano", "Retrato", "Abstracto"].map((f, i) => `
+    <button class="sol-filter${i === 0 ? " active" : ""}" style="${i === 0 ? `background:linear-gradient(135deg,${c1},${c2});color:#fff;border-color:transparent` : ""}">${f}</button>`).join("");
   const photos = [
-    { h: 'tall', row: 'span 2' },
-    { h: 'short', row: '' },
-    { h: 'short', row: '' },
-    { h: 'short', row: '' },
-    { h: 'tall', row: 'span 2' },
-    { h: 'short', row: '' },
+    { h: "tall", row: "span 2" },
+    { h: "short", row: "" },
+    { h: "short", row: "" },
+    { h: "short", row: "" },
+    { h: "tall", row: "span 2" },
+    { h: "short", row: "" }
   ];
-
   const gallery = photos.map((p, i) => {
-    // Abstract gradients simulating colorful modern photography
     const gradients = [
       `radial-gradient(circle at 30% 30%, ${c1}, transparent 60%), radial-gradient(circle at 80% 80%, ${c2}, transparent 60%), #0a0c15`,
       `linear-gradient(145deg, ${c2}, #111 60%)`,
@@ -1366,9 +1724,8 @@ function buildSolarisPreview(t: TemplateItem): string {
       `linear-gradient(to top right, ${c1}22, ${c2}66)`
     ];
     const bg = gradients[i % gradients.length];
-    
     return `
-    <div class="sol-photo" style="--i:${i};grid-row:${p.row || 'span 1'}">
+    <div class="sol-photo" style="--i:${i};grid-row:${p.row || "span 1"}">
       <div class="sol-img" style="background:${bg}; box-shadow: inset 0 0 40px rgba(0,0,0,0.5)">
         <div class="sol-overlay">
           <div class="sol-series" style="font-family:'Syncopate',sans-serif;color:${c1};font-size:9px;letter-spacing:2px;text-transform:uppercase">Serie ${String.fromCharCode(65 + i)}</div>
@@ -1377,8 +1734,7 @@ function buildSolarisPreview(t: TemplateItem): string {
         <div class="sol-num" style="font-family:'Syncopate',sans-serif;color:rgba(255,255,255,0.7)">0${i + 1}</div>
       </div>
     </div>`;
-  }).join('');
-
+  }).join("");
   const extra = `
     .sol-hero{text-align:center;padding:70px 24px 30px;max-width:660px;margin:0 auto}
     .sol-title{font-family:'Syncopate',sans-serif;font-size:clamp(18px,4vw,36px);font-weight:700;letter-spacing:2px;text-transform:uppercase;line-height:1.2;color:#fff;margin:16px 0 12px;-webkit-text-fill-color:#fff}
@@ -1399,43 +1755,34 @@ function buildSolarisPreview(t: TemplateItem): string {
     .sol-about b{font-family:'Syncopate',sans-serif;font-size:24px;display:block;color:#fff;letter-spacing:1px}
     .sol-about span{font-family:'Raleway',sans-serif;font-size:11px;color:#6b7385;text-transform:uppercase;letter-spacing:2px;margin-top:4px;display:block}
     @media(max-width:700px){.sol-gallery{grid-template-columns:1fr 1fr;padding:0 16px 30px}.sol-photo{grid-row:span 1!important}}`;
-
   const about = `
     <div class="sol-about">
-      <div><b>${t.sales.toLocaleString('es')}+</b><span>descargas</span></div>
-      <div><b>★ ${t.rating}</b><span>rating</span></div>
-      <div><b>${t.pages}</b><span>páginas</span></div>
+      <div><b>${t.sales.toLocaleString("es")}+</b><span>descargas</span></div>
+      <div><b>\u2605 ${t.rating}</b><span>rating</span></div>
+      <div><b>${t.pages}</b><span>p\xE1ginas</span></div>
     </div>`;
-
   const heroSection = `
     <div class="sol-hero">
-      <span class="pill">Portfolio · Fotografía · Visual</span>
+      <span class="pill">Portfolio \xB7 Fotograf\xEDa \xB7 Visual</span>
       <h1 class="sol-title">${t.tagline}</h1>
-      <p class="sol-sub">${t.description.split('.')[0]}.</p>
+      <p class="sol-sub">${t.description.split(".")[0]}.</p>
     </div>`;
-
   return previewWrap(t, `${nav}${heroSection}<div class="sol-filters">${filters}</div><div class="sol-gallery">${gallery}</div>${about}${previewFooter(t.name)}`, extra, gFont, "'Raleway', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   NEXA SAAS — SaaS IA moderno · Bricolage Grotesque
-   ═══════════════════════════════════════════ */
-function buildNexaPreview(t: TemplateItem): string {
+function buildNexaPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700;800&display=swap';
-
-  const nav = previewNav(t.name, c1, c2, ['Producto', 'Precios', 'Docs', 'Blog']);
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700;800&display=swap";
+  const nav = previewNav(t.name, c1, c2, ["Producto", "Precios", "Docs", "Blog"]);
   const hero = `
     <div class="nexa-bg"></div>
     <section class="nexa-hero">
       <div class="nexa-badge" style="background:${c1}18;border:1px solid ${c1}33">
-        <span style="color:${c1}">✦</span> SaaS + IA · Lanzado 2026
+        <span style="color:${c1}">\u2726</span> SaaS + IA \xB7 Lanzado 2026
       </div>
       <h1 class="nexa-h1">${t.tagline}</h1>
-      <p class="nexa-sub">${t.description.split('.')[0]}.</p>
+      <p class="nexa-sub">${t.description.split(".")[0]}.</p>
       <div style="display:flex;gap:12px;justify-content:center;margin-bottom:36px">
-        <button class="primary">Empezar gratis →</button>
+        <button class="primary">Empezar gratis \u2192</button>
         <button class="ghost">Ver demo</button>
       </div>
       <div class="nexa-mockup">
@@ -1444,7 +1791,7 @@ function buildNexaPreview(t: TemplateItem): string {
           <div class="nm-body">
             <div class="nm-sidebar">
               <div class="nm-logo" style="background:linear-gradient(135deg,${c1},${c2})">N</div>
-              ${['📊','⚡','🤖','📈','⚙️'].map((ic, i) => `<div class="nm-ic${i === 1 ? ' active' : ''}" style="${i === 1 ? `color:${c1}` : ''}">${ic}</div>`).join('')}
+              ${["\u{1F4CA}", "\u26A1", "\u{1F916}", "\u{1F4C8}", "\u2699\uFE0F"].map((ic, i) => `<div class="nm-ic${i === 1 ? " active" : ""}" style="${i === 1 ? `color:${c1}` : ""}">${ic}</div>`).join("")}
             </div>
             <div class="nm-main">
               <div class="nm-topbar">
@@ -1453,35 +1800,32 @@ function buildNexaPreview(t: TemplateItem): string {
               </div>
               <div class="nm-automations">
                 ${[
-                  { name: 'Lead scoring', status: 'Activo', runs: '1.2K' },
-                  { name: 'Email sequences', status: 'Activo', runs: '890' },
-                  { name: 'Churn prediction', status: 'Pausado', runs: '340' },
-                ].map((a, i) => `
+    { name: "Lead scoring", status: "Activo", runs: "1.2K" },
+    { name: "Email sequences", status: "Activo", runs: "890" },
+    { name: "Churn prediction", status: "Pausado", runs: "340" }
+  ].map((a, i) => `
                 <div class="nm-auto" style="border-color:#ffffff10">
-                  <div class="nm-auto-dot" style="background:${a.status === 'Activo' ? '#22c55e' : '#f59e0b'}"></div>
+                  <div class="nm-auto-dot" style="background:${a.status === "Activo" ? "#22c55e" : "#f59e0b"}"></div>
                   <span class="nm-auto-name">${a.name}</span>
                   <span class="nm-auto-runs">${a.runs} ejecuciones</span>
-                  <span class="nm-auto-status" style="color:${a.status === 'Activo' ? '#22c55e' : '#f59e0b'}">${a.status}</span>
-                </div>`).join('')}
+                  <span class="nm-auto-status" style="color:${a.status === "Activo" ? "#22c55e" : "#f59e0b"}">${a.status}</span>
+                </div>`).join("")}
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>`;
-
   const logos = `
     <div class="nexa-logos">
       <span style="font-size:11px;color:#4b5568;letter-spacing:1px;text-transform:uppercase">Usado por equipos en</span>
-      ${['Stripe', 'Linear', 'Vercel', 'Notion', 'Figma'].map(l => `<span style="font-size:14px;font-weight:700;color:#2a3042">${l}</span>`).join('')}
+      ${["Stripe", "Linear", "Vercel", "Notion", "Figma"].map((l) => `<span style="font-size:14px;font-weight:700;color:#2a3042">${l}</span>`).join("")}
     </div>`;
-
   const bento = t.features.slice(0, 6).map((f, i) => `
-    <div class="nexa-feat" style="--i:${i}${i === 0 ? ';grid-column:span 2;background:linear-gradient(135deg,' + c1 + '18,' + c2 + '12);border-color:' + c1 + '33' : ''}">
-      <div class="nf-ic" style="background:${i === 0 ? `linear-gradient(135deg,${c1},${c2})` : '#ffffff0a'}">${['🤖','⚡','📊','🔗','🎯','🔒'][i]}</div>
-      <b style="font-size:${i === 0 ? '16px' : '14px'}">${f}</b>
-    </div>`).join('');
-
+    <div class="nexa-feat" style="--i:${i}${i === 0 ? ";grid-column:span 2;background:linear-gradient(135deg," + c1 + "18," + c2 + "12);border-color:" + c1 + "33" : ""}">
+      <div class="nf-ic" style="background:${i === 0 ? `linear-gradient(135deg,${c1},${c2})` : "#ffffff0a"}">${["\u{1F916}", "\u26A1", "\u{1F4CA}", "\u{1F517}", "\u{1F3AF}", "\u{1F512}"][i]}</div>
+      <b style="font-size:${i === 0 ? "16px" : "14px"}">${f}</b>
+    </div>`).join("");
   const extra = `
     .nexa-bg{position:fixed;inset:-25%;z-index:-1;filter:blur(90px);
       background:radial-gradient(34% 32% at 20% 20%,${c2}45,transparent 70%),
@@ -1518,28 +1862,22 @@ function buildNexaPreview(t: TemplateItem): string {
     .nf-ic{width:40px;height:40px;border-radius:11px;font-size:20px;display:grid;place-items:center;flex-shrink:0}
     .nexa-feat b{line-height:1.3}
     @media(max-width:800px){.nexa-bento{grid-template-columns:1fr 1fr;padding:20px}.nexa-feat:first-child{grid-column:span 2}}`;
-
   return previewWrap(t, `${nav}${hero}${logos}<div class="nexa-bento">${bento}</div>${previewFooter(t.name)}`, extra, gFont, "'Bricolage Grotesque', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   STOREFRONT PRO — Premium Headless WooCommerce
-   ═══════════════════════════════════════════ */
-function buildStorefrontPreview(t: TemplateItem): string {
+function buildStorefrontPreview(t) {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap';
-
+  const gFont = "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap";
   const nav = `
     <nav class="sf-nav">
       <div class="sf-brand">${t.name}</div>
       <div class="sf-links">
         <a class="active">Inicio</a>
-        <a>Colección</a>
+        <a>Colecci\xF3n</a>
         <a>Mujer</a>
         <a>Hombre</a>
       </div>
       <div class="sf-actions">
-        <span>Búsqueda</span>
+        <span>B\xFAsqueda</span>
         <span>Favoritos</span>
         <div class="sf-cart">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
@@ -1547,7 +1885,6 @@ function buildStorefrontPreview(t: TemplateItem): string {
         </div>
       </div>
     </nav>`;
-
   const hero = `
     <div class="sf-hero">
       <div class="sf-hero-bg" style="background:linear-gradient(135deg,${c1}18,${c2}10)">
@@ -1556,42 +1893,39 @@ function buildStorefrontPreview(t: TemplateItem): string {
         </div>
       </div>
       <div class="sf-hero-content">
-        <span class="sf-tag">Nueva colección 2026</span>
+        <span class="sf-tag">Nueva colecci\xF3n 2026</span>
         <h1 class="sf-h1">Eleva tu estilo con<br><i>Storefront Pro</i></h1>
-        <p class="sf-lead">${t.description.split('.')[0]}.</p>
-        <button class="sf-btn" style="background:linear-gradient(135deg,${c1},${c2})">Explorar colección →</button>
+        <p class="sf-lead">${t.description.split(".")[0]}.</p>
+        <button class="sf-btn" style="background:linear-gradient(135deg,${c1},${c2})">Explorar colecci\xF3n \u2192</button>
       </div>
     </div>`;
-
   const products = [
-    { n: 'Bolso Minimal', p: '$120' },
-    { n: 'Chaqueta Urban', p: '$240', badge: 'Nuevo' },
-    { n: 'Zapatillas Runner', p: '$95' },
-    { n: 'Gafas de sol', p: '$85', badge: '-20%' }
+    { n: "Bolso Minimal", p: "$120" },
+    { n: "Chaqueta Urban", p: "$240", badge: "Nuevo" },
+    { n: "Zapatillas Runner", p: "$95" },
+    { n: "Gafas de sol", p: "$85", badge: "-20%" }
   ];
-
   const grid = `
     <div class="sf-section">
       <div class="sf-section-header">
         <h2 class="sf-h2">Tendencias</h2>
-        <a class="sf-viewall" style="color:${c1}">Ver todo →</a>
+        <a class="sf-viewall" style="color:${c1}">Ver todo \u2192</a>
       </div>
       <div class="sf-grid">
         ${products.map((p, i) => `
           <div class="sf-card" style="--i:${i}">
             <div class="sf-card-img" style="background:linear-gradient(140deg,${c1}15,${c2}12,transparent)">
-              ${p.badge ? `<span class="sf-card-badge" style="background:${p.badge.includes('%') ? '#ef4444' : '#10b981'}">${p.badge}</span>` : ''}
-              <button class="sf-add">Añadir</button>
+              ${p.badge ? `<span class="sf-card-badge" style="background:${p.badge.includes("%") ? "#ef4444" : "#10b981"}">${p.badge}</span>` : ""}
+              <button class="sf-add">A\xF1adir</button>
             </div>
             <div class="sf-card-info">
               <b>${p.n}</b>
               <span>${p.p}</span>
             </div>
           </div>
-        `).join('')}
+        `).join("")}
       </div>
     </div>`;
-
   const extra = `
     .sf-nav{display:flex;justify-content:space-between;align-items:center;padding:20px 48px;border-bottom:1px solid #ffffff10;position:sticky;top:0;background:rgba(11,13,18,.9);backdrop-filter:blur(16px);z-index:10}
     .sf-brand{font-family:'Playfair Display',serif;font-size:24px;font-style:italic;font-weight:600}
@@ -1624,52 +1958,42 @@ function buildStorefrontPreview(t: TemplateItem): string {
     @media(max-width:900px){.sf-grid{grid-template-columns:repeat(2,1fr)}}
     @media(max-width:600px){.sf-hero{height:auto;padding:60px 24px;text-align:center}.sf-hero-content{margin:0 auto}.sf-nav{padding:20px}.sf-links{display:none}}
   `;
-
   return previewWrap(t, `${nav}${hero}${grid}${previewFooter(t.name)}`, extra, gFont, "'Plus Jakarta Sans', sans-serif");
 }
-
-/* ═══════════════════════════════════════════
-   GENERIC FALLBACK
-   ═══════════════════════════════════════════ */
-function buildGenericPreview(t: TemplateItem): string {
+function buildGenericPreview(t) {
   const [c1, c2] = t.colors;
   const cat = CATEGORY_LABELS[t.category];
-  const price = t.price === 0 ? 'Gratis' : `$${t.price}`;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap';
-
+  const price = t.price === 0 ? "Gratis" : `$${t.price}`;
+  const gFont = "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap";
   const nav = previewNav(t.name, c1, c2);
-
   const hero = `
     <div class="mesh"></div>
     <header>
-      <span class="pill">${cat} · v2.4 · Premium</span>
+      <span class="pill">${cat} \xB7 v2.4 \xB7 Premium</span>
       <h1>${t.tagline}</h1>
-      <p class="lead">${t.description.split('.')[0]}. Diseñada al detalle, lista para producción.</p>
+      <p class="lead">${t.description.split(".")[0]}. Dise\xF1ada al detalle, lista para producci\xF3n.</p>
       <div class="ctas">
-        <button class="primary">Probar ${price} <b aria-hidden="true">→</b></button>
+        <button class="primary">Probar ${price} <b aria-hidden="true">\u2192</b></button>
         <button class="ghost">Ver demo</button>
       </div>
-      <div class="meta">★ ${t.rating} · ${t.sales.toLocaleString('es')} ventas · ${t.pages} páginas · Lighthouse 98</div>
-      <div class="marquee" aria-hidden="true"><span>${t.name}</span><i>✦</i><span>HTML5</span><i>✦</i><span>PREMIUM</span><i>✦</i><span>VELOZ</span><i>✦</i><span>${t.name}</span><i>✦</i><span>HTML5</span><i>✦</i></div>
+      <div class="meta">\u2605 ${t.rating} \xB7 ${t.sales.toLocaleString("es")} ventas \xB7 ${t.pages} p\xE1ginas \xB7 Lighthouse 98</div>
+      <div class="marquee" aria-hidden="true"><span>${t.name}</span><i>\u2726</i><span>HTML5</span><i>\u2726</i><span>PREMIUM</span><i>\u2726</i><span>VELOZ</span><i>\u2726</i><span>${t.name}</span><i>\u2726</i><span>HTML5</span><i>\u2726</i></div>
     </header>`;
-
   const cards = t.features.slice(0, 6).map((f, i) => `
     <div class="card" style="--i:${i}">
       <div class="ic"></div><b>${f}</b><small>Incluido en ${t.name}</small>
-    </div>`).join('');
-
+    </div>`).join("");
   const stats = `
     <section class="stats">
-      <div><b>${t.sales.toLocaleString('es')}+</b><span>ventas</span></div>
-      <div><b>${t.rating}★</b><span>valoración</span></div>
-      <div><b>${t.pages}</b><span>páginas</span></div>
+      <div><b>${t.sales.toLocaleString("es")}+</b><span>ventas</span></div>
+      <div><b>${t.rating}\u2605</b><span>valoraci\xF3n</span></div>
+      <div><b>${t.pages}</b><span>p\xE1ginas</span></div>
       <div><b>98</b><span>Lighthouse</span></div>
     </section>
     <section class="quotes">
-      <div class="qcard"><div class="stars">★★★★★</div><p>«Lista para producción. La abrimos y quedó online el mismo día.»</p><small><b>María</b> · Cliente</small></div>
-      <div class="qcard"><div class="stars">★★★★★</div><p>«Estética premium y cero peso de más. Impresionante.»</p><small><b>Diego</b> · CTO</small></div>
+      <div class="qcard"><div class="stars">\u2605\u2605\u2605\u2605\u2605</div><p>\xABLista para producci\xF3n. La abrimos y qued\xF3 online el mismo d\xEDa.\xBB</p><small><b>Mar\xEDa</b> \xB7 Cliente</small></div>
+      <div class="qcard"><div class="stars">\u2605\u2605\u2605\u2605\u2605</div><p>\xABEst\xE9tica premium y cero peso de m\xE1s. Impresionante.\xBB</p><small><b>Diego</b> \xB7 CTO</small></div>
     </section>`;
-
   const extra = `
     .mesh{position:fixed;inset:-20%;z-index:-1;filter:blur(60px);
       background:radial-gradient(42% 38% at 18% 12%,${c1}42,transparent 70%),
@@ -1705,6 +2029,16 @@ function buildGenericPreview(t: TemplateItem): string {
     .qcard small{color:#6b7385;font-size:12px}
     .stars{color:${c1};letter-spacing:2px}
     @media(max-width:640px){.stats{gap:26px}.grid,.quotes{padding:20px}.quotes{grid-template-columns:1fr}}`;
-
   return previewWrap(t, `${nav}${hero}${stats}<div class="grid">${cards}</div>${previewFooter(t.name)}`, extra, gFont, "'Plus Jakarta Sans', sans-serif");
+}
+
+// gen-previews.ts
+var fs = __toESM(require("fs"));
+var path = __toESM(require("path"));
+var outDir = path.join(process.cwd(), "preview-outputs");
+if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+for (const t of TEMPLATES) {
+  const html = buildPreviewHtml(t);
+  fs.writeFileSync(path.join(outDir, t.id + ".html"), html, "utf8");
+  console.log("Generated:", t.id, "(" + html.length + " bytes)");
 }

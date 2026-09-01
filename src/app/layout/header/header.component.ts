@@ -128,6 +128,9 @@ export class HeaderComponent {
     this.lastY = y;
   }
 
+  private catalogTimeout: any;
+  private officeTimeout: any;
+
   toggleCatalog(): void {
     this.catalogOpen.update((v) => !v);
     this.officeOpen.set(false);
@@ -136,13 +139,14 @@ export class HeaderComponent {
 
   openCatalogOnHover(): void {
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      clearTimeout(this.catalogTimeout);
       this.catalogOpen.set(true);
       this.officeOpen.set(false);
     }
   }
 
   closeCatalogDelay(): void {
-    setTimeout(() => {
+    this.catalogTimeout = setTimeout(() => {
       if (this.catalogOpen()) this.catalogOpen.set(false);
     }, 180);
   }
@@ -159,13 +163,14 @@ export class HeaderComponent {
 
   openOfficeOnHover(): void {
     if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      clearTimeout(this.officeTimeout);
       this.officeOpen.set(true);
       this.catalogOpen.set(false);
     }
   }
 
   closeOfficeDelay(): void {
-    setTimeout(() => {
+    this.officeTimeout = setTimeout(() => {
       if (this.officeOpen()) this.officeOpen.set(false);
     }, 180);
   }
@@ -240,12 +245,20 @@ export class HeaderComponent {
     }
   }
 
-  @HostListener('document:keydown.escape')
-  onEscape(): void {
-    this.catalogOpen.set(false);
-    this.officeOpen.set(false);
-    this.searchOpen.set(false);
-    this.userMenuOpen.set(false);
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(e: KeyboardEvent): void {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (!this.searchOpen()) {
+        this.toggleSearch();
+      }
+    }
+    if (e.key === 'Escape') {
+      this.catalogOpen.set(false);
+      this.officeOpen.set(false);
+      this.searchOpen.set(false);
+      this.userMenuOpen.set(false);
+    }
   }
 
   logout(): void {

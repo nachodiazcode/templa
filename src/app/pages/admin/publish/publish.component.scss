@@ -42,9 +42,9 @@
   transition: all 0.3s;
 
   .active & {
-    border-color: #8b5cf6;
-    background: rgba(139, 92, 246, 0.15);
-    color: #c084fc;
+    border-color: #f43f5e;
+    background: rgba(244, 63, 94, 0.15);
+    color: #fb7185;
   }
 }
 
@@ -64,7 +64,7 @@
   border-radius: 1px;
   transition: background 0.3s;
 
-  &.active { background: #8b5cf6; }
+  &.active { background: #f43f5e; }
 }
 
 /* ── Wizard Card ── */
@@ -113,7 +113,7 @@ select {
   transition: border-color 0.2s;
 
   &::placeholder { color: rgba(255, 255, 255, 0.2); }
-  &:focus { outline: none; border-color: #8b5cf6; }
+  &:focus { outline: none; border-color: #f43f5e; }
 }
 
 select {
@@ -170,7 +170,7 @@ textarea { resize: vertical; min-height: 80px; }
   input[type='checkbox'] {
     width: 18px;
     height: 18px;
-    accent-color: #8b5cf6;
+    accent-color: #f43f5e;
     cursor: pointer;
   }
 
@@ -192,8 +192,8 @@ textarea { resize: vertical; min-height: 80px; }
 
   &:hover,
   &.dragover {
-    border-color: #8b5cf6;
-    background: rgba(139, 92, 246, 0.06);
+    border-color: #f43f5e;
+    background: rgba(244, 63, 94, 0.06);
   }
 }
 
@@ -202,7 +202,7 @@ textarea { resize: vertical; min-height: 80px; }
   margin-bottom: 16px;
 
   .dropzone:hover &,
-  .dropzone.dragover & { color: #8b5cf6; }
+  .dropzone.dragover & { color: #f43f5e; }
 }
 
 .drop-text {
@@ -232,7 +232,7 @@ textarea { resize: vertical; min-height: 80px; }
   width: 52px;
   height: 52px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+  background: linear-gradient(135deg, #f43f5e, #d97706);
   display: grid;
   place-items: center;
   color: #fff;
@@ -361,8 +361,8 @@ textarea { resize: vertical; min-height: 80px; }
 }
 
 .badge {
-  background: rgba(139, 92, 246, 0.15);
-  color: #c084fc !important;
+  background: rgba(244, 63, 94, 0.15);
+  color: #fb7185 !important;
   padding: 3px 10px;
   border-radius: 6px;
   font-size: 12px !important;
@@ -411,9 +411,9 @@ textarea { resize: vertical; min-height: 80px; }
   gap: 10px;
 
   .flag {
-    background: rgba(139, 92, 246, 0.12);
-    border: 1px solid rgba(139, 92, 246, 0.25);
-    color: #c084fc;
+    background: rgba(244, 63, 94, 0.12);
+    border: 1px solid rgba(244, 63, 94, 0.25);
+    color: #fb7185;
     padding: 5px 14px;
     border-radius: 8px;
     font-size: 12.5px;
@@ -439,12 +439,12 @@ textarea { resize: vertical; min-height: 80px; }
   font-family: inherit;
 
   &.primary {
-    background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+    background: linear-gradient(135deg, #f43f5e, #d97706);
     color: #fff;
 
     &:hover:not(:disabled) {
       transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+      box-shadow: 0 8px 24px rgba(244, 63, 94, 0.3);
     }
 
     &:disabled {

@@ -253,87 +253,103 @@
 </section>
 
 <!-- ============ MATCH QUIZ ============ -->
-<section class="container section" id="quiz">
-  <app-match-quiz />
-</section>
+@defer (on viewport) {
+  <section class="container section" id="quiz">
+    <app-match-quiz />
+  </section>
+} @placeholder {
+  <div style="min-height: 400px;"></div>
+}
 
 <!-- ============ TESTIMONIOS ============ -->
-<section class="container section">
-  <div class="section-head center">
-    <span class="kicker">Confianza real</span>
-    <h2>Equipos que ya lanzaron con Templa</h2>
-  </div>
-  <div class="quotes">
-    <blockquote>
-      <div class="q-stars">★★★★★</div>
-      <p>"Encontré una plantilla gratuita mejor que otras de pago que había comprado. El live preview me convenció en dos minutos."</p>
-      <footer>
-        <span class="q-avatar">MR</span>
-        <div><b>Marta Ruiz</b><span>Founder, Plannio</span></div>
-      </footer>
-    </blockquote>
-    <blockquote>
-      <div class="q-stars">★★★★★</div>
-      <p>"El código es Angular de verdad: standalone, signals y limpio. Migramos a producción sin tocar nada raro."</p>
-      <footer>
-        <span class="q-avatar">DF</span>
-        <div><b>Diego Ferrer</b><span>Tech Lead, Kubit</span></div>
-      </footer>
-    </blockquote>
-    <blockquote>
-      <div class="q-stars">★★★★★</div>
-      <p>"Compramos Atlas Store un lunes y el viernes ya estábamos vendiendo. La mejor inversión del trimestre."</p>
-      <footer>
-        <span class="q-avatar">LP</span>
-        <div><b>Lucía Peña</b><span>E-commerce Manager, Nordal</span></div>
-      </footer>
-    </blockquote>
-  </div>
-</section>
+@defer (on viewport) {
+  <section class="container section">
+    <div class="section-head center">
+      <span class="kicker">Confianza real</span>
+      <h2>Equipos que ya lanzaron con Templa</h2>
+    </div>
+    <div class="quotes">
+      <blockquote>
+        <div class="q-stars">★★★★★</div>
+        <p>"Encontré una plantilla gratuita mejor que otras de pago que había comprado. El live preview me convenció en dos minutos."</p>
+        <footer>
+          <span class="q-avatar">MR</span>
+          <div><b>Marta Ruiz</b><span>Founder, Plannio</span></div>
+        </footer>
+      </blockquote>
+      <blockquote>
+        <div class="q-stars">★★★★★</div>
+        <p>"El código es Angular de verdad: standalone, signals y limpio. Migramos a producción sin tocar nada raro."</p>
+        <footer>
+          <span class="q-avatar">DF</span>
+          <div><b>Diego Ferrer</b><span>Tech Lead, Kubit</span></div>
+        </footer>
+      </blockquote>
+      <blockquote>
+        <div class="q-stars">★★★★★</div>
+        <p>"Compramos Atlas Store un lunes y el viernes ya estábamos vendiendo. La mejor inversión del trimestre."</p>
+        <footer>
+          <span class="q-avatar">LP</span>
+          <div><b>Lucía Peña</b><span>E-commerce Manager, Nordal</span></div>
+        </footer>
+      </blockquote>
+    </div>
+  </section>
+} @placeholder {
+  <div style="min-height: 300px;"></div>
+}
 
 <!-- ============ FAQ ============ -->
-<section class="container section">
-  <div class="section-head center">
-    <span class="kicker">Preguntas frecuentes</span>
-    <h2>Lo que necesitas saber antes de empezar</h2>
-  </div>
+@defer (on viewport) {
+  <section class="container section">
+    <div class="section-head center">
+      <span class="kicker">Preguntas frecuentes</span>
+      <h2>Lo que necesitas saber antes de empezar</h2>
+    </div>
 
-  <div class="faq-list">
-    <details class="faq-item">
-      <summary>¿Puedo usar las plantillas en proyectos comerciales?</summary>
-      <p>Sí, tanto las de pago como las gratuitas incluyen licencia comercial completa. Puedes usarlas para proyectos propios o de clientes sin restricciones.</p>
-    </details>
-    <details class="faq-item">
-      <summary>¿Qué tecnología usan las plantillas?</summary>
-      <p>Todas usan Angular 18+ con standalone components, signals, tipado estricto y SCSS modular. El código está preparado para producción desde el día uno.</p>
-    </details>
-    <details class="faq-item">
-      <summary>¿Tengo que pagar una suscripción?</summary>
-      <p>No. Pago único, licencia de por vida. Sin suscripciones mensuales, sin costes ocultos. Incluye todas las actualizaciones futuras de la plantilla.</p>
-    </details>
-    <details class="faq-item">
-      <summary>¿Qué incluye la descarga?</summary>
-      <p>Código fuente completo en TypeScript/Angular, archivos SCSS, assets, documentación de personalización y soporte por email del autor durante 24 horas.</p>
-    </details>
-    <details class="faq-item">
-      <summary>¿Las plantillas gratuitas están recortadas?</summary>
-      <p>No. Las gratuitas tienen el mismo nivel de calidad, código completo y licencia comercial que las de pago. Es nuestra forma de ganarnos tu confianza.</p>
-    </details>
-    <details class="faq-item">
-      <summary>¿Cómo pruebo una plantilla antes de comprar?</summary>
-      <p>Cada plantilla tiene una vista previa en vivo integrada. Puedes navegar, hacer clic e interactuar con la web real directamente en la ficha del producto.</p>
-    </details>
-  </div>
-</section>
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>¿Puedo usar las plantillas en proyectos comerciales?</summary>
+        <p>Sí, tanto las de pago como las gratuitas incluyen licencia comercial completa. Puedes usarlas para proyectos propios o de clientes sin restricciones.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué tecnología usan las plantillas?</summary>
+        <p>Todas usan Angular 18+ con standalone components, signals, tipado estricto y SCSS modular. El código está preparado para producción desde el día uno.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Tengo que pagar una suscripción?</summary>
+        <p>No. Pago único, licencia de por vida. Sin suscripciones mensuales, sin costes ocultos. Incluye todas las actualizaciones futuras de la plantilla.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué incluye la descarga?</summary>
+        <p>Código fuente completo en TypeScript/Angular, archivos SCSS, assets, documentación de personalización y soporte por email del autor durante 24 horas.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Las plantillas gratuitas están recortadas?</summary>
+        <p>No. Las gratuitas tienen el mismo nivel de calidad, código completo y licencia comercial que las de pago. Es nuestra forma de ganarnos tu confianza.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Cómo pruebo una plantilla antes de comprar?</summary>
+        <p>Cada plantilla tiene una vista previa en vivo integrada. Puedes navegar, hacer clic e interactuar con la web real directamente en la ficha del producto.</p>
+      </details>
+    </div>
+  </section>
+} @placeholder {
+  <div style="min-height: 400px;"></div>
+}
 
 <!-- ============ CTA FINAL ============ -->
-<section class="container section">
-  <div class="final-cta">
-    <h2>Tu proyecto merece empezar bien</h2>
-    <p>Descarga una plantilla gratis ahora y compruébalo tú mismo.</p>
-    <div class="acts">
-      <a routerLink="/templates" [queryParams]="{ tipo: 'gratis' }" class="btn lg ghost light">Empezar gratis</a>
-      <a routerLink="/templates" class="btn lg primary">Explorar catálogo</a>
+@defer (on viewport) {
+  <section class="container section">
+    <div class="final-cta">
+      <h2>Tu proyecto merece empezar bien</h2>
+      <p>Descarga una plantilla gratis ahora y compruébalo tú mismo.</p>
+      <div class="acts">
+        <a routerLink="/templates" [queryParams]="{ tipo: 'gratis' }" class="btn lg ghost light">Empezar gratis</a>
+        <a routerLink="/templates" class="btn lg primary">Explorar catálogo</a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+} @placeholder {
+  <div style="min-height: 200px;"></div>
+}

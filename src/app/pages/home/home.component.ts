@@ -5,6 +5,7 @@ import { TEMPLATES } from '../../core/data/templates.data';
 import { CATEGORY_LABELS, TemplateCategory } from '../../core/models/template.model';
 import { TemplateCardComponent } from '../../shared/template-card/template-card.component';
 import { MatchQuizComponent } from '../../shared/match-quiz/match-quiz.component';
+import { SeoService } from '../../core/services/seo.service';
 
 @Component({
   selector: 'app-home',
@@ -16,6 +17,11 @@ import { MatchQuizComponent } from '../../shared/match-quiz/match-quiz.component
 })
 export class HomeComponent {
   private router = inject(Router);
+  private seo = inject(SeoService);
+
+  constructor() {
+    this.seo.reset();
+  }
 
   readonly featured = computed(() => TEMPLATES.filter((t) => t.isFeatured));
   readonly freeTemplates = computed(() => TEMPLATES.filter((t) => t.price === 0));

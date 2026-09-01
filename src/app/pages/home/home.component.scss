@@ -17,14 +17,14 @@
 
   &.g1 {
     width: 520px; height: 520px;
-    background: rgba(139, 92, 246, 0.28);
+    background: rgba(244, 63, 94, 0.28);
     top: -180px; left: -120px;
     animation: float 9s ease-in-out infinite;
   }
 
   &.g2 {
     width: 460px; height: 460px;
-    background: rgba(34, 211, 238, 0.18);
+    background: rgba(245, 158, 11, 0.18);
     top: -80px; right: -100px;
     animation: float 11s ease-in-out infinite reverse;
   }
@@ -93,7 +93,7 @@ h1 {
 
   &:focus-within {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.14);
+    box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.14);
   }
 
   svg { color: var(--text-faint); flex-shrink: 0; }
@@ -162,7 +162,7 @@ h1 {
   border: 1px solid rgba(52, 211, 153, 0.22);
   background:
     radial-gradient(90% 130% at 100% 0%, rgba(52, 211, 153, 0.09), transparent 55%),
-    radial-gradient(80% 110% at 0% 100%, rgba(139, 92, 246, 0.08), transparent 50%),
+    radial-gradient(80% 110% at 0% 100%, rgba(244, 63, 94, 0.08), transparent 50%),
     var(--bg-soft);
 
   h2 { font-size: clamp(24px, 3.4vw, 34px); margin: 18px 0 14px; }
@@ -217,9 +217,9 @@ h1 {
     display: grid; place-items: center;
     border-radius: 13px;
 
-    &.ic-violet { background: rgba(139,92,246,.14); color: #a78bfa; }
+    &.ic-violet { background: rgba(244, 63, 94,.14); color: #fda4af; }
     &.ic-green { background: rgba(52,211,153,.13); color: var(--success); }
-    &.ic-cyan { background: rgba(34,211,238,.12); color: var(--accent-2); }
+    &.ic-cyan { background: rgba(245, 158, 11,.12); color: var(--accent-2); }
     &.ic-pink { background: rgba(251,113,133,.13); color: var(--danger); }
   }
 }
@@ -304,7 +304,7 @@ h1 {
   font-size: 13px;
   display: grid;
   place-items: center;
-  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.5);
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.5);
 }
 
 .step-icon {
@@ -315,9 +315,9 @@ h1 {
   place-items: center;
   margin: 0 auto;
 
-  &.si-browse { background: rgba(139, 92, 246, 0.12); color: #a78bfa; }
+  &.si-browse { background: rgba(244, 63, 94, 0.12); color: #fda4af; }
   &.si-pay { background: rgba(52, 211, 153, 0.12); color: var(--success); }
-  &.si-ship { background: rgba(34, 211, 238, 0.12); color: var(--accent-2); }
+  &.si-ship { background: rgba(245, 158, 11, 0.12); color: var(--accent-2); }
 }
 
 .step-line {
@@ -413,7 +413,7 @@ h1 {
   &.ti-scss { background: rgba(205, 103, 153, 0.12); color: #f48fb1; border: 1px solid rgba(205, 103, 153, 0.2); }
   &.ti-a11y { background: rgba(52, 211, 153, 0.12); color: var(--success); border: 1px solid rgba(52, 211, 153, 0.2); }
   &.ti-perf { background: rgba(251, 191, 36, 0.12); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.2); font-size: 13px; }
-  &.ti-theme { background: rgba(139, 92, 246, 0.12); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.2); font-size: 20px; }
+  &.ti-theme { background: rgba(244, 63, 94, 0.12); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.2); font-size: 20px; }
 }
 
 /* ---------- Testimonios ---------- */
@@ -532,8 +532,8 @@ h1 {
   border-radius: 26px;
   border: 1px solid var(--border-strong);
   background:
-    radial-gradient(90% 140% at 50% -20%, rgba(139, 92, 246, 0.22), transparent 60%),
-    radial-gradient(60% 100% at 80% 110%, rgba(34, 211, 238, 0.12), transparent 55%),
+    radial-gradient(90% 140% at 50% -20%, rgba(244, 63, 94, 0.22), transparent 60%),
+    radial-gradient(60% 100% at 80% 110%, rgba(245, 158, 11, 0.12), transparent 55%),
     var(--surface);
 
   h2 { font-size: clamp(26px, 4vw, 40px); margin: 0 0 12px; }

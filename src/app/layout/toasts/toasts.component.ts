@@ -26,7 +26,7 @@ import { ToastService } from '../../core/services/toast.service';
       box-shadow: 0 16px 44px -12px rgba(0,0,0,.6);
       animation: pop .3s cubic-bezier(.22,1,.36,1);
       max-width: 340px;
-      &.info { border-color: rgba(139, 92, 246, 0.5); }
+      &.info { border-color: rgba(244, 63, 94, 0.5); }
     }
     @keyframes pop { from { transform: translateY(14px) scale(.96); opacity: 0; } }
   `,
