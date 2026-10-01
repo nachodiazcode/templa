@@ -24,7 +24,13 @@ const REVIEWS_FILE = path.join(DATA_DIR, 'reviews.json');
 const COUPONS_FILE = path.join(DATA_DIR, 'coupons.json');
 const AUDIT_FILE = path.join(DATA_DIR, 'audit.json');
 
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+if (!isServerless) {
+  try {
+    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+  } catch (err) {
+    console.error('[vault] mkdir:', err.message);
+  }
+}
 
 function readJson(file, fallback) {
   try {
