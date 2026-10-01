@@ -1,6 +1,6 @@
 import { TemplateItem } from '../models/template.model';
 import { CATEGORY_LABELS } from '../models/template.model';
-import { previewNav, previewFooter, previewWrap } from './preview-shared';
+import { previewNav, previewFooter, previewWrap, previewBlocks, previewColors, PreviewBlock } from './preview-shared';
 
 /**
  * Router principal: despacha al renderer específico según ID de template.
@@ -23,102 +23,188 @@ export function buildPreviewHtml(t: TemplateItem): string {
     case 'solaris-portfolio':return buildSolarisPreview(t);
     case 'nexa-saas':        return buildNexaPreview(t);
     case 'storefront-gatsby':return buildStorefrontPreview(t);
+    case 'atelier-agency':   return buildAtelierPreview(t);
+    case 'aula-learn':       return buildAulaPreview(t);
+    case 'manual-docs':      return buildManualPreview(t);
+    case 'harbor-admin':     return buildHarborPreview(t);
     default:                 return buildGenericPreview(t);
   }
 }
 
 /* ═══════════════════════════════════════════
-   AURORA — Bento grid + Syne
+   AURORA — Bento grid + Instrument Serif
    ═══════════════════════════════════════════ */
 function buildAuroraPreview(t: TemplateItem): string {
   const [c1, c2] = t.colors;
-  const gFont = 'https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap';
+  const gFont = 'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap';
 
   const nav = `
     <nav>
       <div class="brand"><span class="dot"></span>${t.name}</div>
-      <div class="links"><a class="active">Inicio</a><a>Sobre</a><a>Stack</a>
+      <div class="links"><a class="active">Inicio</a><a>Tema</a><a>CSS</a>
         <button class="cta">Descargar</button>
       </div>
     </nav>`;
 
   const hero = `
-    <div class="mesh"></div>
-    <header>
-      <span class="pill">HTML5 puro · Sin frameworks · Lighthouse 100</span>
-      <h1>${t.tagline}</h1>
-      <p class="lead">${t.description.split('.')[0]}.</p>
-      <div class="ctas">
-        <button class="primary">Descargar gratis →</button>
-        <button class="ghost">Ver demo</button>
-      </div>
-    </header>`;
-
-  const bento = `
-    <div class="bento">
-      <div class="b-card b-big" style="background:linear-gradient(135deg,${c1}22,${c2}12);border-color:${c1}33">
-        <div class="b-icon" style="background:linear-gradient(135deg,${c1},${c2})">⚡</div>
-        <b>Lighthouse 100/100</b>
-        <small>Performance · Accesibilidad · SEO · Best Practices — todo perfecto, sin trampa.</small>
-        <div class="b-score"><span style="color:${c1};font-size:42px;font-weight:800;letter-spacing:-2px">100</span><span style="color:#6b7385;font-size:13px;margin-left:6px">/ 100</span></div>
-      </div>
-      <div class="b-card" style="background:linear-gradient(135deg,${c2}18,transparent)">
-        <div class="b-icon" style="background:linear-gradient(135deg,${c2},${c1})">🌗</div>
-        <b>Tema dual</b>
-        <small>Modo claro y oscuro con persistencia en localStorage.</small>
-      </div>
-      <div class="b-card">
-        <div class="b-icon" style="background:linear-gradient(135deg,${c1},${c2})">📐</div>
-        <b>Bento Grid</b>
-        <small>Layout responsive con CSS Grid moderno y sin media queries extras.</small>
-      </div>
-      <div class="b-card">
-        <div class="b-icon" style="background:linear-gradient(135deg,${c2},${c1})">👁</div>
-        <b>Scroll reveal</b>
-        <small>Animaciones con IntersectionObserver. Accesibles y performantes.</small>
-      </div>
-      <div class="b-card b-wide" style="background:linear-gradient(90deg,${c1}15,${c2}10)">
-        <div style="display:flex;gap:24px;align-items:center">
-          <div class="b-icon" style="background:linear-gradient(135deg,${c1},${c2});flex-shrink:0">📦</div>
-          <div><b>14 KB de CSS comentado</b><small style="display:block;margin-top:4px">Todo el estilo en un solo archivo ordenado por secciones. Sin build, sin dependencias.</small></div>
-          <div style="margin-left:auto;font-size:36px;font-weight:800;color:${c1};opacity:.6">14<span style="font-size:16px">KB</span></div>
+    <section class="stage">
+      <div class="veil" aria-hidden="true"></div>
+      <svg class="ribbons" viewBox="0 0 900 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="aur" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="${c2}"/><stop offset="55%" stop-color="${c1}"/><stop offset="100%" stop-color="#f0abfc"/>
+          </linearGradient>
+        </defs>
+        <path d="M-30 250C140 80 260 340 470 170C680 0 760 210 960 90" fill="none" stroke="url(#aur)" stroke-width="54" stroke-linecap="round"/>
+        <path d="M-10 300C180 150 300 390 520 220C740 50 820 250 980 160" fill="none" stroke="${c2}" stroke-width="16" stroke-linecap="round" opacity=".7"/>
+      </svg>
+      <div class="wrap copy">
+        <span class="pill">HTML5 puro · sin build · sin dependencias</span>
+        <h1>Cero frameworks.<br><span>Cien en Lighthouse.</span></h1>
+        <p class="lead">Una landing de un solo archivo: tema dual, bento y scroll reveal. 14 KB de CSS comentado, listo para abrir en el navegador.</p>
+        <div class="ctas">
+          <button class="primary">Descargar gratis →</button>
+          <button class="ghost">Ver el CSS</button>
         </div>
       </div>
-    </div>`;
+      <div class="wrap">
+        <article class="score">
+          <div class="score-n">
+            <b>100</b>
+            <small>Lighthouse</small>
+          </div>
+          <ul class="bars">
+            ${['Performance', 'Accesibilidad', 'SEO', 'Best Practices'].map((label) => `
+              <li>
+                <span>${label}</span><em>100</em>
+                <i><u></u></i>
+              </li>`).join('')}
+          </ul>
+        </article>
+      </div>
+    </section>`;
+
+  const bento = `
+    <section class="bento wrap">
+      <article class="tile theme">
+        <div class="modes" aria-hidden="true">
+          <div class="mode night"><span></span><span></span><b></b></div>
+          <div class="mode day"><span></span><span></span><b></b></div>
+        </div>
+        <div>
+          <h2>Tema dual</h2>
+          <p>Claro y oscuro, con la elección guardada en localStorage.</p>
+        </div>
+      </article>
+      <article class="tile">
+        <ol class="reveal" aria-hidden="true">
+          <li>Hero</li><li>Bento</li><li>Cierre</li>
+        </ol>
+        <h2>Scroll reveal</h2>
+        <p>IntersectionObserver. Se mueve poco y no estorba al leer.</p>
+      </article>
+      <article class="tile">
+        <div class="mini" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <h2>Bento real</h2>
+        <p>CSS Grid que cierra cada fila, en escritorio y en el móvil.</p>
+      </article>
+      <article class="tile code">
+        <pre><span class="c">&lt;!-- aurora.css · 14 KB --&gt;</span>
+<span class="t">&lt;link</span> <span class="a">rel</span>=<span class="s">"stylesheet"</span> <span class="a">href</span>=<span class="s">"aurora.css"</span><span class="t">&gt;</span>
+<span class="t">&lt;section</span> <span class="a">class</span>=<span class="s">"bento"</span><span class="t">&gt;</span>…<span class="t">&lt;/section&gt;</span></pre>
+        <div>
+          <h2>Un archivo, y ya está.</h2>
+          <p>Sin npm y sin bundler. Abres index.html y la landing está servida.</p>
+        </div>
+      </article>
+    </section>`;
 
   const stats = `
-    <div class="aurora-stats">
+    <div class="aurora-stats wrap">
       <div><b>${t.sales.toLocaleString('es')}+</b><span>descargas</span></div>
       <div><b>★ ${t.rating}</b><span>valoración</span></div>
-      <div><b>14 KB</b><span>CSS total</span></div>
-      <div><b>0</b><span>dependencias</span></div>
+      <div><b>14 KB</b><span>de CSS</span></div>
+      <div><b>Cero</b><span>dependencias</span></div>
     </div>`;
 
   const extra = `
-    .mesh{position:fixed;inset:-20%;z-index:-1;filter:blur(70px);
-      background:radial-gradient(40% 36% at 15% 10%,${c1}50,transparent 70%),
-                 radial-gradient(34% 30% at 85% 20%,${c2}40,transparent 70%),
-                 radial-gradient(40% 38% at 50% 90%,${c1}28,transparent 70%);
-      animation:drift 24s ease-in-out infinite alternate}
-    @keyframes drift{to{transform:translate(-5%,6%) scale(1.1) rotate(-3deg)}}
-    header{position:relative;text-align:center;padding:80px 24px 48px;max-width:760px;margin:0 auto}
-    .lead{color:#8a93a8;font-size:16px;line-height:1.7;max-width:500px;margin:0 auto}
-    .ctas{display:flex;gap:12px;justify-content:center;margin-top:28px}
-    .bento{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:14px;padding:0 48px 40px;max-width:1040px;margin:0 auto}
-    .b-card{background:#12151e;border:1px solid #ffffff14;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:8px}
-    .b-big{grid-column:span 1;grid-row:span 2;justify-content:space-between}
-    .b-wide{grid-column:span 2}
-    .b-icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:20px;flex-shrink:0}
-    .b-card b{font-size:15px;font-weight:700}
-    .b-card small{color:#6b7385;font-size:12.5px;line-height:1.5}
-    .b-score{margin-top:auto;padding-top:16px}
-    .aurora-stats{display:flex;justify-content:center;gap:60px;padding:36px 24px;border-top:1px solid #ffffff10;flex-wrap:wrap}
-    .aurora-stats div{text-align:center}
-    .aurora-stats b{font-size:26px;display:block;color:#fff;font-weight:800}
-    .aurora-stats span{color:#6b7385;font-size:11px;text-transform:uppercase;letter-spacing:1.4px}
-    @media(max-width:700px){.bento{grid-template-columns:1fr;padding:0 20px 30px}.b-big,.b-wide{grid-column:span 1}.aurora-stats{gap:28px}}`;
+    body{background:#07080d}
+    h1{background:none;-webkit-text-fill-color:#f5f7fb;color:#f5f7fb;font-family:'Instrument Serif',serif;
+       font-weight:400;font-size:clamp(40px,5.6vw,64px);line-height:.96;letter-spacing:-.03em;margin:14px 0 12px;max-width:none}
+    h1 span{font-style:italic;background:linear-gradient(100deg,${c2},${c1});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .brand{font-family:'Instrument Serif',serif;font-weight:400;font-size:22px;letter-spacing:-.03em}
+    .stage{position:relative;padding:12px 0 4px;overflow:hidden}
+    .veil{position:absolute;inset:-30% -10% auto;height:280px;z-index:0;filter:blur(40px);pointer-events:none;
+      background:radial-gradient(40% 70% at 88% 20%,${c1}50,transparent 70%),radial-gradient(30% 60% at 10% 0%,${c2}28,transparent 70%)}
+    .ribbons{position:absolute;right:-18%;top:-90px;width:min(560px,78%);height:210px;z-index:0;filter:blur(8px);opacity:.5;pointer-events:none}
+    .wrap{position:relative;z-index:1;width:min(1040px,calc(100% - 40px));margin:0 auto}
+    .copy{padding-top:18px}
+    .lead{color:#a3adc2;font-size:16px;line-height:1.65;max-width:46ch}
+    .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+    .score{margin-top:18px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;
+      padding:14px 16px;border-radius:22px;background:rgba(12,14,22,.72);border:1px solid rgba(255,255,255,.1);
+      box-shadow:0 24px 60px rgba(0,0,0,.28);backdrop-filter:blur(16px)}
+    .score-n b{display:block;font-family:'Instrument Serif',serif;font-weight:400;font-size:58px;line-height:.85;letter-spacing:-.04em;
+      background:linear-gradient(120deg,#fff,${c2});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .score-n small{color:#8b95a8;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+    .bars{list-style:none;display:grid;gap:8px}
+    .bars li{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;font-size:12.5px;color:#c5cce0}
+    .bars em{font-style:normal;font-weight:700;color:#fff}
+    .bars i{grid-column:1 / -1;height:5px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+    .bars u{display:block;height:100%;width:100%;background:linear-gradient(90deg,${c2},${c1});text-decoration:none}
+    .bento{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:22px 0 8px}
+    .tile{background:#10131b;border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:18px;min-width:0}
+    .tile h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:26px;margin:12px 0 6px;letter-spacing:-.03em}
+    .tile p{color:#8b95a8;font-size:13.5px;line-height:1.5}
+    .theme{grid-column:1 / -1;display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:center;
+      background:linear-gradient(120deg,rgba(192,132,252,.16),rgba(103,232,249,.08) 42%,#10131b 70%)}
+    .modes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .mode{border-radius:14px;padding:12px;display:grid;gap:7px;min-height:92px}
+    .mode span{height:8px;border-radius:99px;width:70%}
+    .mode span:last-of-type{width:46%;opacity:.6}
+    .mode b{height:22px;border-radius:8px;width:54%;margin-top:6px}
+    .night{background:#0c0e14;border:1px solid rgba(255,255,255,.08)}
+    .night span,.night b{background:linear-gradient(90deg,${c1},${c2})}
+    .day{background:#f4f6fb;border:1px solid rgba(255,255,255,.4)}
+    .day span{background:#1c2030}
+    .day b{background:linear-gradient(90deg,${c1},${c2})}
+    .reveal{list-style:none;display:grid;gap:6px;margin-bottom:4px}
+    .reveal li{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;
+      padding:7px 10px;font-size:12px;font-weight:600;color:#d5dbeb}
+    .reveal li:nth-child(2){opacity:.72;transform:translateX(8px)}
+    .reveal li:nth-child(3){opacity:.45;transform:translateX(16px)}
+    .mini{display:grid;grid-template-columns:1.4fr 1fr;grid-template-rows:28px 28px;gap:6px}
+    .mini span{border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.06)}
+    .mini span:first-child{grid-row:1 / span 2;background:linear-gradient(160deg,${c1}88,${c2}55)}
+    .code{grid-column:1 / -1;display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:center}
+    .code pre{margin:0;padding:16px;border-radius:14px;background:#07080d;border:1px solid rgba(255,255,255,.08);
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.7;overflow:auto;color:#d7deee}
+    .c{color:#6f7890}.t{color:${c2}}.a{color:#f0abfc}.s{color:#fde68a}
+    .aurora-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px 0 28px}
+    .aurora-stats div{padding:14px 8px;text-align:center;border-top:1px solid rgba(255,255,255,.08)}
+    .aurora-stats b{display:block;font-family:'Instrument Serif',serif;font-weight:400;font-size:28px}
+    .aurora-stats span{color:#8b95a8;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+    @media(min-width:920px){
+      .stage{display:grid;grid-template-columns:1.05fr .95fr;align-items:end;padding-bottom:10px}
+      .copy{grid-column:1;padding-bottom:8px}
+      .stage .wrap:last-child{grid-column:2}
+      .score{margin-top:0}
+    }
+    @media(max-width:640px){
+      .theme,.code{grid-template-columns:1fr}
+      .bento{grid-template-columns:1fr}
+      .tile.theme,.code{grid-column:auto}
+      .aurora-stats{grid-template-columns:1fr 1fr}
+      .score{grid-template-columns:1fr}
+    }
+    @media(max-width:520px){
+      .links a{display:none}
+      h1{font-size:32px}
+    }
+    @media(prefers-reduced-motion:reduce){.ribbons,.veil{display:none}}`;
 
-  return previewWrap(t, `${nav}${hero}${bento}${stats}${previewFooter(t.name)}`, extra, gFont, "'Syne', sans-serif");
+    const ux = previewBlocks(t, ["cta"] as PreviewBlock[]);
+  return previewWrap(t, `${nav}${hero}${bento}${stats}${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'Manrope', sans-serif");
 }
 
 /* ═══════════════════════════════════════════
@@ -135,7 +221,7 @@ function buildNovaSaasPreview(t: TemplateItem): string {
     <section class="hero-split">
       <div class="hero-text">
         <span class="pill">SaaS · v2.4 · Premium</span>
-        <h1>${t.tagline}</h1>
+        <h1>El producto,<br>en una página.</h1>
         <p class="lead">${t.description.split('.')[0]}.</p>
         <div class="ctas"><button class="primary">Empezar gratis →</button><button class="ghost">Ver demo</button></div>
         <div class="trust">
@@ -193,24 +279,24 @@ function buildNovaSaasPreview(t: TemplateItem): string {
     .trust{display:flex;align-items:center;gap:12px;margin-top:20px}
     .avatars{display:flex}.av{width:28px;height:28px;border-radius:50%;border:2px solid #0b0d12;margin-left:-8px}
     .avatars .av:first-child{margin-left:0}
-    .trust span{font-size:12.5px;color:#6b7385}
+    .trust span{font-size:12.5px;color:#8a93a8}
     .mockup-shell{background:#0d1017;border:1px solid #ffffff18;border-radius:16px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}
     .mock-bar{display:flex;gap:5px;padding:10px 14px;background:#0a0c14;border-bottom:1px solid #ffffff10}
     .mock-bar i{width:8px;height:8px;border-radius:50%;background:#2a3042}
     .mock-bar i:first-child{background:${c1}}
     .mock-body{display:flex;min-height:200px}
     .mock-sidebar{width:90px;padding:12px 8px;border-right:1px solid #ffffff10;display:flex;flex-direction:column;gap:4px}
-    .mock-nav-item{font-size:10px;padding:6px 8px;border-radius:6px;color:#6b7385;cursor:pointer}
+    .mock-nav-item{font-size:10px;padding:6px 8px;border-radius:6px;color:#8a93a8;cursor:pointer}
     .mock-nav-item.active{font-weight:700}
     .mock-content{flex:1;padding:12px}
     .mock-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
     .mock-kpi{background:#ffffff06;border:1px solid #ffffff10;border-radius:8px;padding:8px;text-align:center}
     .mk-val{font-size:13px;font-weight:800}
-    .mk-lbl{font-size:9px;color:#6b7385;margin-top:2px}
+    .mk-lbl{font-size:9px;color:#8a93a8;margin-top:2px}
     .mock-chart{background:#ffffff06;border:1px solid #ffffff10;border-radius:8px;padding:10px}
     .logos-bar{display:flex;align-items:center;justify-content:center;gap:28px;padding:20px 48px;border-top:1px solid #ffffff10;border-bottom:1px solid #ffffff10;flex-wrap:wrap}
-    .logos-label{font-size:12px;color:#4b5568;white-space:nowrap}
-    .logo-name{font-size:14px;font-weight:700;color:#2a3042;letter-spacing:.5px}
+    .logos-label{font-size:12px;color:#7d8599;white-space:nowrap}
+    .logo-name{font-size:14px;font-weight:700;color:#6b7489;letter-spacing:.5px}
     .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:36px 48px;max-width:1100px;margin:0 auto}
     .feat-card{background:#12151e;border:1px solid #ffffff14;border-radius:16px;padding:22px;display:flex;align-items:center;gap:14px;opacity:0;animation:up .5s forwards calc(var(--i)*70ms);transition:.25s}
     .feat-card:hover{border-color:${c1}55;transform:translateY(-2px)}
@@ -218,7 +304,8 @@ function buildNovaSaasPreview(t: TemplateItem): string {
     .feat-card b{font-size:13.5px;line-height:1.4}
     @media(max-width:900px){.hero-split{grid-template-columns:1fr;padding:50px 24px 30px}.feats{grid-template-columns:1fr 1fr;padding:24px}}`;
 
-  return previewWrap(t, `${nav}${hero}${logos}<div class="feats">${features}</div>${previewFooter(t.name)}`, extra, gFont, "'Plus Jakarta Sans', sans-serif");
+    const ux = previewBlocks(t, ["pricing", "testimonials", "faq", "cta"] as PreviewBlock[]);
+  return previewWrap(t, `${nav}${hero}${logos}<div class="feats">${features}</div>${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'Plus Jakarta Sans', sans-serif");
 }
 
 /* ═══════════════════════════════════════════
@@ -252,7 +339,7 @@ function buildAtlasStorePreview(t: TemplateItem): string {
     <section class="shop-hero">
       <div class="shop-hero-text">
         <div class="hero-badge" style="background:${c1}18;border:1px solid ${c1}44;color:${c1}">✦ Nueva colección 2026</div>
-        <h1 style="font-size:clamp(32px,5vw,58px);line-height:1.0;letter-spacing:-2px">${t.tagline}</h1>
+        <h1 style="font-size:clamp(32px,5vw,58px);line-height:1.0;letter-spacing:-.04em">Convierte desde<br>el primer scroll.</h1>
         <p style="color:#8a93a8;font-size:16px;line-height:1.6;max-width:420px">${t.description.split('.')[0]}.</p>
         <div style="display:flex;gap:12px;margin-top:28px">
           <button class="primary">Ver colección</button>
@@ -278,15 +365,15 @@ function buildAtlasStorePreview(t: TemplateItem): string {
   const productCards = products.map((p, i) => `
     <div class="prod-card" style="--i:${i}">
       <div class="prod-img" style="background:linear-gradient(${140 + i * 25}deg,color-mix(in srgb,${c1} ${30 - i * 4}%,#12151e),#0c0e15)">
-        ${p.badge ? `<span class="prod-badge" style="background:linear-gradient(135deg,${c1},${c2})">${p.badge}</span>` : ''}
+        <span class="prod-glyph" aria-hidden="true">${p.name[0]}</span>${p.badge ? `<span class="prod-badge" style="background:linear-gradient(135deg,${c1},${c2})">${p.badge}</span>` : ''}
         <button class="prod-wish">♡</button>
       </div>
       <div class="prod-info">
-        <div style="font-size:11px;color:#6b7385;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">${p.cat}</div>
+        <div style="font-size:11px;color:#8a93a8;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">${p.cat}</div>
         <b style="font-size:15px;display:block;margin-bottom:8px">${p.name}</b>
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div style="display:flex;align-items:baseline;gap:6px">
-            ${p.old ? `<s style="color:#4b5568;font-size:12px">${p.old}</s>` : ''}
+            ${p.old ? `<s style="color:#7d8599;font-size:12px">${p.old}</s>` : ''}
             <span style="font-size:18px;font-weight:800;color:${c1}">${p.price}</span>
           </div>
           <button class="add-btn" style="background:linear-gradient(135deg,${c1},${c2})">+</button>
@@ -309,13 +396,15 @@ function buildAtlasStorePreview(t: TemplateItem): string {
     .prod-img{aspect-ratio:1/1;position:relative;display:flex;align-items:flex-start;justify-content:flex-end;padding:12px}
     .prod-badge{font-size:10px;font-weight:800;color:#fff;padding:4px 10px;border-radius:99px;text-transform:uppercase;letter-spacing:.5px}
     .prod-wish{position:absolute;top:12px;left:12px;background:#ffffff10;border:none;border-radius:50%;width:30px;height:30px;color:#fff;cursor:pointer;font-size:14px;display:grid;place-items:center}
+    .prod-glyph{position:absolute;inset:0;display:grid;place-items:center;font-size:88px;font-weight:800;letter-spacing:-.05em;color:#ffffff12;pointer-events:none}
     .prod-info{padding:14px 16px 18px}
     .add-btn{border:none;color:#fff;width:32px;height:32px;border-radius:10px;font-size:18px;cursor:pointer;display:grid;place-items:center}
     .cart-btn{position:relative;cursor:pointer;color:#98a1b3;display:flex;align-items:center}
     .cart-count{position:absolute;top:-6px;right:-8px;font-size:9px;font-weight:800;color:#fff;width:15px;height:15px;border-radius:50%;display:grid;place-items:center}
     @media(max-width:900px){.shop-hero{grid-template-columns:1fr;padding:40px 24px}.prod-grid{grid-template-columns:1fr 1fr;padding:0 20px 30px}}`;
 
-  return previewWrap(t, `${nav}${hero}<div class="filters">${filters}</div><div class="prod-grid">${productCards}</div>${previewFooter(t.name)}`, extra, gFont, "'DM Sans', sans-serif");
+    const ux = previewBlocks(t, ["trust", "newsletter"] as PreviewBlock[]);
+  return previewWrap(t, `${nav}${hero}<div class="filters">${filters}</div><div class="prod-grid">${productCards}</div>${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'DM Sans', sans-serif");
 }
 
 /* ═══════════════════════════════════════════
@@ -331,7 +420,7 @@ function buildLumenPreview(t: TemplateItem): string {
     <div class="mesh"></div>
     <section class="lumen-hero">
       <span class="pill">Landing · Lighthouse 98+ · Gratis</span>
-      <h1 class="lumen-h1">${t.tagline}</h1>
+      <h1 class="lumen-h1">Menos ruido.<br><span>Más impacto.</span></h1>
       <div class="lumen-line" style="background:linear-gradient(90deg,transparent,${c1},${c2},transparent)"></div>
       <p class="lead">${t.description.split('.')[0]}.</p>
       <div class="ctas">
@@ -363,7 +452,7 @@ function buildLumenPreview(t: TemplateItem): string {
           <!-- Mockup of a Dashboard -->
           <div style="display:flex; height:260px;">
             <!-- Sidebar -->
-            <div style="width:60px; border-right:1px solid #ffffff10; display:flex; flex-direction:column; align-items:center; padding:16px 0; gap:16px; background:#080a12">
+            <div class="ls-side" style="width:60px; border-right:1px solid #ffffff10; display:flex; flex-direction:column; align-items:center; padding:16px 0; gap:16px; background:#080a12">
               <div style="width:24px; height:24px; border-radius:6px; background:linear-gradient(135deg,${c1},${c2})"></div>
               <div style="width:20px; height:20px; border-radius:4px; background:#ffffff10"></div>
               <div style="width:20px; height:20px; border-radius:4px; background:#ffffff10"></div>
@@ -380,7 +469,7 @@ function buildLumenPreview(t: TemplateItem): string {
                 </div>
               </div>
               <!-- Cards -->
-              <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px">
+              <div class="ls-kpis">
                 <div style="background:#11141c; border:1px solid #ffffff0a; border-radius:12px; padding:16px">
                   <div style="width:40px; height:8px; border-radius:4px; background:#ffffff10; margin-bottom:12px"></div>
                   <div style="width:60px; height:18px; border-radius:4px; background:linear-gradient(90deg,${c1},${c2})"></div>
@@ -415,11 +504,12 @@ function buildLumenPreview(t: TemplateItem): string {
       animation:drift 26s ease-in-out infinite alternate}
     @keyframes drift{to{transform:translate(-3%,4%) scale(1.08)}}
     .lumen-hero{text-align:center;padding:90px 24px 50px;max-width:800px;margin:0 auto}
-    .lumen-h1{font-size:clamp(36px,7vw,72px);line-height:.98;font-weight:900;letter-spacing:-3px;margin:20px 0;background:linear-gradient(120deg,#fff 40%,#aab3c5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .lumen-h1{font-size:clamp(40px,7vw,72px);line-height:.95;font-weight:800;letter-spacing:-.045em;margin:20px 0;color:#f6f7fb;background:none;-webkit-text-fill-color:#f6f7fb}
+    .lumen-h1 span{background:linear-gradient(100deg,${c1},${c2});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
     .lumen-line{height:2px;width:120px;margin:0 auto 24px;border-radius:2px}
     .lead{color:#8a93a8;font-size:16px;line-height:1.7;max-width:520px;margin:0 auto 28px}
     .ctas{display:flex;gap:12px;justify-content:center;margin-bottom:32px}
-    .lumen-meta{display:flex;align-items:center;justify-content:center;gap:16px;font-size:13.5px;color:#6b7385}
+    .lumen-meta{display:flex;align-items:center;justify-content:center;gap:16px;font-size:13.5px;color:#8a93a8}
     .lumen-dot{width:3px;height:3px;border-radius:50%;background:#3a3f50}
     .lumen-feats{display:flex;flex-direction:column;gap:0;max-width:680px;margin:0 auto;padding:20px 48px 0}
     .lumen-feat{display:flex;align-items:center;gap:20px;padding:20px 0;border-bottom:1px solid #ffffff0d;opacity:0;animation:up .5s forwards calc(var(--i)*80ms)}
@@ -431,16 +521,19 @@ function buildLumenPreview(t: TemplateItem): string {
     .ls-bar i{width:8px;height:8px;border-radius:50%;background:#2a3042}
     .ls-content{padding:24px}
     .ls-p{height:8px;border-radius:4px;background:#ffffff10;margin-bottom:8px}
-    @media(max-width:700px){.lumen-feats,.lumen-showcase{padding:20px}.lumen-meta{flex-wrap:wrap}}`;
+    .ls-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media(max-width:700px){.lumen-feats,.lumen-showcase{padding:20px}.lumen-meta{flex-wrap:wrap}.ctas{flex-wrap:wrap}}
+    @media(max-width:520px){.ls-side{display:none}.ls-kpis{grid-template-columns:1fr}}`;
 
-  return previewWrap(t, `${nav}${hero}<div class="lumen-feats">${features}</div>${showcase}${previewFooter(t.name)}`, extra, gFont, "'Outfit', sans-serif");
+    const ux = previewBlocks(t, ["testimonials", "faq", "cta"] as PreviewBlock[]);
+  return previewWrap(t, `${nav}${hero}<div class="lumen-feats">${features}</div>${showcase}${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'Outfit', sans-serif");
 }
 
 /* ═══════════════════════════════════════════
    MONOGRAM — Portfolio editorial · Fraunces + DM Sans
    ═══════════════════════════════════════════ */
 function buildMonogramPreview(t: TemplateItem): string {
-  const [c1, c2] = t.colors;
+  const [c1, c2] = previewColors(t);
   const gFont = 'https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,700;0,900;1,300;1,700&family=DM+Sans:wght@400;500;600&display=swap';
 
   const nav = `
@@ -481,21 +574,23 @@ function buildMonogramPreview(t: TemplateItem): string {
     .mono-tag{display:inline-block;font-size:12px;font-weight:500;padding:6px 16px;border-radius:99px;border:1px solid;margin-bottom:24px;letter-spacing:.5px}
     .mono-title{font-family:'Fraunces',serif;font-size:clamp(40px,6vw,72px);line-height:1.0;font-weight:900;letter-spacing:-2px;color:#fff;margin-bottom:20px;-webkit-text-fill-color:#fff}
     .mono-sub{color:#7a859a;font-size:15px;line-height:1.7;max-width:480px;margin:0 auto}
-    .mono-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:0 48px 40px;max-width:1080px;margin:0 auto}
+    .mono-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:280px;gap:16px;padding:0 48px 40px;max-width:1080px;margin:0 auto}
     .mono-proj{border-radius:18px;overflow:hidden;cursor:pointer;opacity:0;animation:up .5s forwards calc(var(--i)*90ms)}
     .col-span-2{grid-column:span 2}
-    .mono-proj-img{aspect-ratio:4/3;position:relative;transition:transform .4s}
+    .mono-proj-img{height:100%;position:relative;transition:transform .4s}
     .mono-proj:hover .mono-proj-img{transform:scale(1.02)}
-    .mono-proj-info{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.85));display:flex;flex-direction:column;justify-content:flex-end;padding:24px;transform:translateY(10px);opacity:0;transition:.35s}
-    .mono-proj:hover .mono-proj-info{opacity:1;transform:none}
+    .mono-proj-info{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.85));display:flex;flex-direction:column;justify-content:flex-end;padding:24px;transition:.35s}
+    .mono-proj:hover .mono-proj-arrow{transform:translateX(6px)}.mono-proj-arrow{transition:.3s}
+    .mono-proj-img::before{content:'';position:absolute;inset:0;background:radial-gradient(60% 50% at 70% 25%,rgba(255,255,255,.09),transparent 70%)}
     .mono-proj-cat{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px}
     .mono-proj-name{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:#fff;line-height:1.2}
     .mono-proj-arrow{font-size:20px;margin-top:8px}
     .mono-stats{display:flex;justify-content:center;gap:60px;padding:30px 48px;border-top:1px solid #ffffff10;flex-wrap:wrap}
     .mono-stats div{text-align:center}
     .mono-stats b{font-family:'Fraunces',serif;font-size:32px;display:block;color:#fff}
-    .mono-stats span{font-size:11px;color:#6b7385;letter-spacing:1.2px;text-transform:uppercase}
-    @media(max-width:700px){.mono-grid{grid-template-columns:1fr;padding:0 20px}.col-span-2{grid-column:span 1}.mono-hero{padding:60px 24px 30px}}`;
+    .mono-stats span{font-size:11px;color:#8a93a8;letter-spacing:1.2px;text-transform:uppercase}
+    @media(max-width:700px){.mono-grid{grid-template-columns:1fr;padding:0 20px}.col-span-2{grid-column:span 1}.mono-hero{padding:60px 24px 30px}.mono-proj-info{opacity:1;transform:none}}
+    @media(hover:none){.mono-proj-info{opacity:1;transform:none}}`;
 
   const stats = `
     <div class="mono-stats">
@@ -504,7 +599,8 @@ function buildMonogramPreview(t: TemplateItem): string {
       <div><b>${t.pages}</b><span>Páginas incluidas</span></div>
     </div>`;
 
-  return previewWrap(t, `${nav}${hero}<div class="mono-grid">${grid}</div>${stats}${previewFooter(t.name)}`, extra, gFont, "'DM Sans', sans-serif");
+    const ux = previewBlocks(t, ["testimonials", "cta"] as PreviewBlock[]);
+  return previewWrap(t, `${nav}${hero}<div class="mono-grid">${grid}</div>${stats}${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'DM Sans', sans-serif");
 }
 
 /* ═══════════════════════════════════════════
@@ -597,8 +693,8 @@ function buildPulsePreview(t: TemplateItem): string {
     .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid #ffffff10;background:#0d101788;backdrop-filter:blur(12px)}
     .topbar h2{font-size:17px;font-weight:700}
     .search{display:flex;align-items:center;gap:8px;background:#ffffff08;border:1px solid #ffffff12;border-radius:9px;padding:7px 12px;width:200px}
-    .search svg{color:#4b5568;width:14px;height:14px}
-    .search span{color:#4b5568;font-size:12px}
+    .search svg{color:#7d8599;width:14px;height:14px}
+    .search span{color:#7d8599;font-size:12px}
     .tb-avatar{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,${c1},${c2});display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;cursor:pointer}
     .content{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:18px}
     .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
@@ -618,9 +714,9 @@ function buildPulsePreview(t: TemplateItem): string {
     .chart-title .tab.active{background:#ffffff10;color:#e2e8f0}
     .chart-grid line{stroke:#ffffff0a;stroke-width:1}
     .chart-labels{display:flex;justify-content:space-between;padding:6px 2px 0}
-    .chart-labels span{font-size:9px;color:#4b5568}
+    .chart-labels span{font-size:9px;color:#7d8599}
     .bar-labels{display:flex;justify-content:space-between;padding:5px 4px 0}
-    .bar-labels span{font-size:9px;color:#4b5568}
+    .bar-labels span{font-size:9px;color:#7d8599}
     .donut-wrap{display:flex;flex-direction:column;align-items:center;gap:14px}
     .donut-svg{width:130px;height:130px}
     .donut-center{font-size:20px;font-weight:800;fill:#e2e8f0}
@@ -632,11 +728,11 @@ function buildPulsePreview(t: TemplateItem): string {
     .bottom{display:grid;grid-template-columns:1fr;gap:14px}
     .table-wrap{background:#11141c;border:1px solid #ffffff10;border-radius:13px;padding:18px;overflow:hidden}
     .table-wrap table{width:100%;border-collapse:collapse;font-size:12.5px}
-    .table-wrap th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:#4b5568;padding:0 0 10px;font-weight:700;border-bottom:1px solid #ffffff10}
+    .table-wrap th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:#7d8599;padding:0 0 10px;font-weight:700;border-bottom:1px solid #ffffff10}
     .table-wrap td{padding:10px 0;border-bottom:1px solid #ffffff08;color:#c8d1e0}
     .table-wrap tr:last-child td{border-bottom:none}
     .mono{font-family:'IBM Plex Mono','SF Mono',Consolas,monospace;font-size:11.5px;color:#7a859a}
-    .dim{color:#4b5568;font-size:11px}
+    .dim{color:#7d8599;font-size:11px}
     .st{font-size:11px;font-weight:600;padding:2px 8px;border-radius:5px}
     .st-ok{color:#22c55e;background:#22c55e16}
     .st-warn{color:#f59e0b;background:#f59e0b16}
@@ -716,7 +812,7 @@ function buildInkBlogPreview(t: TemplateItem): string {
   const nav = `
     <nav style="display:flex;justify-content:space-between;align-items:center;padding:18px 34px;position:sticky;top:0;backdrop-filter:blur(14px);background:rgba(11,13,18,.8);border-bottom:1px solid #ffffff12;z-index:9">
       <div style="font-family:'Lora',serif;font-weight:700;font-size:20px;font-style:italic;color:#fff">${t.name}</div>
-      <div style="display:flex;gap:20px;align-items:center;font-size:13px;color:#98a1b3">
+      <div class="ink-links" style="display:flex;gap:20px;align-items:center;font-size:13px;color:#98a1b3">
         <a style="cursor:pointer;color:#fff">Artículos</a><a style="cursor:pointer">Categorías</a><a style="cursor:pointer">Sobre</a>
         <button style="background:linear-gradient(135deg,${c1},${c2});border:none;color:#fff;padding:8px 16px;border-radius:99px;font-weight:600;cursor:pointer;font-size:12px">Newsletter</button>
       </div>
@@ -731,7 +827,7 @@ function buildInkBlogPreview(t: TemplateItem): string {
       </div>
       <div class="ink-feat-text">
         <div class="ink-meta" style="color:${c1}">Angular · 12 min lectura · Hace 2 días</div>
-        <h1 class="ink-h1">${t.tagline}</h1>
+        <h1 class="ink-h1">Leer, sin distracciones.</h1>
         <p class="ink-lead">${t.description.split('.')[0]}.</p>
         <div class="ink-author">
           <div class="ink-av" style="background:linear-gradient(135deg,${c1},${c2})"></div>
@@ -779,7 +875,7 @@ function buildInkBlogPreview(t: TemplateItem): string {
     .ink-author{display:flex;align-items:center;gap:12px}
     .ink-av{width:38px;height:38px;border-radius:50%;flex-shrink:0}
     .ink-an{font-size:13.5px;font-weight:600;color:#fff}
-    .ink-ad{font-size:12px;color:#6b7385}
+    .ink-ad{font-size:12px;color:#8a93a8}
     .ink-posts-section{max-width:1000px;margin:0 auto;padding:0 48px}
     .ink-posts-title{font-family:'Lora',serif;font-size:22px;font-weight:700;font-style:italic;color:#fff;margin-bottom:20px;border-bottom:1px solid #ffffff12;padding-bottom:14px}
     .ink-post{display:flex;gap:18px;background:#11141c;border:1px solid #ffffff12;border-radius:14px;overflow:hidden;cursor:pointer;margin-bottom:14px;opacity:0;animation:up .5s forwards calc(var(--i)*80ms);transition:.25s}
@@ -787,14 +883,14 @@ function buildInkBlogPreview(t: TemplateItem): string {
     .ink-post-thumb{width:100px;flex-shrink:0;min-height:80px}
     .ink-post-body{padding:14px 16px 14px 0;display:flex;flex-direction:column;gap:6px;flex:1}
     .ink-post-title{font-family:'Lora',serif;font-size:15px;font-weight:600;color:#e7eaf2;line-height:1.35}
-    .ink-post-meta{font-size:12px;color:#6b7385;margin-top:auto}
+    .ink-post-meta{font-size:12px;color:#8a93a8;margin-top:auto}
     .ink-nl{border-radius:18px;padding:28px;text-align:center;margin:30px 48px 0;max-width:904px}
     .ink-nl-icon{font-size:28px;margin-bottom:10px}
     .ink-nl-title{font-family:'Lora',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:8px}
     .ink-nl-sub{font-size:14px;color:#8a93a8;margin-bottom:20px}
     .ink-nl-form{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
     .ink-input{background:#0b0d12;border:1px solid #ffffff18;border-radius:99px;padding:10px 18px;color:#e7eaf2;font-size:13px;width:220px}
-    @media(max-width:800px){.ink-featured{grid-template-columns:1fr;padding:30px 24px}.ink-posts-section,.ink-nl{padding:0 20px;margin:20px 20px 0}}`;
+    @media(max-width:800px){.ink-featured{grid-template-columns:1fr;padding:30px 24px}.ink-posts-section,.ink-nl{padding:0 20px;margin:20px 20px 0}.ink-links a{display:none}}`;
 
   return previewWrap(t, `${nav}${featured}<div class="ink-posts-section"><div class="ink-posts-title">Últimos artículos</div>${postList}</div>${newsletter}${previewFooter(t.name)}`, extra, gFont, "'Inter', sans-serif");
 }
@@ -812,7 +908,7 @@ function buildOrbitPreview(t: TemplateItem): string {
     <div class="orbit-bg"></div>
     <section class="orbit-hero">
       <span class="pill">Startup · ${t.name} · v2.0</span>
-      <h1>${t.tagline}</h1>
+      <h1>Una startup.<br>Un sitio.</h1>
       <p class="lead">${t.description.split('.')[0]}.</p>
       <div class="ctas"><button class="primary">Ver producto →</button><button class="ghost">Hablar con ventas</button></div>
       <div class="orbit-ring">
@@ -869,17 +965,18 @@ function buildOrbitPreview(t: TemplateItem): string {
     .orbit-feat:hover{border-color:${c1}44;transform:translateY(-3px)}
     .of-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;margin:0 auto 14px;font-size:20px}
     .orbit-feat b{display:block;font-size:15px;margin-bottom:6px}
-    .orbit-feat small{color:#6b7385;font-size:12.5px;line-height:1.5}
+    .orbit-feat small{color:#8a93a8;font-size:12.5px;line-height:1.5}
     .orbit-section-title{text-align:center;font-size:22px;font-weight:700;margin:40px 0 24px;letter-spacing:-.5px}
     .orbit-team{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:0 48px;max-width:1040px;margin:0 auto}
     .orbit-team-card{background:#11141c;border:1px solid #ffffff14;border-radius:16px;padding:24px;text-align:center;opacity:0;animation:up .5s forwards calc(var(--i)*80ms);transition:.25s}
     .orbit-team-card:hover{border-color:${c1}44;transform:translateY(-2px)}
     .otm-av{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;margin:0 auto 14px}
     .orbit-team-card b{display:block;font-size:14px;font-weight:700;margin-bottom:4px}
-    .orbit-team-card small{color:#6b7385;font-size:12px}
+    .orbit-team-card small{color:#8a93a8;font-size:12px}
     @media(max-width:800px){.orbit-feats,.orbit-team{grid-template-columns:1fr 1fr;padding:0 20px}}`;
 
-  return previewWrap(t, `${nav}${hero}<div class="orbit-feats">${services}</div><div class="orbit-section-title">El equipo</div><div class="orbit-team">${teamCards}</div>${previewFooter(t.name)}`, extra, gFont, "'Space Grotesk', sans-serif");
+    const ux = previewBlocks(t, ["testimonials", "faq", "cta"] as PreviewBlock[]);
+  return previewWrap(t, `${nav}${hero}<div class="orbit-feats">${services}</div><div class="orbit-section-title">El equipo</div><div class="orbit-team">${teamCards}</div>${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'Space Grotesk', sans-serif");
 }
 
 /* ═══════════════════════════════════════════
@@ -895,7 +992,7 @@ function buildCrateShopPreview(t: TemplateItem): string {
     <section class="crate-hero">
       <div class="crate-hero-bg" style="background:radial-gradient(60% 60% at 50% 0%,${c1}30,transparent 70%)"></div>
       <span class="pill">Mini-tienda · Productos digitales · Gratis</span>
-      <h1 style="font-size:clamp(30px,5vw,52px);font-weight:900;letter-spacing:-1.5px;line-height:1.05;margin:16px 0 14px">${t.tagline}</h1>
+      <h1 class="crate-h1">Archivos que<br>se venden solos.</h1>
       <p style="color:#8a93a8;font-size:15.5px;line-height:1.65;max-width:480px;margin:0 auto 28px">${t.description.split('.')[0]}.</p>
       <div style="display:flex;gap:12px;justify-content:center">
         <button class="primary">Explorar productos</button>
@@ -919,8 +1016,8 @@ function buildCrateShopPreview(t: TemplateItem): string {
 
   const productCards = products.map((p, i) => `
     <div class="crate-prod" style="--i:${i}">
-      <div class="cp-cover" style="height:120px; border-radius:12px; margin-bottom:16px; background:${p.bg}; display:grid; place-items:center; font-size:40px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5)">
-        ${p.emoji}
+      <div class="cp-cover" style="background:${p.bg}">
+        <span>${p.name.slice(0, 1)}</span>
       </div>
       <div class="cp-type" style="color:${c1}; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px">${p.type}</div>
       <b class="cp-name" style="display:block; font-size:15px; margin-bottom:12px">${p.name}</b>
@@ -931,7 +1028,10 @@ function buildCrateShopPreview(t: TemplateItem): string {
     </div>`).join('');
 
   const extra = `
+    .crate-h1{font-size:clamp(34px,5vw,56px);font-weight:800;letter-spacing:-.04em;line-height:.98;margin:16px 0 14px;color:#f6f7fb;-webkit-text-fill-color:#f6f7fb}
     .crate-hero{text-align:center;padding:70px 24px 40px;max-width:760px;margin:0 auto;position:relative}
+    .cp-cover{height:132px;border-radius:14px;margin-bottom:16px;display:grid;place-items:center;box-shadow:inset 0 0 20px rgba(0,0,0,.35)}
+    .cp-cover span{font-size:42px;font-weight:800;color:#fff;letter-spacing:-.04em}
     .crate-hero-bg{position:absolute;inset:0;z-index:-1;pointer-events:none}
     .crate-cats{display:flex;gap:10px;padding:0 48px 30px;flex-wrap:wrap;justify-content:center}
     .crate-cat{font-size:13px;font-weight:700;padding:9px 18px;border-radius:12px;border:1px solid;cursor:pointer;opacity:0;animation:up .4s forwards calc(var(--i)*60ms);transition:.2s}
@@ -944,10 +1044,12 @@ function buildCrateShopPreview(t: TemplateItem): string {
     .cp-name{font-size:15px;font-weight:800;display:block;margin-bottom:14px;line-height:1.3}
     .cp-footer{display:flex;justify-content:space-between;align-items:center}
     .cp-price{font-size:17px;font-weight:800}
-    .cp-rating{font-size:12px;color:#6b7385}
-    @media(max-width:800px){.crate-grid{grid-template-columns:1fr 1fr;padding:0 20px}.crate-cats{padding:0 20px 20px}}`;
+    .cp-rating{font-size:12px;color:#8a93a8}
+    @media(max-width:800px){.crate-grid{grid-template-columns:1fr 1fr;padding:0 20px}.crate-cats{padding:0 20px 20px}}
+    @media(max-width:520px){.crate-grid{grid-template-columns:1fr}}`;
 
-  return previewWrap(t, `${nav}${hero}<div class="crate-cats">${categories}</div><div class="crate-grid">${productCards}</div>${previewFooter(t.name)}`, extra, gFont, "'Nunito', sans-serif");
+    const ux = previewBlocks(t, ["trust", "newsletter"] as PreviewBlock[], { digital: true });
+  return previewWrap(t, `${nav}${hero}<div class="crate-cats">${categories}</div><div class="crate-grid">${productCards}</div>${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'Nunito', sans-serif");
 }
 
 /* ═══════════════════════════════════════════
@@ -966,7 +1068,7 @@ function buildFrameFolioPreview(t: TemplateItem): string {
   const hero = `
     <section class="frame-hero">
       <div class="fh-label" style="color:${c1}">Portfolio fotográfico · ${t.sales.toLocaleString('es')} descargas</div>
-      <h1 class="frame-h1">${t.tagline}</h1>
+      <h1 class="frame-h1">A pantalla completa.</h1>
       <p class="frame-sub">${t.description.split('.')[0]}.</p>
       <button class="primary" style="margin-top:20px">Explorar galería →</button>
     </section>`;
@@ -1007,8 +1109,9 @@ function buildFrameFolioPreview(t: TemplateItem): string {
     .frame-stats{display:flex;justify-content:center;gap:56px;padding:28px;border-top:1px solid #ffffff10;flex-wrap:wrap}
     .frame-stats div{text-align:center}
     .frame-stats b{font-family:'Cormorant Garamond',serif;font-size:30px;display:block;color:#fff;font-style:italic}
-    .frame-stats span{font-size:11px;color:#6b7385;text-transform:uppercase;letter-spacing:1.5px}
-    @media(max-width:700px){.frame-gallery{grid-template-columns:1fr 1fr;padding:10px 16px 30px}.grid-col-2{grid-column:span 2}}`;
+    .frame-stats span{font-size:11px;color:#8a93a8;text-transform:uppercase;letter-spacing:1.5px}
+    @media(max-width:700px){.frame-gallery{grid-template-columns:1fr 1fr;padding:10px 16px 30px}.grid-col-2{grid-column:span 2}.fp-overlay{opacity:1}}
+    @media(hover:none){.fp-overlay{opacity:1}}`;
 
   const stats = `
     <div class="frame-stats">
@@ -1017,7 +1120,8 @@ function buildFrameFolioPreview(t: TemplateItem): string {
       <div><b>${t.sales}+</b><span>Descargas</span></div>
     </div>`;
 
-  return previewWrap(t, `${nav}${hero}<div class="frame-gallery">${gallery}</div>${stats}${previewFooter(t.name)}`, extra, gFont, "'Inter', sans-serif");
+    const ux = previewBlocks(t, ["testimonials", "cta"] as PreviewBlock[]);
+  return previewWrap(t, `${nav}${hero}<div class="frame-gallery">${gallery}</div>${stats}${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'Inter', sans-serif");
 }
 
 /* ═══════════════════════════════════════════
@@ -1039,7 +1143,7 @@ function buildLaunchOnePreview(t: TemplateItem): string {
     <div class="launch-bg"></div>
     <section class="launch-hero">
       <span class="pill">Coming soon · Lanzamiento próximo</span>
-      <h1 class="launch-h1">${t.tagline}</h1>
+      <h1 class="launch-h1">Ya casi.</h1>
       <p class="launch-sub">${t.description.split('.')[0]}.</p>
       <div class="countdown">
         <div class="cd-unit"><div class="cd-num" style="color:${c1}">14</div><div class="cd-lbl">días</div></div>
@@ -1080,11 +1184,11 @@ function buildLaunchOnePreview(t: TemplateItem): string {
     .countdown{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:32px}
     .cd-unit{text-align:center;background:#11141c;border:1px solid #ffffff14;border-radius:14px;padding:14px 20px;min-width:72px}
     .cd-num{font-family:'Bebas Neue',cursive;font-size:44px;line-height:1}
-    .cd-lbl{font-size:10px;color:#6b7385;text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
+    .cd-lbl{font-size:10px;color:#8a93a8;text-transform:uppercase;letter-spacing:1.5px;margin-top:4px}
     .cd-sep{font-family:'Bebas Neue',cursive;font-size:40px;margin-bottom:16px}
     .waitlist-form{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
     .wl-input{background:#11141c;border:1px solid #ffffff18;border-radius:12px;padding:14px 20px;color:#e7eaf2;font-size:14px;width:240px}
-    .wl-social{display:flex;align-items:center;justify-content:center;gap:12px;font-size:13px;color:#6b7385}
+    .wl-social{display:flex;align-items:center;justify-content:center;gap:12px;font-size:13px;color:#8a93a8}
     .wl-avatars{display:flex}.wl-av{width:26px;height:26px;border-radius:50%;border:2px solid #0b0d12;margin-left:-6px}
     .wl-avatars .wl-av:first-child{margin-left:0}
     .launch-feats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;max-width:640px;margin:0 auto;padding:20px 48px 40px}
@@ -1093,7 +1197,8 @@ function buildLaunchOnePreview(t: TemplateItem): string {
     .launch-feat span{font-size:13.5px;color:#c6cddc}
     @media(max-width:600px){.countdown{gap:6px}.cd-unit{min-width:58px;padding:10px 14px}.launch-feats{grid-template-columns:1fr;padding:20px}}`;
 
-  return previewWrap(t, `${nav}${hero}<div class="launch-feats">${features}</div>${previewFooter(t.name)}`, extra, gFont, "'Outfit', sans-serif");
+    const ux = previewBlocks(t, ["faq", "cta"] as PreviewBlock[], { ctaTitle: "Súmate a la lista de espera", cta: "Reservar mi lugar" });
+  return previewWrap(t, `${nav}${hero}<div class="launch-feats">${features}</div>${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'Outfit', sans-serif");
 }
 
 /* ═══════════════════════════════════════════
@@ -1144,7 +1249,7 @@ function buildLedgerPreview(t: TemplateItem): string {
 
   const txRows = transactions.map(tx => `
     <tr>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#6b7385">${tx.date}</td>
+      <td style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8a93a8">${tx.date}</td>
       <td style="font-size:13px">${tx.desc}</td>
       <td style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:${tx.amount.startsWith('+') ? '#22c55e' : '#ef4444'}">${tx.amount}</td>
       <td><span style="font-size:11px;padding:3px 10px;border-radius:5px;font-weight:600;background:${tx.type === 'Ingreso' ? '#22c55e18' : '#ef444418'};color:${tx.type === 'Ingreso' ? '#22c55e' : '#ef4444'}">${tx.type}</span></td>
@@ -1166,7 +1271,7 @@ function buildLedgerPreview(t: TemplateItem): string {
     .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
     .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid #ffffff10;background:#0d101788;backdrop-filter:blur(12px)}
     .topbar h2{font-size:16px;font-weight:700}
-    .tb-period{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6b7385;background:#ffffff08;border:1px solid #ffffff12;padding:5px 12px;border-radius:6px}
+    .tb-period{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8a93a8;background:#ffffff08;border:1px solid #ffffff12;padding:5px 12px;border-radius:6px}
     .content{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px}
     .ledger-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
     .ledger-kpi{background:#11141c;border:1px solid #ffffff10;border-radius:12px;padding:16px 18px;opacity:0;animation:fadeUp .45s forwards calc(var(--i)*80ms)}
@@ -1178,17 +1283,17 @@ function buildLedgerPreview(t: TemplateItem): string {
     .charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
     .chart-box{background:#11141c;border:1px solid #ffffff10;border-radius:12px;padding:18px}
     .chart-box-title{font-size:13px;font-weight:600;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
-    .chart-box-title span{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#6b7385}
+    .chart-box-title span{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8a93a8}
     .chart-grid line{stroke:#ffffff08;stroke-width:1}
     .months{display:flex;justify-content:space-between;margin-top:6px}
-    .months span{font-size:9px;color:#4b5568;font-family:'IBM Plex Mono',monospace}
+    .months span{font-size:9px;color:#7d8599;font-family:'IBM Plex Mono',monospace}
     .ledger-legend{display:flex;gap:16px;margin-bottom:10px}
     .ll-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#98a1b3}
     .ll-dot{width:8px;height:8px;border-radius:2px}
     .table-box{background:#11141c;border:1px solid #ffffff10;border-radius:12px;padding:18px}
     .table-box-title{font-size:13px;font-weight:600;margin-bottom:14px}
     .table-box table{width:100%;border-collapse:collapse}
-    .table-box th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:#4b5568;padding:0 0 10px;font-weight:700;border-bottom:1px solid #ffffff10}
+    .table-box th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:#7d8599;padding:0 0 10px;font-weight:700;border-bottom:1px solid #ffffff10}
     .table-box td{padding:10px 0;border-bottom:1px solid #ffffff08;color:#c8d1e0}
     .table-box tr:last-child td{border-bottom:none}
     @keyframes fadeUp{to{opacity:1;transform:none}}
@@ -1203,7 +1308,7 @@ function buildLedgerPreview(t: TemplateItem): string {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
         ${l}</div>`).join('')}
     </nav>
-    <div style="padding:14px;border-top:1px solid #ffffff10;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#4b5568">v1.4.2 · Ledger Finance</div>
+    <div style="padding:14px;border-top:1px solid #ffffff10;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#7d8599">v1.4.2 · Ledger Finance</div>
   </aside>
   <div class="main">
     <header class="topbar"><h2>Dashboard financiero</h2>
@@ -1251,7 +1356,7 @@ function buildLedgerPreview(t: TemplateItem): string {
    JOURNAL MINIMAL — Blog minimalista · Playfair Display
    ═══════════════════════════════════════════ */
 function buildJournalPreview(t: TemplateItem): string {
-  const [c1, c2] = t.colors;
+  const [c1, c2] = previewColors(t);
   const gFont = 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Source+Serif+4:wght@300;400;600&display=swap';
 
   const nav = `
@@ -1268,13 +1373,13 @@ function buildJournalPreview(t: TemplateItem): string {
   const hero = `
     <section style="max-width:680px;margin:0 auto;padding:60px 24px 50px;border-bottom:1px solid #ffffff0d">
       <div style="font-size:11px;color:${c1};text-transform:uppercase;letter-spacing:2px;font-weight:600;margin-bottom:16px">Artículo destacado</div>
-      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,46px);font-weight:700;line-height:1.15;color:#fff;margin-bottom:16px;-webkit-text-fill-color:#fff">${t.tagline}</h1>
+      <h1 style="font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,46px);font-weight:700;line-height:1.15;color:#fff;margin-bottom:16px;-webkit-text-fill-color:#fff">Una columna basta.</h1>
       <p style="font-family:'Source Serif 4',serif;font-size:17px;color:#8a93a8;line-height:1.8;margin-bottom:24px;font-weight:300">${t.description.split('.')[0]}.</p>
       <div style="display:flex;align-items:center;gap:14px">
         <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,${c1},${c2})"></div>
         <div>
           <div style="font-size:13.5px;font-weight:600;color:#fff">Admin Journal</div>
-          <div style="font-size:12px;color:#6b7385">Hace 2 días · 8 min lectura</div>
+          <div style="font-size:12px;color:#8a93a8">Hace 2 días · 8 min lectura</div>
         </div>
         <div style="margin-left:auto;font-size:13px;color:${c1};font-weight:500">Leer →</div>
       </div>
@@ -1292,7 +1397,7 @@ function buildJournalPreview(t: TemplateItem): string {
       <div>
         <div style="font-size:11px;color:${c1};text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:10px">${p.cat}</div>
         <h2 style="font-family:'Playfair Display',serif;font-size:clamp(16px,2.5vw,22px);font-weight:700;color:#e7eaf2;line-height:1.25;margin-bottom:8px;transition:.2s">${p.title}</h2>
-        <div style="font-size:12px;color:#6b7385">${p.date} · ${p.time} lectura</div>
+        <div style="font-size:12px;color:#8a93a8">${p.date} · ${p.time} lectura</div>
       </div>
       <div style="font-size:20px;color:#ffffff18;padding-top:4px">→</div>
     </article>`).join('');
@@ -1300,7 +1405,7 @@ function buildJournalPreview(t: TemplateItem): string {
   const archive = ['2026', '2025', '2024'].map((y, i) => `
     <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #ffffff08;cursor:pointer">
       <span style="font-family:'Playfair Display',serif;font-size:15px;font-style:italic;color:#fff">${y}</span>
-      <span style="font-size:12px;color:#6b7385">${[14, 22, 18][i]} artículos</span>
+      <span style="font-size:12px;color:#8a93a8">${[14, 22, 18][i]} artículos</span>
     </div>`).join('');
 
   const extra = `
@@ -1308,7 +1413,7 @@ function buildJournalPreview(t: TemplateItem): string {
     .journal-main{padding:20px 48px 40px;border-right:1px solid #ffffff08}
     .journal-aside{padding:40px 32px;position:sticky;top:60px;align-self:start}
     .journal-section{margin-bottom:32px}
-    .journal-section-title{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:#6b7385;margin-bottom:16px;text-transform:lowercase;letter-spacing:.5px}
+    .journal-section-title{font-family:'Playfair Display',serif;font-size:14px;font-style:italic;color:#8a93a8;margin-bottom:16px;text-transform:lowercase;letter-spacing:.5px}
     @media(max-width:768px){.journal-layout{grid-template-columns:1fr}.journal-main{padding:20px 24px}.journal-aside{display:none}}`;
 
   const aside = `
@@ -1325,7 +1430,8 @@ function buildJournalPreview(t: TemplateItem): string {
       </div>
     </div>`;
 
-  return previewWrap(t, `${nav}${hero}<div class="journal-layout"><div class="journal-main">${postList}</div><aside class="journal-aside">${aside}</aside></div>${previewFooter(t.name)}`, extra, gFont, "'Source Serif 4', serif");
+    const ux = previewBlocks(t, [] as PreviewBlock[]);
+  return previewWrap(t, `${nav}${hero}<div class="journal-layout"><div class="journal-main">${postList}</div><aside class="journal-aside">${aside}</aside></div>${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'Source Serif 4', serif");
 }
 
 /* ═══════════════════════════════════════════
@@ -1397,8 +1503,9 @@ function buildSolarisPreview(t: TemplateItem): string {
     .sol-about{display:flex;justify-content:center;gap:60px;padding:30px 48px;border-top:1px solid #ffffff10;flex-wrap:wrap}
     .sol-about div{text-align:center}
     .sol-about b{font-family:'Syncopate',sans-serif;font-size:24px;display:block;color:#fff;letter-spacing:1px}
-    .sol-about span{font-family:'Raleway',sans-serif;font-size:11px;color:#6b7385;text-transform:uppercase;letter-spacing:2px;margin-top:4px;display:block}
-    @media(max-width:700px){.sol-gallery{grid-template-columns:1fr 1fr;padding:0 16px 30px}.sol-photo{grid-row:span 1!important}}`;
+    .sol-about span{font-family:'Raleway',sans-serif;font-size:11px;color:#8a93a8;text-transform:uppercase;letter-spacing:2px;margin-top:4px;display:block}
+    @media(max-width:700px){.sol-gallery{grid-template-columns:1fr 1fr;padding:0 16px 30px}.sol-photo{grid-row:span 1!important}.sol-overlay{opacity:1}.sol-filters{padding:12px 16px}}
+    @media(hover:none){.sol-overlay{opacity:1}}`;
 
   const about = `
     <div class="sol-about">
@@ -1410,11 +1517,12 @@ function buildSolarisPreview(t: TemplateItem): string {
   const heroSection = `
     <div class="sol-hero">
       <span class="pill">Portfolio · Fotografía · Visual</span>
-      <h1 class="sol-title">${t.tagline}</h1>
+      <h1 class="sol-title">Encuadre<br>y luz.</h1>
       <p class="sol-sub">${t.description.split('.')[0]}.</p>
     </div>`;
 
-  return previewWrap(t, `${nav}${heroSection}<div class="sol-filters">${filters}</div><div class="sol-gallery">${gallery}</div>${about}${previewFooter(t.name)}`, extra, gFont, "'Raleway', sans-serif");
+    const ux = previewBlocks(t, ["testimonials", "cta"] as PreviewBlock[]);
+  return previewWrap(t, `${nav}${heroSection}<div class="sol-filters">${filters}</div><div class="sol-gallery">${gallery}</div>${about}${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'Raleway', sans-serif");
 }
 
 /* ═══════════════════════════════════════════
@@ -1432,7 +1540,7 @@ function buildNexaPreview(t: TemplateItem): string {
       <div class="nexa-badge" style="background:${c1}18;border:1px solid ${c1}33">
         <span style="color:${c1}">✦</span> SaaS + IA · Lanzado 2026
       </div>
-      <h1 class="nexa-h1">${t.tagline}</h1>
+      <h1 class="nexa-h1">Pricing, producto, listo.</h1>
       <p class="nexa-sub">${t.description.split('.')[0]}.</p>
       <div style="display:flex;gap:12px;justify-content:center;margin-bottom:36px">
         <button class="primary">Empezar gratis →</button>
@@ -1472,8 +1580,8 @@ function buildNexaPreview(t: TemplateItem): string {
 
   const logos = `
     <div class="nexa-logos">
-      <span style="font-size:11px;color:#4b5568;letter-spacing:1px;text-transform:uppercase">Usado por equipos en</span>
-      ${['Stripe', 'Linear', 'Vercel', 'Notion', 'Figma'].map(l => `<span style="font-size:14px;font-weight:700;color:#2a3042">${l}</span>`).join('')}
+      <span style="font-size:11px;color:#7d8599;letter-spacing:1px;text-transform:uppercase">Usado por equipos en</span>
+      ${['Stripe', 'Linear', 'Vercel', 'Notion', 'Figma'].map(l => `<span style="font-size:14px;font-weight:700;color:#6b7489">${l}</span>`).join('')}
     </div>`;
 
   const bento = t.features.slice(0, 6).map((f, i) => `
@@ -1509,7 +1617,7 @@ function buildNexaPreview(t: TemplateItem): string {
     .nm-auto{display:flex;align-items:center;gap:10px;background:#ffffff04;border:1px solid;border-radius:8px;padding:8px 12px}
     .nm-auto-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
     .nm-auto-name{font-size:12px;font-weight:500;flex:1}
-    .nm-auto-runs{font-size:10.5px;color:#6b7385}
+    .nm-auto-runs{font-size:10.5px;color:#8a93a8}
     .nm-auto-status{font-size:11px;font-weight:600}
     .nexa-logos{display:flex;align-items:center;justify-content:center;gap:28px;padding:24px 48px;border-top:1px solid #ffffff10;border-bottom:1px solid #ffffff10;flex-wrap:wrap}
     .nexa-bento{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:32px 48px;max-width:1080px;margin:0 auto}
@@ -1517,9 +1625,11 @@ function buildNexaPreview(t: TemplateItem): string {
     .nexa-feat:hover{border-color:${c1}44;transform:translateY(-2px)}
     .nf-ic{width:40px;height:40px;border-radius:11px;font-size:20px;display:grid;place-items:center;flex-shrink:0}
     .nexa-feat b{line-height:1.3}
-    @media(max-width:800px){.nexa-bento{grid-template-columns:1fr 1fr;padding:20px}.nexa-feat:first-child{grid-column:span 2}}`;
+    @media(max-width:800px){.nexa-bento{grid-template-columns:1fr 1fr;padding:20px}.nexa-feat:first-child{grid-column:span 2}}
+    @media(max-width:520px){.nexa-bento{grid-template-columns:1fr}.nexa-feat:first-child{grid-column:auto}}`;
 
-  return previewWrap(t, `${nav}${hero}${logos}<div class="nexa-bento">${bento}</div>${previewFooter(t.name)}`, extra, gFont, "'Bricolage Grotesque', sans-serif");
+    const ux = previewBlocks(t, ["pricing", "testimonials", "faq", "cta"] as PreviewBlock[]);
+  return previewWrap(t, `${nav}${hero}${logos}<div class="nexa-bento">${bento}</div>${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'Bricolage Grotesque', sans-serif");
 }
 
 /* ═══════════════════════════════════════════
@@ -1621,11 +1731,242 @@ function buildStorefrontPreview(t: TemplateItem): string {
     .sf-card-info{display:flex;justify-content:space-between;align-items:center}
     .sf-card-info b{font-size:14px;font-weight:600}
     .sf-card-info span{font-size:14px;color:#98a1b3}
-    @media(max-width:900px){.sf-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(hover:none){.sf-add{opacity:1;transform:none}}
+    @media(max-width:900px){.sf-grid{grid-template-columns:repeat(2,1fr)}.sf-add{opacity:1;transform:none}}
     @media(max-width:600px){.sf-hero{height:auto;padding:60px 24px;text-align:center}.sf-hero-content{margin:0 auto}.sf-nav{padding:20px}.sf-links{display:none}}
   `;
 
-  return previewWrap(t, `${nav}${hero}${grid}${previewFooter(t.name)}`, extra, gFont, "'Plus Jakarta Sans', sans-serif");
+    const ux = previewBlocks(t, ["trust", "newsletter"] as PreviewBlock[]);
+  return previewWrap(t, `${nav}${hero}${grid}${ux.html}${previewFooter(t.name)}`, extra + ux.css, gFont, "'Plus Jakarta Sans', sans-serif");
+}
+
+/* ═══════════════════════════════════════════
+   ATELIER — Estudio creativo, casos y equipo
+   ═══════════════════════════════════════════ */
+function buildAtelierPreview(t: TemplateItem): string {
+  const [c1, c2] = t.colors;
+  const font = 'https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&display=swap';
+  const cases = [
+    ['Maison Verde', 'Identidad y web', c1],
+    ['Kilo Coffee', 'Packaging y e-commerce', c2],
+    ['Nube Studio', 'Producto digital', c1],
+    ['Faro Hotels', 'Campaña y motion', c2],
+  ].map(([n, k, c], i) => `
+    <a class="case" href="#" style="--c:${c};--i:${i}">
+      <div class="thumb" aria-hidden="true"></div>
+      <div><b>${n}</b><span>${k}</span></div><em aria-hidden="true">↗</em>
+    </a>`).join('');
+  const team = ['Lucía R.|Dirección creativa', 'Mateo S.|Diseño', 'Ana P.|Estrategia', 'Bruno C.|Desarrollo'].map((m) => {
+    const [n, r] = m.split('|');
+    return `<li><span class="av" aria-hidden="true">${n[0]}</span><b>${n}</b><small>${r}</small></li>`;
+  }).join('');
+  const body = `
+    ${previewNav(t.name, c1, c2, ['Estudio', 'Casos', 'Equipo', 'Contacto'])}
+    <main>
+      <header class="hero">
+        <span class="pill">Estudio independiente · 2014</span>
+        <h1>Diseñamos marcas que <em>se sienten</em> antes de leerse.</h1>
+        <p class="lead">${t.description.split('.')[0]}.</p>
+        <div class="ctas"><button class="primary" type="button">Hablemos de tu proyecto →</button><button class="ghost" type="button">Ver casos</button></div>
+      </header>
+      <section class="wrap" aria-labelledby="h-cases">
+        <h2 id="h-cases">Casos <small>selección 2024–26</small></h2>
+        <div class="cases">${cases}</div>
+      </section>
+      <section class="wrap" aria-labelledby="h-team">
+        <h2 id="h-team">Equipo</h2>
+        <ul class="team">${team}</ul>
+      </section>
+      <section class="wrap cta-band"><h2>¿Tienes algo en mente?</h2><button class="primary" type="button">Escríbenos</button></section>
+    </main>${previewFooter(t.name)}`;
+  const css = `
+    h1,h2{font-family:'Fraunces',serif;font-weight:400}
+    h1 em{color:${c1};font-style:italic}
+    .hero{max-width:860px;margin:0 auto;padding:88px 24px 56px;text-align:center}
+    .lead{color:#a4adbf;font-size:17px;line-height:1.65;max-width:560px;margin:0 auto}
+    .ctas{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+    .wrap{max-width:1040px;margin:0 auto;padding:40px 24px}
+    h2{font-size:28px;letter-spacing:-.02em;margin-bottom:22px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+    h2 small{font-family:Inter,sans-serif;font-size:12px;color:#8a93a8;letter-spacing:.1em;text-transform:uppercase}
+    .cases{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .case{display:flex;gap:16px;align-items:center;padding:16px;border:1px solid #ffffff14;border-radius:18px;background:#ffffff08;
+      transition:transform .25s,border-color .25s;opacity:0;animation:up .5s forwards calc(var(--i)*80ms)}
+    .case:hover{transform:translateY(-3px);border-color:var(--c)}
+    .thumb{width:84px;height:84px;border-radius:14px;flex:none;background:linear-gradient(135deg,var(--c),#0b0d12 140%)}
+    .case b{display:block;font-size:16px}.case span{color:#8a93a8;font-size:13px}
+    .case em{margin-left:auto;font-style:normal;color:var(--c);font-size:20px}
+    .team{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    .team li{text-align:center;padding:20px 12px;border:1px solid #ffffff12;border-radius:16px}
+    .av{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 12px;border-radius:50%;font-family:Fraunces,serif;font-size:22px;
+      background:linear-gradient(135deg,${c1},${c2});color:#0b0d12}
+    .team b{display:block;font-size:14px}.team small{color:#8a93a8;font-size:12px}
+    .cta-band{text-align:center;padding:64px 24px}.cta-band h2{justify-content:center;font-size:34px}
+    @media(max-width:700px){.cases{grid-template-columns:1fr}.team{grid-template-columns:repeat(2,1fr)}.hero{padding-top:56px}}`;
+  return previewWrap(t, body, css, font, "Inter,sans-serif");
+}
+
+/* ═══════════════════════════════════════════
+   AULA — Landing de curso
+   ═══════════════════════════════════════════ */
+function buildAulaPreview(t: TemplateItem): string {
+  const [c1, c2] = t.colors;
+  const font = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap';
+  const modules = ['Fundamentos y primer proyecto', 'Componentes y estado', 'Datos, APIs y formularios', 'Testing y despliegue'].map((m, i) => `
+    <li><span class="n">${String(i + 1).padStart(2, '0')}</span><div><b>${m}</b><small>${4 + i} lecciones · ${2 + i}h</small></div></li>`).join('');
+  const body = `
+    ${previewNav(t.name, c1, c2, ['Programa', 'Docentes', 'Precio', 'FAQ'])}
+    <main>
+      <header class="hero">
+        <span class="pill">Nueva cohorte · 12 cupos</span>
+        <h1>Aprende a construir apps reales en <span class="hl">8 semanas</span>.</h1>
+        <p class="lead">${t.description.split('.')[0]}. Clases en vivo, proyectos guiados y feedback personal.</p>
+        <div class="ctas"><button class="primary" type="button">Reservar cupo →</button><button class="ghost" type="button">Descargar temario</button></div>
+        <ul class="facts"><li><b>8</b> semanas</li><li><b>32</b> lecciones</li><li><b>4.9★</b> alumnos</li></ul>
+      </header>
+      <section class="wrap" aria-labelledby="h-prog">
+        <h2 id="h-prog">Programa</h2>
+        <ol class="mods">${modules}</ol>
+      </section>
+      <section class="wrap price" aria-labelledby="h-pr">
+        <div><h2 id="h-pr">Todo incluido</h2><p class="lead">Acceso de por vida a grabaciones, comunidad y certificado.</p></div>
+        <div class="box"><small>Pago único</small><b>$189</b><button class="primary" type="button">Inscribirme</button><em>Garantía de 14 días</em></div>
+      </section>
+    </main>${previewFooter(t.name)}`;
+  const css = `
+    .hero{max-width:820px;margin:0 auto;padding:80px 24px 40px;text-align:center}
+    .hl{background:linear-gradient(135deg,${c1},${c2});-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .lead{color:#a4adbf;font-size:16px;line-height:1.65;max-width:560px;margin:0 auto}
+    .ctas{display:flex;gap:12px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+    .facts{list-style:none;display:flex;gap:32px;justify-content:center;margin-top:36px;color:#8a93a8;font-size:13px;flex-wrap:wrap}
+    .facts b{display:block;font-size:22px;color:#fff}
+    .wrap{max-width:860px;margin:0 auto;padding:36px 24px}
+    h2{font-size:26px;letter-spacing:-.02em;margin-bottom:18px}
+    .mods{list-style:none;display:grid;gap:10px}
+    .mods li{display:flex;gap:16px;align-items:center;padding:16px 18px;border:1px solid #ffffff14;border-radius:14px;background:#ffffff08;transition:border-color .2s}
+    .mods li:hover{border-color:${c1}88}
+    .n{font-weight:800;color:${c1};font-size:18px;min-width:30px}
+    .mods b{display:block;font-size:15px}.mods small{color:#8a93a8;font-size:12.5px}
+    .price{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center}
+    .box{padding:28px;border-radius:20px;text-align:center;border:1px solid ${c1}55;background:linear-gradient(160deg,${c1}1f,transparent)}
+    .box small{color:#8a93a8;display:block}.box b{display:block;font-size:46px;margin:6px 0 16px;letter-spacing:-.03em}
+    .box em{display:block;margin-top:12px;font-style:normal;color:#8a93a8;font-size:12px}
+    @media(max-width:700px){.price{grid-template-columns:1fr}.hero{padding-top:52px}}`;
+  return previewWrap(t, body, css, font, "'Plus Jakarta Sans',sans-serif");
+}
+
+/* ═══════════════════════════════════════════
+   MANUAL — Documentación con índice lateral
+   ═══════════════════════════════════════════ */
+function buildManualPreview(t: TemplateItem): string {
+  const [c1, c2] = t.colors;
+  const font = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap';
+  const groups: [string, string[]][] = [
+    ['Empezar', ['Introducción', 'Instalación', 'Primeros pasos']],
+    ['Guías', ['Configuración', 'Temas y estilos', 'Despliegue']],
+    ['Referencia', ['API', 'CLI', 'Changelog']],
+  ];
+  const side = groups.map(([g, items]) => `
+    <div class="grp"><h3>${g}</h3><ul>${items.map((i, k) => `<li><a href="#"${g === 'Empezar' && k === 1 ? ' class="on" aria-current="page"' : ''}>${i}</a></li>`).join('')}</ul></div>`).join('');
+  const body = `
+    ${previewNav(t.name, c1, c2, ['Docs', 'Guías', 'API', 'GitHub'])}
+    <div class="layout">
+      <aside aria-label="Índice"><label class="search"><span aria-hidden="true">⌕</span><input type="search" placeholder="Buscar…" aria-label="Buscar en la documentación"/><kbd>⌘K</kbd></label>${side}</aside>
+      <main class="doc">
+        <small class="crumb">Docs / Empezar / Instalación</small>
+        <h1>Instalación</h1>
+        <p class="lead">Instala ${t.name} en menos de un minuto. Requiere Node 20 o superior.</p>
+        <pre><code><span class="c"># con npm</span>
+npm install ${t.id}
+
+<span class="c"># con pnpm</span>
+pnpm add ${t.id}</code></pre>
+        <div class="note"><b>Consejo</b> Usa <code>--save-dev</code> si solo lo necesitas en desarrollo.</div>
+        <h2 id="uso">Uso básico</h2>
+        <p>Importa el módulo y monta tu primera página con una sola línea.</p>
+        <div class="pager" role="navigation" aria-label="Paginación"><a href="#"><small>Anterior</small>Introducción</a><a href="#"><small>Siguiente</small>Primeros pasos →</a></div>
+      </main>
+      <aside class="toc" aria-label="En esta página"><h3>En esta página</h3><a href="#" class="on">Instalación</a><a href="#uso">Uso básico</a></aside>
+    </div>${previewFooter(t.name)}`;
+  const css = `
+    .layout{display:grid;grid-template-columns:240px minmax(0,1fr) 180px;gap:40px;max-width:1160px;margin:0 auto;padding:32px 24px}
+    aside h3{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#8a93a8;margin:22px 0 8px}
+    aside ul{list-style:none}aside a{display:block;padding:7px 10px;border-radius:8px;font-size:14px;color:#a4adbf}
+    aside a:hover{color:#fff;background:#ffffff0d}aside a.on{color:${c1};background:${c1}18;font-weight:600}
+    .search{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid #ffffff1c;border-radius:10px;color:#8a93a8;font-size:14px}
+    .search input{flex:1;min-width:0;background:none;border:0;color:#fff;font:inherit;outline:0}
+    kbd{font:11px 'JetBrains Mono',monospace;border:1px solid #ffffff26;border-radius:6px;padding:2px 6px}
+    .toc{position:sticky;top:90px;align-self:start}.toc a{padding:5px 0 5px 12px;border-left:2px solid #ffffff14;border-radius:0;font-size:13px}
+    .toc a.on{border-color:${c1};background:none}
+    .crumb{color:#8a93a8;font-size:13px}
+    .doc h1{font-size:38px;margin:10px 0 12px}.doc h2{font-size:22px;margin:32px 0 10px;letter-spacing:-.02em}
+    .doc p{color:#b5bdcc;line-height:1.7;font-size:15.5px}.lead{font-size:17px!important}
+    pre{margin:20px 0;padding:18px 20px;border-radius:14px;background:#06080c;border:1px solid #ffffff14;overflow-x:auto;
+      font:13.5px/1.7 'JetBrains Mono',monospace;color:#e7eaf2}.c{color:#6f7a90}
+    code{font-family:'JetBrains Mono',monospace}
+    .note{padding:14px 16px;border-radius:12px;border:1px solid ${c1}44;background:${c1}10;color:#c6cddc;font-size:14px}
+    .note b{color:${c1};margin-right:8px}
+    .pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:40px}
+    .pager a{border:1px solid #ffffff14;border-radius:12px;padding:14px 16px;font-weight:600;transition:border-color .2s}
+    .pager a:hover{border-color:${c1}88}.pager a:last-child{text-align:right}.pager small{display:block;color:#8a93a8;font-weight:400;font-size:12px}
+    @media(max-width:980px){.layout{grid-template-columns:200px minmax(0,1fr)}.toc{display:none}}
+    @media(max-width:700px){.layout{grid-template-columns:1fr;gap:12px}.layout>aside:first-child{order:2;border-top:1px solid #ffffff12;padding-top:12px}}`;
+  return previewWrap(t, body, css, font, "Inter,sans-serif");
+}
+
+/* ═══════════════════════════════════════════
+   HARBOR — Panel admin con tablas y estados
+   ═══════════════════════════════════════════ */
+function buildHarborPreview(t: TemplateItem): string {
+  const [c1, c2] = t.colors;
+  const font = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
+  const kpis: [string, string, string][] = [['Pedidos hoy', '1.284', '+12%'], ['Ingresos', '$48.2k', '+8%'], ['Devoluciones', '23', '-4%'], ['Tickets abiertos', '57', '+3%']];
+  const rows: [string, string, string, string][] = [
+    ['#4821', 'Sofía Márquez', 'Pagado', '$220'], ['#4820', 'Tomás Vera', 'Pendiente', '$89'],
+    ['#4819', 'Camila Ruiz', 'Enviado', '$134'], ['#4818', 'Iván Soto', 'Fallido', '$59'], ['#4817', 'Paula Díaz', 'Pagado', '$312'],
+  ];
+  const cls: Record<string, string> = { Pagado: 'ok', Pendiente: 'wa', Enviado: 'in', Fallido: 'er' };
+  const body = `
+    <div class="app">
+      <aside aria-label="Navegación"><div class="brand"><span class="dot" aria-hidden="true"></span>${t.name}</div>
+        <div class="menu" role="navigation" aria-label="Secciones">${['Resumen', 'Pedidos', 'Clientes', 'Productos', 'Ajustes'].map((l, i) => `<a href="#"${i === 1 ? ' class="on" aria-current="page"' : ''}>${l}</a>`).join('')}</div></aside>
+      <main>
+        <header class="top"><div><h1>Pedidos</h1><small>Actualizado hace 2 min</small></div>
+          <div class="tools"><input type="search" placeholder="Buscar pedido…" aria-label="Buscar pedido"/><button class="primary" type="button">+ Nuevo</button></div></header>
+        <section class="kpis" aria-label="Indicadores">${kpis.map(([l, v, d]) => `<article><small>${l}</small><b>${v}</b><span class="${d.startsWith('-') ? 'dn' : 'up'}">${d}</span></article>`).join('')}</section>
+        <section class="tbl" aria-label="Lista de pedidos">
+          <div class="tabs" role="tablist"><button role="tab" aria-selected="true" class="on" type="button">Todos</button><button role="tab" type="button">Pendientes</button><button role="tab" type="button">Enviados</button></div>
+          <div class="scroll"><table><thead><tr><th>Pedido</th><th>Cliente</th><th>Estado</th><th class="r">Total</th></tr></thead>
+          <tbody>${rows.map(([id, c, s, a]) => `<tr><td>${id}</td><td>${c}</td><td><span class="st ${cls[s]}">${s}</span></td><td class="r">${a}</td></tr>`).join('')}</tbody></table></div>
+        </section>
+      </main>
+    </div>${previewFooter(t.name)}`;
+  const css = `
+    .app{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:calc(100vh - 80px)}
+    aside{padding:22px 16px;border-right:1px solid #ffffff12;background:#0a0c11}
+    aside .menu{display:grid;gap:4px;margin-top:26px}
+    aside .menu a{padding:10px 12px;border-radius:10px;font-size:14px;color:#a4adbf;transition:.2s}
+    aside .menu a:hover{background:#ffffff0d;color:#fff}aside .menu a.on{background:${c1}20;color:#fff;box-shadow:inset 3px 0 ${c1}}
+    main{padding:26px 28px;min-width:0}
+    .top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+    .top h1{font-size:26px;margin:0;-webkit-text-fill-color:#f4f6fb}.top small{color:#8a93a8;font-size:12.5px}
+    .tools{display:flex;gap:10px}.tools input{background:#ffffff0a;border:1px solid #ffffff1c;border-radius:10px;padding:10px 14px;color:#fff;font:inherit;font-size:14px;min-width:0}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+    .kpis article{padding:16px;border:1px solid #ffffff12;border-radius:14px;background:#ffffff06}
+    .kpis small{color:#8a93a8;font-size:12px}.kpis b{display:block;font-size:26px;letter-spacing:-.02em;margin:4px 0}
+    .up{color:#34d399;font-size:12.5px;font-weight:600}.dn{color:#fb7185;font-size:12.5px;font-weight:600}
+    .tbl{border:1px solid #ffffff12;border-radius:16px;overflow:hidden}
+    .tabs{display:flex;gap:4px;padding:10px;border-bottom:1px solid #ffffff10}
+    .tabs button{background:none;border:0;color:#a4adbf;padding:8px 14px;border-radius:8px;font-size:13.5px;cursor:pointer;min-height:36px}
+    .tabs button.on{background:#ffffff12;color:#fff}
+    .scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}
+    th{text-align:left;color:#8a93a8;font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.08em;padding:12px 16px}
+    td{padding:14px 16px;border-top:1px solid #ffffff0d}tbody tr{transition:background .15s}tbody tr:hover{background:#ffffff08}.r{text-align:right}
+    .st{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px}
+    .ok{background:#34d39922;color:#34d399}.wa{background:#fbbf2422;color:#fbbf24}.in{background:#38bdf822;color:#38bdf8}.er{background:#fb718522;color:#fb7185}
+    @media(max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:640px){.app{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid #ffffff12;padding:12px}
+      aside .menu{display:flex;overflow-x:auto;margin-top:10px}aside .menu a{white-space:nowrap}main{padding:18px 14px}}`;
+  return previewWrap(t, body, css, font, "Inter,sans-serif");
 }
 
 /* ═══════════════════════════════════════════
@@ -1681,28 +2022,28 @@ function buildGenericPreview(t: TemplateItem): string {
     .lead{color:#98a1b3;font-size:16px;line-height:1.65;max-width:520px;margin:0 auto}
     .ctas{display:flex;gap:12px;justify-content:center;margin-top:28px}
     .ctas b{font-weight:900}
-    .meta{margin-top:26px;color:#6b7385;font-size:12.5px;letter-spacing:.4px}
+    .meta{margin-top:26px;color:#8a93a8;font-size:12.5px;letter-spacing:.4px}
     .marquee{overflow:hidden;margin-top:52px;border-block:1px solid #ffffff12;padding:12px 0;
       max-width:100%;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
-    .marquee span{font-weight:800;letter-spacing:.22em;color:#6b7385;font-size:13px;animation:x 16s linear infinite;display:inline-block}
+    .marquee span{font-weight:800;letter-spacing:.22em;color:#8a93a8;font-size:13px;animation:x 16s linear infinite;display:inline-block}
     .marquee i{color:${c1};font-style:normal;font-weight:800;letter-spacing:.22em;font-size:13px;animation:x 16s linear infinite}
     @keyframes x{to{transform:translateX(-100%)}}
     .stats{display:flex;justify-content:center;gap:54px;padding:36px 20px;border-top:1px solid #ffffff10;
            border-bottom:1px solid #ffffff10;margin:30px 60px 0;flex-wrap:wrap}
     .stats div{text-align:center}.stats b{font-size:24px;display:block}
-    .stats span{color:#6b7385;font-size:12px;text-transform:uppercase;letter-spacing:1.4px}
+    .stats span{color:#8a93a8;font-size:12px;text-transform:uppercase;letter-spacing:1.4px}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;padding:56px 48px;max-width:1080px;margin:0 auto}
     .card{border:1px solid #ffffff14;background:rgba(255,255,255,.035);backdrop-filter:blur(12px);border-radius:16px;padding:22px;opacity:0;transform:translateY(16px);
           animation:up .5s forwards calc(var(--i)*90ms);transition:.25s}
     .card:hover{transform:translateY(-4px)!important;border-color:${t.accent}66}
     .ic{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,${c1},${c2});margin-bottom:14px;opacity:.9;box-shadow:0 6px 18px ${c1}55}
     .card b{display:block;font-size:14.5px;margin-bottom:6px;line-height:1.35}
-    .card small{color:#6b7385;font-size:12px}
+    .card small{color:#8a93a8;font-size:12px}
     .quotes{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:1080px;margin:8px auto 0;padding:0 48px}
     .qcard{border:1px solid #ffffff14;background:rgba(255,255,255,.03);border-radius:16px;padding:24px}
     .qcard p{color:#c6cddc;font-size:14px;line-height:1.55;margin:8px 0 14px}
     .qcard b{color:#fff;font-size:13px}
-    .qcard small{color:#6b7385;font-size:12px}
+    .qcard small{color:#8a93a8;font-size:12px}
     .stars{color:${c1};letter-spacing:2px}
     @media(max-width:640px){.stats{gap:26px}.grid,.quotes{padding:20px}.quotes{grid-template-columns:1fr}}`;
 

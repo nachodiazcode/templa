@@ -19,7 +19,7 @@ const RICH = {
   'nova-saas': {
     description:
       'Nova SaaS es la plantilla definitiva para lanzar tu producto digital. Incluye landing de alta conversión, pricing dinámico, blog integrado y panel de cliente, con un sistema de diseño completo.',
-    category: 'saas', accent: '#8b5cf6', oldPrice: 129, sales: 1830,
+    category: 'saas', accent: '#8b5cf6', oldPrice: 122990, sales: 1830,
     isFeatured: true, isNew: true, releasedAt: '2026-07-02',
   },
   'atlas-store': {
@@ -37,7 +37,7 @@ const RICH = {
   monogram: {
     description:
       'Portfolio editorial con transiciones de página suaves, casos de estudio a pantalla completa y una galería que hace que tu trabajo hable por ti.',
-    category: 'portfolio', accent: '#e11d48', oldPrice: 69, sales: 980,
+    category: 'portfolio', accent: '#e11d48', oldPrice: 65990, sales: 980,
     isFeatured: true, isNew: false, releasedAt: '2026-03-22',
   },
   'pulse-dashboard': {
@@ -79,7 +79,7 @@ const RICH = {
   'ledger-finance': {
     description:
       'Visualiza KPIs financieros, flujos de caja y proyecciones con un dashboard serio y elegante. Exportación a PDF incluida.',
-    category: 'dashboard', accent: '#0284c7', oldPrice: 119, sales: 540,
+    category: 'dashboard', accent: '#0284c7', oldPrice: 112990, sales: 540,
     isFeatured: false, isNew: false, releasedAt: '2026-06-15',
   },
   'journal-minimal': {
@@ -97,8 +97,38 @@ const RICH = {
   'nexa-saas': {
     description:
       'SaaS landing con pricing, mockup y automatizaciones IA: hero interactivo, bento grid de features, FAQ nativo y testimonios.',
-    category: 'saas', accent: '#22d3ee', oldPrice: 69, sales: 1560,
+    category: 'saas', accent: '#22d3ee', oldPrice: 65990, sales: 1560,
     isFeatured: true, isNew: true, releasedAt: '2026-08-10',
+  },
+  'storefront-gatsby': {
+    description:
+      'Storefront Pro es una plantilla premium para WooCommerce creada de forma headless con Gatsby. Ofrece velocidades de carga ultrarrápidas, SEO optimizado y una experiencia de usuario increíble. Integración perfecta con WordPress backend.',
+    category: 'ecommerce', accent: '#d946ef', oldPrice: null, sales: 320,
+    isFeatured: true, isNew: true, releasedAt: '2026-09-01',
+  },
+  'atelier-agency': {
+    description:
+      'Atelier es la plantilla para estudios y agencias: portada editorial, grilla de casos, equipo y un cierre para pedir propuesta. Tipografía grande y mucho aire.',
+    category: 'agency', accent: '#fb7185', oldPrice: null, sales: 410,
+    isFeatured: false, isNew: true, releasedAt: '2026-09-20',
+  },
+  'aula-learn': {
+    description:
+      'Aula presenta un curso o bootcamp: promesa, programa por módulos, docentes y precio de inscripción. Pensada para academias y talleres.',
+    category: 'education', accent: '#34d399', oldPrice: null, sales: 360,
+    isFeatured: false, isNew: true, releasedAt: '2026-09-18',
+  },
+  'manual-docs': {
+    description:
+      'Manual es una base de documentación: índice fijo, búsqueda visual y páginas de guía. Sirve para APIs, productos y handbooks internos.',
+    category: 'documentation', accent: '#a3e635', oldPrice: null, sales: 290,
+    isFeatured: false, isNew: true, releasedAt: '2026-09-16',
+  },
+  'harbor-admin': {
+    description:
+      'Harbor es un admin panel: sidebar, métricas, tabla de registros y estados. Listo para envolver un backend propio.',
+    category: 'admin-panel', accent: '#818cf8', oldPrice: null, sales: 250,
+    isFeatured: false, isNew: true, releasedAt: '2026-09-14',
   },
 };
 

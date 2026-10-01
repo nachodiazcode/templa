@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { DecimalPipe, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { CATEGORY_LABELS, TemplateCategory, TemplateItem } from '../../core/models/template.model';
+import { CATEGORY_LABELS, TemplateCategory, TemplateItem, templateTier } from '../../core/models/template.model';
 import { CartService } from '../../core/services/cart.service';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-template-card',
@@ -10,7 +11,8 @@ import { CartService } from '../../core/services/cart.service';
   standalone: true,
   imports: [RouterLink, DecimalPipe, NgOptimizedImage],
   template: `
-    <a [routerLink]="['/templates', t().id]" class="card">
+    <article class="card">
+      <a [routerLink]="['/templates', t().id]" class="hit">
       <div class="thumb" [style.--c1]="t().colors[0]" [style.--c2]="t().colors[1]">
         <div class="browser">
           <div class="bar"><i></i><i></i><i></i></div>
@@ -31,10 +33,12 @@ import { CartService } from '../../core/services/cart.service';
           fill
           onerror="this.style.display='none'"
         />
-        @if (t().price === 0) {
+        @if (tier() === 'free') {
           <span class="flag free">Gratis</span>
-        } @else if (t().isNew) {
-          <span class="flag new">Nuevo</span>
+        } @else if (tier() === 'gold') {
+          <span class="flag gold">Gold</span>
+        } @else {
+          <span class="flag prem">Premium</span>
         }
         <span class="open">Vista previa →</span>
       </div>
@@ -46,8 +50,8 @@ import { CartService } from '../../core/services/cart.service';
             @if (t().price === 0) {
               <span class="free-price">Gratis</span>
             } @else {
-              <s>{{ t().oldPrice ? '$' + t().oldPrice : '' }}</s>
-              <b>\${{ t().price }}</b>
+              <s>{{ t().oldPrice ? '$' + t().oldPrice?.toLocaleString('es-CL') : '' }}</s>
+              <b>\${{ t().price.toLocaleString('es-CL') }}</b>
             }
           </div>
         </div>
@@ -60,15 +64,29 @@ import { CartService } from '../../core/services/cart.service';
           <span>{{ t().sales | number: '1.0-0' }} ventas</span>
         </div>
       </div>
-    </a>
+      </a>
+      <button
+        type="button"
+        class="quick"
+        [class.in]="inCart()"
+        (click)="quickAdd()"
+        [attr.aria-label]="(inCart() ? 'Ver carrito, ' : 'Añadir ') + t().name"
+      >
+        {{ inCart() ? 'En carrito' : (t().price === 0 ? 'Guardar' : 'Añadir') }}
+      </button>
+    </article>
   `,
   styles: `
     :host { display: block; height: 100%; }
     .card {
+      position: relative;
       display: flex; flex-direction: column; height: 100%;
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius); overflow: hidden;
       transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    }
+    .hit {
+      display: flex; flex-direction: column; height: 100%; color: inherit;
     }
     .card:hover {
       transform: translateY(-5px);
@@ -115,7 +133,9 @@ import { CartService } from '../../core/services/cart.service';
       padding: 4px 10px; border-radius: 99px; backdrop-filter: blur(8px);
     }
     .flag.free { background: rgba(52,211,153,.16); color: var(--success); border: 1px solid rgba(52,211,153,.4); }
-    .flag.new { background: rgba(139,92,246,.2); color: #c4b5fd; border: 1px solid rgba(139,92,246,.45); }
+    .flag.prem { background: rgba(244,63,94,.16); color: #fda4af; border: 1px solid rgba(244,63,94,.4); }
+    .flag.gold { background: rgba(245,158,11,.18); color: #fbbf24; border: 1px solid rgba(245,158,11,.45); }
+    .flag.new { background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
     .open {
       position: absolute; bottom: 12px; right: 12px;
       font-size: 12px; font-weight: 700; color: #fff;
@@ -124,7 +144,18 @@ import { CartService } from '../../core/services/cart.service';
       opacity: 0; transform: translateY(6px); transition: all .25s ease; backdrop-filter: blur(8px);
     }
     .card:hover .open { opacity: 1; transform: none; }
-    .body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    @media (hover: none) {
+      .open { opacity: 1; transform: none; }
+    }
+    .body { padding: 18px 18px 54px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .quick {
+      position: absolute; right: 14px; bottom: 14px; z-index: 2;
+      border: 1px solid var(--border-strong); background: var(--bg);
+      color: var(--text); font: inherit; font-size: 12px; font-weight: 800;
+      border-radius: 99px; padding: 6px 12px; cursor: pointer;
+    }
+    .quick:hover { border-color: var(--accent); color: var(--accent); }
+    .quick.in { color: var(--success); border-color: color-mix(in srgb, var(--success) 45%, transparent); }
     .top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
     h3 { margin: 0; font-size: 17.5px; }
     .price { display: flex; align-items: baseline; gap: 7px; }
@@ -145,6 +176,23 @@ import { CartService } from '../../core/services/cart.service';
 export class TemplateCardComponent {
   readonly t = input.required<TemplateItem>();
   readonly label = computed(() => CATEGORY_LABELS[this.t().category as TemplateCategory]);
+  readonly tier = computed(() => templateTier(this.t()));
+  readonly inCart = computed(() => this.cart.has(this.t().id));
 
   private cart = inject(CartService);
+  private toast = inject(ToastService);
+
+  quickAdd(): void {
+    const template = this.t();
+    if (this.cart.has(template.id)) {
+      this.cart.open();
+      return;
+    }
+    if (!this.cart.add(template)) return;
+    this.toast.show(
+      template.price === 0
+        ? `"${template.name}" guardada en el carrito.`
+        : `"${template.name}" añadida al carrito.`,
+    );
+  }
 }

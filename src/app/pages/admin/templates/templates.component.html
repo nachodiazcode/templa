@@ -36,7 +36,7 @@
             <tr>
               <td class="mono">{{ t.id }}</td>
               <td>{{ t.name }}</td>
-              <td class="mono">{{ t.price === 0 ? 'Gratis' : '$' + t.price }}</td>
+              <td class="mono">{{ t.price === 0 ? 'Gratis' : '$' + t.price.toLocaleString('es-CL') }}</td>
               <td>{{ catLabel(t.category) }}</td>
               <td>{{ t.pages }}</td>
               <td>

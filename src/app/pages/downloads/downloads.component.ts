@@ -35,7 +35,7 @@ import { CheckoutService, OrderStatus } from '../../core/services/checkout.servi
                 <li>
                   <div class="info">
                     <b>{{ item.name }}</b>
-                    <small>{{ item.price === 0 ? 'Gratis' : '$' + item.price }} · licencia comercial</small>
+                    <small>{{ item.price === 0 ? 'Gratis' : '$' + item.price.toLocaleString('es-CL') }} · licencia comercial</small>
                   </div>
                   <a class="btn sm dl" [href]="checkout.downloadUrl(o.orderId, item.id)">Descargar</a>
                 </li>

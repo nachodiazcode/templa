@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TEMPLATES } from '../../core/data/templates.data';
-import { CATEGORY_LABELS, TemplateCategory } from '../../core/models/template.model';
+import { CATEGORY_LABELS, TemplateCategory, templateTier } from '../../core/models/template.model';
 import { TemplateCardComponent } from '../../shared/template-card/template-card.component';
 import { SeoService } from '../../core/services/seo.service';
 
-type TypeFilter = 'todos' | 'gratis' | 'premium';
+type TypeFilter = 'todos' | 'gratis' | 'premium' | 'gold';
 type SortKey = 'populares' | 'nuevas' | 'precio-asc' | 'valoracion';
 
 @Component({
@@ -59,8 +59,9 @@ export class CatalogComponent {
       list = list.filter((t) => t.category === this.cat());
     }
 
-    if (this.tipo() === 'gratis') list = list.filter((t) => t.price === 0);
-    if (this.tipo() === 'premium') list = list.filter((t) => t.price > 0);
+    if (this.tipo() === 'gratis') list = list.filter((t) => templateTier(t) === 'free');
+    if (this.tipo() === 'premium') list = list.filter((t) => templateTier(t) === 'premium');
+    if (this.tipo() === 'gold') list = list.filter((t) => templateTier(t) === 'gold');
 
     const tech = this.tech();
     if (tech) list = list.filter((t) => t.tech.includes(tech));
@@ -91,12 +92,14 @@ export class CatalogComponent {
 
       if (q !== null) this.q.set(q);
       if (cat && this.categories.includes(cat)) this.cat.set(cat);
-      if (tipo === 'gratis' || tipo === 'premium' || tipo === 'todos') this.tipo.set(tipo);
+      if (tipo === 'gratis' || tipo === 'premium' || tipo === 'gold' || tipo === 'todos') this.tipo.set(tipo);
       if (orden) this.orden.set(orden);
 
       let title = 'Catálogo de plantillas';
       if (this.cat() !== 'todas') title = `${this.categoryLabels[this.cat() as TemplateCategory]} - Catálogo`;
       if (this.tipo() === 'gratis') title = `Plantillas Gratuitas - ${title}`;
+      if (this.tipo() === 'premium') title = `Premium - ${title}`;
+      if (this.tipo() === 'gold') title = `Gold - ${title}`;
       
       this.seo.set({
         title,

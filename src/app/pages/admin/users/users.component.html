@@ -65,7 +65,7 @@
           <div class="item-row">
             <span class="mono">{{ o.orderId }}</span>
             <span>{{ o.items?.length }} items</span>
-            <span class="mono">${{ o.amount | number }}</span>
+            <span class="mono">${{ o.amount.toLocaleString('es-CL') }}</span>
             <span class="status-chip" [class]="o.status === 'paid' ? 'green' : o.status === 'pending' ? 'yellow' : 'gray'">{{ o.status }}</span>
           </div>
         }

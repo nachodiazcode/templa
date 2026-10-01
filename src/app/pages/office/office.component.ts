@@ -59,37 +59,27 @@ interface OfficeConfig {
           <article class="ocard" [style.--c1]="t.colors[0]" [style.--c2]="t.colors[1]">
             <div class="omock">
               @if (format() === 'pptx') {
-                <div class="slide">
-                  <div class="s-side"></div>
-                  <div class="s-body">
-                    <div class="s-title"></div>
-                    <div class="s-line"></div>
-                    <div class="s-line w60"></div>
-                    <div class="s-kpis">
-                      <span></span><span></span><span></span>
-                    </div>
-                    <div class="s-bars">
-                      <span></span><span></span><span></span><span></span><span></span>
+                <div class="slide" [attr.data-id]="t.id" [class.dark]="t.id === 'deck-pitch' || t.id === 'deck-minimal' || t.id === 'deck-keynote'">
+                  <div class="s-rail"></div>
+                  <div class="s-copy">
+                    <em>{{ t.name }}</em>
+                    <strong>{{ t.tagline }}</strong>
+                    <div class="s-metrics">
+                      <span><b>01</b></span>
+                      <span><b>02</b></span>
+                      <span><b>03</b></span>
                     </div>
                   </div>
                 </div>
               } @else {
-                <div class="doc">
-                  <div class="d-head">
-                    <div class="d-kicker"></div>
-                    <div class="d-title"></div>
-                    <div class="d-rule"></div>
+                <div class="doc" [attr.data-id]="t.id">
+                  <div class="d-band">{{ t.name }}</div>
+                  <strong>{{ t.tagline }}</strong>
+                  <div class="d-rule"></div>
+                  <div class="d-cols">
+                    <div><i></i><i class="short"></i><i></i></div>
+                    <div><i></i><i></i><i class="short"></i></div>
                   </div>
-                  <div class="d-line"></div>
-                  <div class="d-line w85"></div>
-                  <div class="d-line w70"></div>
-                  <div class="d-table">
-                    <div class="d-tr"><i></i><i></i><i></i></div>
-                    <div class="d-tr"><i></i><i></i><i></i></div>
-                    <div class="d-tr"><i></i><i></i><i></i></div>
-                  </div>
-                  <div class="d-line"></div>
-                  <div class="d-line w65"></div>
                 </div>
               }
               <span class="flag">{{ format() === 'pptx' ? 'PPTX' : 'DOCX' }}</span>
@@ -226,43 +216,51 @@ interface OfficeConfig {
       border: 1px solid rgba(52,211,153,.4); backdrop-filter: blur(8px);
     }
 
-    /* mockup slide pptx */
     .slide {
-      aspect-ratio: 16 / 9; background: #fff; border-radius: 10px;
+      aspect-ratio: 16 / 9; background: #f7f8fb; border-radius: 12px;
       overflow: hidden; display: flex; box-shadow: 0 18px 40px -18px rgba(0,0,0,.55);
       transition: transform .35s ease;
     }
-    .ocard:hover .slide { transform: translateY(-4px) rotate(-1deg); }
-    .s-side { width: 7%; background: color-mix(in srgb, var(--c2) 85%, white); }
-    .s-body { flex: 1; padding: 6% 8%; display: flex; flex-direction: column; gap: 4.5%; }
-    .s-title { width: 62%; height: 9%; border-radius: 4px; background: var(--c1); opacity: .92; }
-    .s-line { width: 88%; height: 3.4%; border-radius: 3px; background: #cbd2e0; }
-    .s-line.w60 { width: 60%; }
-    .s-kpis { display: flex; gap: 4%; margin-top: 1%; }
-    .s-kpis span { flex: 1; height: 22%; aspect-ratio: 3 / 2.2; border-radius: 6px; background: linear-gradient(135deg, color-mix(in srgb, var(--c2) 55%, white), color-mix(in srgb, var(--c1) 35%, white)); }
-    .s-bars { display: flex; align-items: flex-end; gap: 3.5%; margin-top: 2%; height: 30%; }
-    .s-bars span { flex: 1; border-radius: 4px 4px 0 0; background: color-mix(in srgb, var(--c2) 70%, #cbd2e0); }
-    .s-bars span:nth-child(1) { height: 55%; } .s-bars span:nth-child(2) { height: 78%; }
-    .s-bars span:nth-child(3) { height: 42%; } .s-bars span:nth-child(4) { height: 90%; }
-    .s-bars span:nth-child(5) { height: 64%; }
+    .ocard:hover .slide, .ocard:hover .doc { transform: translateY(-4px); }
+    .slide.dark { background: var(--c1); color: #f4f6fb; }
+    .s-rail { width: 8px; background: var(--c2); flex-shrink: 0; }
+    .s-copy { padding: 8% 7% 7%; display: flex; flex-direction: column; min-width: 0; }
+    .s-copy em {
+      font-style: normal; font-size: 11px; font-weight: 800; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--c2);
+    }
+    .s-copy strong {
+      margin-top: 8px; font-size: 18px; line-height: 1.15; letter-spacing: -.03em;
+      color: var(--c1); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .slide.dark .s-copy strong { color: #fff; }
+    .s-metrics { display: flex; gap: 8px; margin-top: auto; padding-top: 14px; }
+    .s-metrics span {
+      flex: 1; border-radius: 8px; padding: 8px 6px;
+      background: color-mix(in srgb, var(--c2) 16%, white);
+      color: var(--c1); font-size: 11px; font-weight: 800; text-align: center;
+    }
+    .slide.dark .s-metrics span { background: color-mix(in srgb, var(--c2) 28%, transparent); color: #fff; }
 
-    /* mockup doc word */
     .doc {
-      aspect-ratio: 3 / 2.4; background: #fff; border-radius: 10px; padding: 5.5% 7%;
-      box-shadow: 0 18px 40px -18px rgba(0,0,0,.55); display: flex; flex-direction: column; gap: 3.2%;
+      aspect-ratio: 4 / 3; background: #fff; border-radius: 12px; overflow: hidden;
+      box-shadow: 0 18px 40px -18px rgba(0,0,0,.55); display: flex; flex-direction: column;
       transition: transform .35s ease;
     }
-    .ocard:hover .doc { transform: translateY(-4px) rotate(-1deg); }
-    .d-head { display: flex; flex-direction: column; gap: 2.2%; }
-    .d-kicker { width: 26%; height: 4%; border-radius: 3px; background: color-mix(in srgb, var(--c2) 80%, white); }
-    .d-title { width: 74%; height: 9%; border-radius: 4px; background: var(--c1); opacity: .92; }
-    .d-rule { height: 2.5px; width: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--c2), transparent); margin-top: 2.5%; }
-    .d-line { width: 100%; height: 2.6%; border-radius: 3px; background: #e3e7f0; }
-    .d-line.w85 { width: 85%; } .d-line.w70 { width: 70%; } .d-line.w65 { width: 65%; }
-    .d-table { display: flex; flex-direction: column; gap: 2.5%; margin: 1% 0; }
-    .d-tr { display: flex; gap: 3%; }
-    .d-tr i { flex: 1; height: 8px; border-radius: 3px; background: #eef1f7; }
-    .d-tr:first-child i { background: linear-gradient(135deg, var(--c2), var(--c1)); opacity: .8; }
+    .d-band {
+      background: var(--c2); color: #fff; font-size: 11px; font-weight: 800;
+      letter-spacing: .14em; text-transform: uppercase; padding: 8px 14px;
+    }
+    .doc strong {
+      margin: 14px 16px 0; font-size: 16px; line-height: 1.25; letter-spacing: -.02em; color: var(--c1);
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .d-rule { height: 2px; margin: 10px 16px 0; background: linear-gradient(90deg, var(--c2), transparent); }
+    .d-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 12px 16px 16px; }
+    .d-cols div { display: grid; gap: 7px; align-content: start; }
+    .d-cols i { display: block; height: 7px; border-radius: 99px; background: #e6eaf2; }
+    .d-cols i.short { width: 68%; }
+    .d-cols div:first-child i:first-child { background: color-mix(in srgb, var(--c2) 70%, white); width: 46%; }
 
     .obody { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
     .otop { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
@@ -349,7 +347,7 @@ export class OfficeComponent {
             'Decks limpios, corporativos o para invertir. Baja un .pptx real, ábrelo en PowerPoint y reemplaza tu contenido: fuentes, colores y animaciones ya están definidos.',
           brand: '#e2663b',
           gradient: 'linear-gradient(135deg, #ed6c47, #c4452b)',
-          stat1: ['4', 'decks editables'],
+          stat1: ['10', 'decks editables'],
           stat2: ['8', 'slides por deck'],
           stat3: ['16:9', 'widescreen'],
           steps: [
@@ -365,7 +363,7 @@ export class OfficeComponent {
             'CVs, informes, propuestas y tesis en formato de documento real. Baja un .docx, ábrelo en Word y escribe sobre la estructura ya armada.',
           brand: '#2b579a',
           gradient: 'linear-gradient(135deg, #2b579a, #418ede)',
-          stat1: ['4', 'documentos listos'],
+          stat1: ['10', 'documentos listos'],
           stat2: ['1–5', 'páginas armadas'],
           stat3: ['100%', 'editable'],
           steps: [

@@ -111,7 +111,7 @@
                     <small>{{ t.tagline }}</small>
                   </span>
                   @if (t.price > 0) {
-                    <span class="mf-price">${{ t.price }}</span>
+                    <span class="mf-price">${{ t.price.toLocaleString('es-CL') }}</span>
                   } @else {
                     <span class="mf-free">Gratis</span>
                   }
@@ -405,7 +405,7 @@
                         <b>{{ t.name }}</b>
                         <small>{{ t.tagline }}</small>
                       </div>
-                      <span class="cf-price" [class.free]="t.price === 0">{{ t.price > 0 ? '$' + t.price : 'Gratis' }}</span>
+                      <span class="cf-price" [class.free]="t.price === 0">{{ t.price > 0 ? '$' + t.price.toLocaleString('es-CL') : 'Gratis' }}</span>
                     </button>
                   }
                 </div>
@@ -441,7 +441,7 @@
                   </div>
                   <div class="ci-end">
                     <span class="ci-price" [class.free]="r.price === 0">
-                      {{ r.price > 0 ? '$' + r.price : 'Gratis' }}
+                      {{ r.price > 0 ? '$' + r.price.toLocaleString('es-CL') : 'Gratis' }}
                     </span>
                     <span class="ci-enter">↵</span>
                   </div>

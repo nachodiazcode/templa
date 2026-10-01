@@ -46,7 +46,7 @@ import { ToastService } from '../../core/services/toast.service';
                   <span>{{ item.tech[0] }} · {{ item.pages }} páginas</span>
                 </div>
                 <div class="right">
-                  <span class="price">{{ item.price === 0 ? 'Gratis' : '$' + item.price }}</span>
+                  <span class="price">{{ item.price === 0 ? 'Gratis' : '$' + item.price.toLocaleString('es-CL') }}</span>
                   <button class="rm" (click)="cart.remove(item.id)" aria-label="Quitar">✕</button>
                 </div>
               </li>
@@ -71,7 +71,7 @@ import { ToastService } from '../../core/services/toast.service';
               <div class="coupon">
                 @if (coupon(); as c) {
                   <div class="coupon-applied">
-                    <span><b>{{ c.code }}</b> — descuento −{{ '$' + c.discount }}</span>
+                    <span><b>{{ c.code }}</b> — descuento −{{ '$' + c.discount.toLocaleString('es-CL') }}</span>
                     <button class="rm" (click)="removeCoupon()" aria-label="Quitar cupón">✕</button>
                   </div>
                 } @else {
@@ -95,17 +95,17 @@ import { ToastService } from '../../core/services/toast.service';
             }
             <div class="row subtotal">
               <span>Subtotal</span>
-              <b>{{ cart.total() === 0 ? 'Gratis' : '$' + cart.total() }}</b>
+              <b>{{ cart.total() === 0 ? 'Gratis' : '$' + cart.total().toLocaleString('es-CL') }}</b>
             </div>
             @if (discount() > 0) {
               <div class="row discount">
                 <span>Descuento</span>
-                <b>−{{ '$' + discount() }}</b>
+                <b>−{{ '$' + discount().toLocaleString('es-CL') }}</b>
               </div>
             }
             <div class="row total">
               <span>Total</span>
-              <b>{{ totalToPay() === 0 ? 'Gratis' : '$' + totalToPay() }}</b>
+              <b>{{ totalToPay() === 0 ? 'Gratis' : '$' + totalToPay().toLocaleString('es-CL') }}</b>
             </div>
             @if (error()) {
               <p class="err">{{ error() }}</p>

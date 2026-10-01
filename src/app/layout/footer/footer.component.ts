@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-footer',
@@ -13,33 +12,31 @@ import { ToastService } from '../../core/services/toast.service';
         <div class="brand-col">
           <a routerLink="/" class="logo"><span class="mark"></span>Templa</a>
           <p>
-            Plantillas premium y gratuitas de calidad real. Compra una vez,
-            usa para siempre. Lanza tu próximo proyecto esta misma semana.
+            Catálogo de 20 plantillas web y 20 de Office. Las de pago tienen
+            precio único. PowerPoint y Word se descargan sin registro.
           </p>
-          <form class="news" (submit)="subscribe($event)">
-            <input type="email" required placeholder="Tu email — 1 plantilla gratis al mes" />
-            <button class="btn primary sm" type="submit">Suscribirme</button>
-          </form>
+          <a routerLink="/templates" [queryParams]="{ tipo: 'gratis' }" class="btn primary sm">Ver las gratis</a>
         </div>
 
         <div class="cols">
           <div>
             <h4>Producto</h4>
-            <a routerLink="/templates">Todas las plantillas</a>
-            <a routerLink="/templates" [queryParams]="{ tipo: 'gratis' }">Gratuitas premium</a>
-            <a routerLink="/templates" [queryParams]="{ orden: 'nuevas' }">Novedades</a>
+            <a routerLink="/templates">Plantillas web</a>
+            <a routerLink="/templates" [queryParams]="{ tipo: 'gratis' }">Gratis</a>
+            <a routerLink="/templates" [queryParams]="{ tipo: 'gold' }">Gold</a>
+            <a routerLink="/powerpoint">PowerPoint</a>
+            <a routerLink="/word">Word</a>
           </div>
           <div>
             <h4>Recursos</h4>
+            <a routerLink="/descargas">Descargas</a>
             <a routerLink="/info/soporte">Soporte</a>
             <a routerLink="/info/licencia">Licencias</a>
-            <a routerLink="/info/soporte">Guía de marca</a>
           </div>
           <div>
             <h4>Compañía</h4>
-            <a>Sobre nosotros</a>
+            <a routerLink="/info/sobre">Qué es Templa</a>
             <a routerLink="/info/contacto">Contacto</a>
-            <a routerLink="/info/contacto">Afiliados (30%)</a>
           </div>
         </div>
       </div>
@@ -47,7 +44,9 @@ import { ToastService } from '../../core/services/toast.service';
       <div class="container bottom">
         <span>© 2026 Templa. Hecho con Angular.</span>
         <div class="legal">
-          <a>Términos</a><a>Privacidad</a><a>Cookies</a>
+          <a routerLink="/info/terminos">Términos</a>
+          <a routerLink="/info/privacidad">Privacidad</a>
+          <a routerLink="/info/cookies">Cookies</a>
         </div>
       </div>
     </footer>
@@ -91,14 +90,4 @@ import { ToastService } from '../../core/services/toast.service';
     }
   `,
 })
-export class FooterComponent {
-  private toast = inject(ToastService);
-
-  subscribe(e: Event): void {
-    e.preventDefault();
-    const input = (e.target as HTMLFormElement).querySelector('input');
-    if (!input?.value) return;
-    this.toast.show('¡Listo! Revisa tu email para descargar tu plantilla gratis.', 'info');
-    input.value = '';
-  }
-}
+export class FooterComponent {}

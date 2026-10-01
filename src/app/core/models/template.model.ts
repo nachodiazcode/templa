@@ -10,6 +10,21 @@ export type TemplateCategory =
   | 'documentation'
   | 'admin-panel';
 
+export type TemplateTier = 'free' | 'premium' | 'gold';
+
+const GOLD_IDS = new Set([
+  'storefront-gatsby',
+  'nova-saas',
+  'atlas-store',
+  'pulse-dashboard',
+  'ledger-finance',
+]);
+
+export function templateTier(t: Pick<TemplateItem, 'id' | 'price'>): TemplateTier {
+  if (t.price === 0) return 'free';
+  return GOLD_IDS.has(t.id) ? 'gold' : 'premium';
+}
+
 export interface TemplateItem {
   id: string;
   name: string;

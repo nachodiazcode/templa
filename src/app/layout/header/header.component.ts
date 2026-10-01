@@ -93,7 +93,7 @@ export class HeaderComponent {
       if (!count) return;
       this.bump.set(false);
       setTimeout(() => this.bump.set(true), 30);
-    });
+    }, { allowSignalWrites: true });
 
     this.router.events.subscribe((e) => {
       if (e instanceof NavigationEnd) {

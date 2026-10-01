@@ -42,7 +42,7 @@
               <td class="mono">{{ o.orderId }}</td>
               <td>{{ o.email }}</td>
               <td>{{ o.items?.length || 0 }}</td>
-              <td class="mono">${{ o.amount | number }}</td>
+              <td class="mono">${{ o.amount.toLocaleString('es-CL') }}</td>
               <td><span class="status-chip" [class]="statusClass(o.status)">{{ label(o.status) }}</span></td>
               <td class="dim">{{ o.createdAt | date: 'd/MM/yy HH:mm' }}</td>
             </tr>
@@ -69,7 +69,7 @@
     </div>
     <div class="detail-grid">
       <div><small>Email</small><b>{{ o.email }}</b></div>
-      <div><small>Monto</small><b>${{ o.amount | number }}</b></div>
+      <div><small>Monto</small><b>${{ o.amount.toLocaleString('es-CL') }}</b></div>
       <div><small>Status</small><span class="status-chip" [class]="statusClass(o.status)">{{ label(o.status) }}</span></div>
       <div><small>Creada</small><b>{{ o.createdAt | date: 'd MMM y, HH:mm' : undefined : 'es' }}</b></div>
     </div>
@@ -78,7 +78,7 @@
       @for (item of o.items; track item.id) {
         <div class="item-row">
           <span>{{ item.name }}</span>
-          <span class="mono">{{ item.price === 0 ? 'Gratis' : '$' + item.price }}</span>
+          <span class="mono">{{ item.price === 0 ? 'Gratis' : '$' + item.price.toLocaleString('es-CL') }}</span>
         </div>
       }
     </div>

@@ -15,7 +15,7 @@
           <button [class.active]="shotDevice() === 'mobile'" (click)="setShot('mobile')">Móvil</button>
         </div>
       </div>
-      <div class="gallery-frame">
+      <div class="gallery-frame" [class.is-phone]="shotDevice() === 'mobile'">
         <img
           class="gallery-img"
           [src]="screenshotSrc()"
@@ -45,7 +45,7 @@
           </div>
         </div>
 
-        <div class="frame-wrap">
+        <div class="frame-wrap" [class.is-phone]="device() === 'mobile'" [class.is-tablet]="device() === 'tablet'">
           <iframe
             [srcdoc]="previewHtml()"
             [style.width]="deviceWidth()"
@@ -87,8 +87,8 @@
             <span class="note">Descarga inmediata · licencia comercial incluida</span>
           } @else {
             <div class="price">
-              ${{ t.price }}
-              @if (t.oldPrice) { <s>${{ t.oldPrice }}</s> }
+              ${{ t.price.toLocaleString('es-CL') }}
+              @if (t.oldPrice) { <s>${{ t.oldPrice.toLocaleString('es-CL') }}</s> }
             </div>
             <span class="note">Pago único · sin suscripción · actualizaciones gratis</span>
           }

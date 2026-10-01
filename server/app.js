@@ -440,7 +440,10 @@ export function buildApi() {
         }
       }
 
-      const amount = gross - discount;
+      const amount = Math.round(gross - discount);
+      if (!Number.isInteger(amount) || amount < 50) {
+        return res.status(400).json({ error: 'Monto inválido para Webpay' });
+      }
 
       const orderId = `T${Date.now().toString(36)}${crypto.randomBytes(2).toString('hex')}`;
       const buyOrder = orderId.slice(0, 26);
@@ -485,50 +488,64 @@ export function buildApi() {
    *  - TBK_TOKEN -> el usuario canceló o expiró la sesión
    * Responder siempre redirigiendo a la página de resultado de Angular.
    */
-  app.post('/api/webpay/return', async (req, res) => {
-    const { token_ws: tokenWs, TBK_TOKEN: tbkToken } = req.body;
+  async function handleWebpayReturn(req, res) {
+    const params = { ...(req.query || {}), ...(req.body || {}) };
+    const tokenWs = params.token_ws;
+    const tbkToken = params.TBK_TOKEN;
+    const findByToken = (tk) => Object.values(orders).find((o) => o.webpayToken === tk);
 
-    if (tbkToken && !tokenWs) {
-      const order = Object.values(orders).find((o) => o.webpayToken === tbkToken);
+    // Anulación, timeout o error en el formulario de pago: TBK_TOKEN presente.
+    if (tbkToken) {
+      const order = findByToken(tbkToken) || (tokenWs && findByToken(tokenWs));
       if (order) {
-        order.status = 'canceled';
-        await saveAndSync(order, orders);
+        if (order.status === 'pending') {
+          order.status = 'canceled';
+          await saveAndSync(order, orders);
+        }
         return res.redirect(302, `${APP_URL}/checkout/result?token=${order.orderId}`);
       }
       return res.redirect(302, `${APP_URL}/checkout/result?token=unknown`);
     }
 
-    try {
-      const commit = await makeTransaction().commit(tokenWs);
-      const order = Object.values(orders).find((o) => o.webpayToken === tokenWs);
+    if (!tokenWs) return res.redirect(302, `${APP_URL}/checkout/result?token=unknown`);
 
-      if (order) {
-        const authorized =
-          commit.response_code === 0 &&
-          ['AUTHORIZED', 'PARTIALLY_AUTHORIZED'].includes(commit.status);
-        order.status = authorized ? 'paid' : 'rejected';
-        if (authorized) {
-          order.paidAt = new Date().toISOString();
-          order.authorizationCode = commit.authorization_code;
-          if (order.couponCode) await applyCouponUsage(order.couponCode);
-        }
-        order.commitDetail = {
-          status: commit.status,
-          responseCode: commit.response_code,
-          paymentTypeCode: commit.payment_type_code,
-          installments: commit.installments_number,
-        };
-        await saveAndSync(order, orders);
-        if (authorized) await fulfill(order, orders);
+    try {
+      const order = findByToken(tokenWs);
+      if (!order) return res.redirect(302, `${APP_URL}/checkout/result?token=unknown`);
+
+      // Idempotencia: si el pagador recarga la página, no se vuelve a confirmar ni a entregar.
+      if (order.status !== 'pending') {
         return res.redirect(302, `${APP_URL}/checkout/result?token=${order.orderId}`);
       }
 
-      return res.redirect(302, `${APP_URL}/checkout/result?token=unknown`);
+      const commit = await makeTransaction().commit(tokenWs);
+      const authorized =
+        commit.response_code === 0 &&
+        ['AUTHORIZED', 'PARTIALLY_AUTHORIZED'].includes(commit.status) &&
+        Number(commit.amount) === Number(order.amount);
+      order.status = authorized ? 'paid' : 'rejected';
+      if (authorized) {
+        order.paidAt = new Date().toISOString();
+        order.authorizationCode = commit.authorization_code;
+        if (order.couponCode) await applyCouponUsage(order.couponCode);
+      }
+      order.commitDetail = {
+        status: commit.status,
+        responseCode: commit.response_code,
+        paymentTypeCode: commit.payment_type_code,
+        installments: commit.installments_number,
+      };
+      await saveAndSync(order, orders);
+      if (authorized) await fulfill(order, orders);
+      return res.redirect(302, `${APP_URL}/checkout/result?token=${order.orderId}`);
     } catch (err) {
       console.error('[webpay return]', err.message);
       return res.redirect(302, `${APP_URL}/checkout/result?token=error`);
     }
-  });
+  }
+
+  app.post('/api/webpay/return', handleWebpayReturn);
+  app.get('/api/webpay/return', handleWebpayReturn);
 
   app.get('/api/order/:orderId', (req, res) => {
     const order = orders[req.params.orderId];

@@ -125,7 +125,7 @@ export class TemplateDetailComponent {
         this.realPreviewHtml.set(html);
       });
       if (this.tab() === 'opiniones') this.loadReviews(t.id);
-    });
+    }, { allowSignalWrites: true });
   }
 
   openReviews(): void {

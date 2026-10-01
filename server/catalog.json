@@ -5,8 +5,15 @@
     "price": 0,
     "tagline": "Landing HTML5 pura — cero frameworks",
     "pages": 1,
-    "tech": ["HTML5", "CSS3", "Vanilla JS"],
-    "colors": ["#c084fc", "#67e8f9"],
+    "tech": [
+      "HTML5",
+      "CSS3",
+      "Vanilla JS"
+    ],
+    "colors": [
+      "#c084fc",
+      "#67e8f9"
+    ],
     "features": [
       "100/100 Lighthouse, sin build",
       "Tema claro y oscuro con persistencia",
@@ -18,11 +25,18 @@
   {
     "id": "nova-saas",
     "name": "Nova SaaS",
-    "price": 79,
+    "price": 74990,
     "tagline": "Landing + app para productos de software",
     "pages": 18,
-    "tech": ["Angular", "Tailwind", "TypeScript"],
-    "colors": ["#7c3aed", "#06b6d4"],
+    "tech": [
+      "Angular",
+      "Tailwind",
+      "TypeScript"
+    ],
+    "colors": [
+      "#7c3aed",
+      "#06b6d4"
+    ],
     "features": [
       "Landing de alta conversión",
       "Pricing con toggle mensual/anual",
@@ -35,11 +49,18 @@
   {
     "id": "atlas-store",
     "name": "Atlas Store",
-    "price": 89,
+    "price": 84990,
     "tagline": "E-commerce moderno que convierte",
     "pages": 22,
-    "tech": ["Angular", "Signals", "SCSS"],
-    "colors": ["#f59e0b", "#ef4444"],
+    "tech": [
+      "Angular",
+      "Signals",
+      "SCSS"
+    ],
+    "colors": [
+      "#f59e0b",
+      "#ef4444"
+    ],
     "features": [
       "Fichas de producto inmersivas",
       "Checkout en un paso",
@@ -55,8 +76,14 @@
     "price": 0,
     "tagline": "Landing page minimalista de alto impacto",
     "pages": 3,
-    "tech": ["Angular", "CSS Grid"],
-    "colors": ["#3b82f6", "#22d3ee"],
+    "tech": [
+      "Angular",
+      "CSS Grid"
+    ],
+    "colors": [
+      "#3b82f6",
+      "#22d3ee"
+    ],
     "features": [
       "Hero cinematográfico",
       "100% responsive",
@@ -68,11 +95,17 @@
   {
     "id": "monogram",
     "name": "Monogram",
-    "price": 49,
+    "price": 46990,
     "tagline": "Portfolio para diseñadores y estudios",
     "pages": 8,
-    "tech": ["Angular", "GSAP-ready"],
-    "colors": ["#111827", "#6b7280"],
+    "tech": [
+      "Angular",
+      "GSAP-ready"
+    ],
+    "colors": [
+      "#111827",
+      "#6b7280"
+    ],
     "features": [
       "Casos de estudio fullscreen",
       "Transiciones entre páginas",
@@ -84,11 +117,18 @@
   {
     "id": "pulse-dashboard",
     "name": "Pulse",
-    "price": 99,
+    "price": 93990,
     "tagline": "Dashboard analítico con gráficas vivas",
     "pages": 26,
-    "tech": ["Angular", "Signals", "SVG Charts"],
-    "colors": ["#10b981", "#0ea5e9"],
+    "tech": [
+      "Angular",
+      "Signals",
+      "SVG Charts"
+    ],
+    "colors": [
+      "#10b981",
+      "#0ea5e9"
+    ],
     "features": [
       "30+ componentes listos",
       "Gráficas SVG animadas sin dependencias",
@@ -103,8 +143,14 @@
     "price": 0,
     "tagline": "Blog editorial centrado en la lectura",
     "pages": 6,
-    "tech": ["Angular", "RSS"],
-    "colors": ["#f43f5e", "#fb923c"],
+    "tech": [
+      "Angular",
+      "RSS"
+    ],
+    "colors": [
+      "#f43f5e",
+      "#fb923c"
+    ],
     "features": [
       "Tipografía optimizada para lectura",
       "Newsletter integrada",
@@ -116,11 +162,17 @@
   {
     "id": "orbit-startup",
     "name": "Orbit",
-    "price": 69,
+    "price": 65990,
     "tagline": "Site corporativo para startups tech",
     "pages": 14,
-    "tech": ["Angular", "Tailwind"],
-    "colors": ["#6366f1", "#a855f7"],
+    "tech": [
+      "Angular",
+      "Tailwind"
+    ],
+    "colors": [
+      "#6366f1",
+      "#a855f7"
+    ],
     "features": [
       "Páginas producto/equipo/careers",
       "Animaciones profesionales",
@@ -135,8 +187,14 @@
     "price": 0,
     "tagline": "Mini-tienda para creadores y productos digitales",
     "pages": 7,
-    "tech": ["Angular", "Stripe-ready"],
-    "colors": ["#84cc16", "#16a34a"],
+    "tech": [
+      "Angular",
+      "Stripe-ready"
+    ],
+    "colors": [
+      "#84cc16",
+      "#16a34a"
+    ],
     "features": [
       "Productos digitales con preview",
       "Reseñas verificadas",
@@ -148,11 +206,17 @@
   {
     "id": "frame-folio",
     "name": "Frame",
-    "price": 39,
+    "price": 36990,
     "tagline": "Portfolio fotográfico a pantalla completa",
     "pages": 5,
-    "tech": ["Angular", "WebGL-lite"],
-    "colors": ["#0ea5e9", "#8b5cf6"],
+    "tech": [
+      "Angular",
+      "WebGL-lite"
+    ],
+    "colors": [
+      "#0ea5e9",
+      "#8b5cf6"
+    ],
     "features": [
       "Lightbox cinematográfico",
       "Navegación por gestos",
@@ -164,11 +228,16 @@
   {
     "id": "launch-one",
     "name": "Launch One",
-    "price": 19,
+    "price": 17990,
     "tagline": "Coming soon + waitlist que genera expectativa",
     "pages": 2,
-    "tech": ["Angular"],
-    "colors": ["#f472b6", "#c084fc"],
+    "tech": [
+      "Angular"
+    ],
+    "colors": [
+      "#f472b6",
+      "#c084fc"
+    ],
     "features": [
       "Cuenta atrás animada",
       "Waitlist con posición en cola",
@@ -180,11 +249,17 @@
   {
     "id": "ledger-finance",
     "name": "Ledger",
-    "price": 89,
+    "price": 84990,
     "tagline": "Dashboard financiero con reportes claros",
     "pages": 15,
-    "tech": ["Angular", "Signals"],
-    "colors": ["#334155", "#0ea5e9"],
+    "tech": [
+      "Angular",
+      "Signals"
+    ],
+    "colors": [
+      "#334155",
+      "#0ea5e9"
+    ],
     "features": [
       "KPIs y proyecciones",
       "Exportación a PDF",
@@ -196,11 +271,16 @@
   {
     "id": "journal-minimal",
     "name": "Journal",
-    "price": 29,
+    "price": 27990,
     "tagline": "Blog minimalista de una columna",
     "pages": 4,
-    "tech": ["Angular"],
-    "colors": ["#78716c", "#fbbf24"],
+    "tech": [
+      "Angular"
+    ],
+    "colors": [
+      "#78716c",
+      "#fbbf24"
+    ],
     "features": [
       "Ultra rápido (<50KB JS)",
       "Tipografía serif moderna",
@@ -215,8 +295,15 @@
     "price": 0,
     "tagline": "Portfolio fotográfico inmersivo con lightbox y filtros",
     "pages": 1,
-    "tech": ["HTML5", "CSS3", "Vanilla JS"],
-    "colors": ["#e879f9", "#fbbf24"],
+    "tech": [
+      "HTML5",
+      "CSS3",
+      "Vanilla JS"
+    ],
+    "colors": [
+      "#e879f9",
+      "#fbbf24"
+    ],
     "features": [
       "Galería masonry con filtros por categoría",
       "Lightbox cinematográfico con navegación",
@@ -230,11 +317,18 @@
   {
     "id": "nexa-saas",
     "name": "Nexa",
-    "price": 49,
+    "price": 46990,
     "tagline": "SaaS landing con pricing, mockup y automatizaciones IA",
     "pages": 1,
-    "tech": ["HTML5", "CSS3", "Vanilla JS"],
-    "colors": ["#22d3ee", "#8b5cf6"],
+    "tech": [
+      "HTML5",
+      "CSS3",
+      "Vanilla JS"
+    ],
+    "colors": [
+      "#22d3ee",
+      "#8b5cf6"
+    ],
     "features": [
       "Hero con mockup interactivo de la app",
       "Bento grid de features",
@@ -244,6 +338,119 @@
       "Testimonials grid",
       "Footer completo multi-columna",
       "Tema dual con persistencia"
+    ]
+  },
+  {
+    "id": "storefront-gatsby",
+    "name": "Storefront Pro",
+    "price": 141990,
+    "tagline": "Premium Headless WooCommerce",
+    "pages": 35,
+    "tech": [
+      "Gatsby",
+      "React",
+      "WooCommerce",
+      "GraphQL"
+    ],
+    "colors": [
+      "#8b5cf6",
+      "#ec4899"
+    ],
+    "features": [
+      "PWA Ready (carga instantánea)",
+      "Checkout optimizado sin recargas",
+      "Integración con Stripe y PayPal",
+      "Búsqueda y filtros ultra rápidos",
+      "Panel de control en WordPress",
+      "Soporte premium 6 meses"
+    ]
+  },
+  {
+    "id": "atelier-agency",
+    "name": "Atelier",
+    "price": 55990,
+    "tagline": "Sitio de estudio con casos y equipo",
+    "pages": 8,
+    "tech": [
+      "Angular",
+      "SCSS"
+    ],
+    "colors": [
+      "#fb7185",
+      "#fbbf24"
+    ],
+    "features": [
+      "Portada editorial",
+      "Grilla de casos",
+      "Equipo y roles",
+      "Formulario de propuesta",
+      "Tema oscuro"
+    ]
+  },
+  {
+    "id": "aula-learn",
+    "name": "Aula",
+    "price": 36990,
+    "tagline": "Landing de curso con programa y docentes",
+    "pages": 6,
+    "tech": [
+      "Angular",
+      "CSS Grid"
+    ],
+    "colors": [
+      "#34d399",
+      "#38bdf8"
+    ],
+    "features": [
+      "Programa por módulos",
+      "Fichas de docentes",
+      "Precio de inscripción",
+      "Preguntas frecuentes",
+      "Responsive"
+    ]
+  },
+  {
+    "id": "manual-docs",
+    "name": "Manual",
+    "price": 42990,
+    "tagline": "Documentación con índice lateral",
+    "pages": 12,
+    "tech": [
+      "Angular",
+      "TypeScript"
+    ],
+    "colors": [
+      "#a3e635",
+      "#22d3ee"
+    ],
+    "features": [
+      "Índice lateral",
+      "Bloques de código",
+      "Buscador visual",
+      "Anclas de sección",
+      "Tema de lectura"
+    ]
+  },
+  {
+    "id": "harbor-admin",
+    "name": "Harbor",
+    "price": 65990,
+    "tagline": "Panel admin con tablas y estados",
+    "pages": 10,
+    "tech": [
+      "Angular",
+      "Signals"
+    ],
+    "colors": [
+      "#818cf8",
+      "#38bdf8"
+    ],
+    "features": [
+      "Sidebar de navegación",
+      "Tarjetas de métricas",
+      "Tabla de registros",
+      "Estados y filtros",
+      "Layout denso"
     ]
   }
 ]

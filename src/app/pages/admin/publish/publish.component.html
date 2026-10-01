@@ -172,7 +172,7 @@
         <div class="review-row"><span class="rl">Nombre</span><span class="rv">{{ form().name }}</span></div>
         <div class="review-row"><span class="rl">Tagline</span><span class="rv">{{ form().tagline || '—' }}</span></div>
         <div class="review-row"><span class="rl">Categoría</span><span class="rv badge">{{ form().category }}</span></div>
-        <div class="review-row"><span class="rl">Precio</span><span class="rv">{{ form().price === 0 ? 'Gratis' : '$' + form().price }}</span></div>
+        <div class="review-row"><span class="rl">Precio</span><span class="rv">{{ form().price === 0 ? 'Gratis' : '$' + form().price.toLocaleString('es-CL') }}</span></div>
         <div class="review-row"><span class="rl">Páginas</span><span class="rv">{{ form().pages }}</span></div>
       </div>
 

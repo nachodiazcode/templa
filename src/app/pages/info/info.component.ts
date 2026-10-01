@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ToastService } from '../../core/services/toast.service';
 
-type PageId = 'soporte' | 'licencia' | 'contacto';
+
+type PageId = 'soporte' | 'licencia' | 'contacto' | 'sobre' | 'terminos' | 'privacidad' | 'cookies';
 
 interface PageContent {
   kicker: string;
@@ -16,16 +16,16 @@ const CONTENT: Record<PageId, PageContent> = {
   soporte: {
     kicker: 'Centro de ayuda',
     title: '¿Cómo podemos ayudarte?',
-    lead: 'Encontrá respuestas rápidas, guías paso a paso o contactá con nuestro equipo de soporte. Respondemos en menos de 24 horas.',
+    lead: 'La ayuda que existe hoy está en estas páginas. No hay un equipo de soporte con plazo de respuesta.',
     cards: [
-      { icon: '📦', title: 'Descarga de plantillas', body: 'Guías para recuperar tus compras y gestionar tus descargas desde el panel de cliente.' },
-      { icon: '🛠️', title: 'Personalización', body: 'Documentación para adaptar colores, textos y secciones de tu plantilla sin tocar lógica.' },
-      { icon: '🔑', title: 'Cuenta y acceso', body: 'Recuperar contraseña, actualizar datos o gestionar el rol de tu cuenta.' },
-      { icon: '💳', title: 'Pagos y licencias', body: 'Dudas sobre Webpay, facturación y condiciones de la licencia comercial.' },
+      { icon: '📦', title: 'Descargas', body: 'PowerPoint y Word se bajan desde su página. Una compra web, si el pago terminó, aparece en Descargas con el código de orden.' },
+      { icon: '👁', title: 'Vista previa', body: 'Cada plantilla web se abre en su ficha, en escritorio, tablet o móvil. Eso es lo que puedes revisar antes de pagar.' },
+      { icon: '🔑', title: 'Cuenta', body: 'Entrar crea una cuenta local en este servidor. Sirve para ver Mis compras. No recupera contraseña por correo.' },
+      { icon: '💳', title: 'Pago', body: 'El carrito usa Webpay en modo de integración, con credenciales de prueba. No es un cobro real.' },
     ],
     faqs: [
-      { q: '¿Cuánto tardan en responder?', a: 'Respondemos en menos de 24 horas hábiles. La mayoría de dudas se resuelven en el primer mensaje.' },
-      { q: '¿Ofrecen soporte después de la compra?', a: 'Sí, cada plantilla incluye 24 horas de soporte por email del autor, y atención del equipo por 30 días.' },
+      { q: '¿Dónde pido ayuda?', a: 'No hay bandeja de correo conectada. Usa la ficha de la plantilla y la página de licencia para lo que el catálogo ya explica.' },
+      { q: '¿El pago descuenta dinero?', a: 'No en esta instalación. Webpay está en modo de integración.' },
     ],
   },
   licencia: {
@@ -36,7 +36,7 @@ const CONTENT: Record<PageId, PageContent> = {
       { icon: '✅', title: 'Uso personal', body: 'Proyectos personales, portfolios y experimentos sin límite de páginas ni de proyectos.' },
       { icon: '💼', title: 'Uso comercial', body: 'Usá la plantilla en proyectos para clientes o productos propios con fines de lucro.' },
       { icon: '🔁', title: 'Reventa del código', body: 'No está permitido revender, redistribuir ni sublicenciar la plantilla o su código fuente.' },
-      { icon: '♾️', title: 'Actualizaciones', body: 'Acceso a todas las actualizaciones futuras de la plantilla sin coste adicional.' },
+      { icon: '1', title: 'Un pago', body: 'No hay cuota mensual. El archivo que descargas es el que está publicado ahora; no hay un plan de actualizaciones.' },
     ],
     faqs: [
       { q: '¿Puedo usarla en un proyecto de un cliente?', a: 'Sí. La licencia estándar incluye uso comercial en proyectos para clientes, como parte de tu servicio.' },
@@ -46,12 +46,56 @@ const CONTENT: Record<PageId, PageContent> = {
   contacto: {
     kicker: 'Contacto',
     title: 'Hablemos',
-    lead: '¿Dudas, sugerencias o querés una plantilla a medida? Escribinos y te respondemos a la brevedad.',
+    lead: 'No hay formulario que envíe correos. Estas son las páginas que sí responden.',
     cards: [
-      { icon: '📧', title: 'Email', body: 'hola@templa.cl — para soporte y ventas.' },
-      { icon: '𝕏', title: 'Redes', body: 'Seguinos en X y LinkedIn para novedades y promociones.' },
-      { icon: '🤝', title: 'Afiliados', body: 'Promocioná Templa y ganá 30% por cada venta referida.' },
-      { icon: '🎨', title: 'Trabajo a medida', body: '¿Necesitás un template específico? Contanos tu idea y te cotizamos.' },
+      { icon: '📦', title: 'Descargas', body: 'Revisa una orden en la página Descargas, con el código que deja el checkout de prueba.' },
+      { icon: '📄', title: 'Licencia', body: 'Qué puedes hacer con una plantilla está escrito en Licencias, no en un mail de ventas.' },
+      { icon: '🖥', title: 'Catálogo', body: 'Las 20 web están en Plantillas. PowerPoint y Word tienen su propia página.' },
+      { icon: 'ℹ', title: 'Qué es esto', body: 'Templa es el catálogo que estás viendo: fichas, precios y archivos de Office generados en este proyecto.' },
+    ],
+  },
+  sobre: {
+    kicker: 'Qué es Templa',
+    title: 'Un catálogo, no una empresa inventada',
+    lead: 'Templa muestra 20 plantillas web y 20 de Office. Los precios, las vistas previas y los archivos .pptx y .docx son los de este proyecto.',
+    cards: [
+      { icon: '20', title: 'Web', body: '5 gratis, 10 premium y 5 gold. La ficha abre la vista previa.' },
+      { icon: '20', title: 'Office', body: '10 PowerPoint y 10 Word. Se descargan sin cuenta.' },
+      { icon: '0', title: 'Reseñas publicadas', body: 'No hay opiniones de clientes guardadas. Las notas de las fichas son datos de ejemplo del catálogo.' },
+      { icon: '1', title: 'Pago', body: 'Un precio por plantilla de pago. No hay suscripción. El checkout de esta copia usa Webpay de prueba.' },
+    ],
+  },
+  terminos: {
+    kicker: 'Términos',
+    title: 'Cómo se usa este catálogo',
+    lead: 'Estas reglas describen lo que hace esta instalación, no un contrato de una tienda en producción.',
+    cards: [
+      { icon: '1', title: 'Precio', body: 'Si la ficha dice Gratis, no pasa por el carrito. Si tiene precio, es un pago único. Office no se cobra.' },
+      { icon: '2', title: 'Vista previa', body: 'La preview de la ficha es para mirar el diseño. No sustituye al archivo de Office ni garantiza un zip de código si ese archivo no está publicado.' },
+      { icon: '3', title: 'Cuenta', body: 'El registro vive en el servidor local. Cerrar sesión borra el acceso a Mis compras en este navegador.' },
+      { icon: '4', title: 'Reventa', body: 'La página de licencia no permite revender el archivo tal cual.' },
+    ],
+  },
+  privacidad: {
+    kicker: 'Privacidad',
+    title: 'Qué se guarda en este servidor',
+    lead: 'No hay analítica de terceros ni lista de correo. Lo que existe es local.',
+    cards: [
+      { icon: '✉', title: 'Cuenta', body: 'Si te registras, el servidor guarda nombre, email y una contraseña hasheada en su almacén local.' },
+      { icon: '🛒', title: 'Órdenes', body: 'Un checkout de prueba puede dejar una orden con email y el id de las plantillas.' },
+      { icon: '☀', title: 'Tema', body: 'Claro u oscuro se recuerda en el navegador, no en una cuenta.' },
+      { icon: '✕', title: 'Lo que no hay', body: 'No se envían newsletters ni se venden datos. El formulario de contacto antiguo no escribía a nadie: ya no está.' },
+    ],
+  },
+  cookies: {
+    kicker: 'Cookies',
+    title: 'Qué recuerda el navegador',
+    lead: 'No hay banner de cookies de marketing porque no hay cookies de marketing.',
+    cards: [
+      { icon: '☀', title: 'Tema', body: 'La preferencia claro/oscuro queda en localStorage.' },
+      { icon: '🛒', title: 'Carrito', body: 'Las plantillas que añades se guardan en el navegador hasta que vacías el carrito.' },
+      { icon: '🔑', title: 'Sesión', body: 'Al entrar, el token de sesión queda en el navegador para Mis compras y Admin.' },
+      { icon: '0', title: 'Publicidad', body: 'No hay píxeles ni cookies de anuncios en esta app.' },
     ],
   },
 };
@@ -93,17 +137,11 @@ const CONTENT: Record<PageId, PageContent> = {
         </div>
       }
 
-      @if (id === 'contacto') {
-        <form class="contact" (submit)="send($event)">
-          <h2>Envianos un mensaje</h2>
-          <div class="row">
-            <input type="text" placeholder="Tu nombre" required />
-            <input type="email" placeholder="Tu email" required />
-          </div>
-          <textarea placeholder="¿En qué podemos ayudarte?" rows="5" required></textarea>
-          <button class="btn primary" type="submit">Enviar mensaje</button>
-        </form>
-      }
+      <div class="acts">
+        <a routerLink="/templates" class="btn primary">Ver plantillas</a>
+        <a routerLink="/descargas" class="btn ghost">Descargas</a>
+        <a routerLink="/info/licencia" class="btn ghost">Licencia</a>
+      </div>
     </div>
   `,
   styles: `
@@ -125,32 +163,20 @@ const CONTENT: Record<PageId, PageContent> = {
     details { border:1px solid var(--border); border-radius:12px; padding:16px 20px; margin-bottom:10px; background:var(--surface); }
     summary { cursor:pointer; font-weight:600; font-size:15px; }
     details p { margin:12px 0 0; color:var(--text-muted); font-size:14px; line-height:1.6; }
-    .contact { max-width:640px; margin:48px auto 0; padding-top:40px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:14px; }
-    .row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    input, textarea {
-      width:100%; background:var(--surface); border:1px solid var(--border-strong); border-radius:11px;
-      padding:13px 16px; color:var(--text); font-size:14px; outline:none; font-family:inherit; box-sizing:border-box;
-      transition:border-color .2s; &:focus { border-color: var(--accent); }
-      &::placeholder { color: var(--text-faint); }
-    }
-    textarea { resize:vertical; }
-    .contact .btn { align-self:flex-start; }
-    @media (max-width:600px){ .row { grid-template-columns:1fr; } }
+    .acts { display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
   `,
 })
 export class InfoPageComponent {
   private route = inject(ActivatedRoute);
-  private toast = inject(ToastService);
 
   readonly id = this.route.snapshot.paramMap.get('page') as PageId;
 
   content(): PageContent {
-    return CONTENT[this.id] ?? CONTENT.soporte;
-  }
-
-  send(e: Event): void {
-    e.preventDefault();
-    this.toast.show('Mensaje enviado. Te responderemos a la brevedad.', 'info');
-    (e.target as HTMLFormElement).reset();
+    return CONTENT[this.id] ?? {
+      kicker: 'No está',
+      title: 'Esa página no existe',
+      lead: 'El enlace no corresponde a una sección de Templa.',
+      cards: [],
+    };
   }
 }

@@ -26,6 +26,8 @@
   --toast-bg: #101522;
   --grid-line: rgba(255, 255, 255, 0.04);
   --shadow-lg: 0 24px 60px -20px rgba(0, 0, 0, 0.55);
+  --scrollbar: #232839;
+  --scrollbar-hover: #2e3448;
   color-scheme: dark;
 }
 
@@ -50,6 +52,8 @@
   --toast-bg: #ffffff;
   --grid-line: rgba(18, 22, 38, 0.06);
   --shadow-lg: 0 24px 60px -26px rgba(23, 26, 38, 0.28);
+  --scrollbar: #c5cad6;
+  --scrollbar-hover: #a8b0c0;
   color-scheme: light;
 }
 
@@ -113,11 +117,11 @@ img { max-width: 100%; display: block; }
   }
 
   &.ghost {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--soft);
     border-color: var(--border-strong);
     color: var(--text);
 
-    &:hover { border-color: rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.07); }
+    &:hover { border-color: var(--text-faint); background: var(--soft-2); }
   }
 
   &.lg { padding: 15px 30px; font-size: 15.5px; border-radius: 14px; }
@@ -168,7 +172,7 @@ img { max-width: 100%; display: block; }
 
 .badge-new {
   background: linear-gradient(135deg, rgba(244, 63, 94, 0.25), rgba(245, 158, 11, 0.25));
-  color: #fda4af;
+  color: var(--accent);
   border: 1px solid rgba(244, 63, 94, 0.4);
   font-size: 11px;
   font-weight: 800;
@@ -246,8 +250,30 @@ img { max-width: 100%; display: block; }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: #232839; border-radius: 99px; border: 2px solid var(--bg); }
-::-webkit-scrollbar-thumb:hover { background: #2e3448; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 99px; border: 2px solid var(--bg); }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-hover); }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 
 @media (max-width: 720px) {
   .container { width: min(1180px, 100% - 32px); }

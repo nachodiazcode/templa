@@ -35,7 +35,7 @@
               <li>
                 <span>{{ item.name }}</span>
                 <span class="right">
-                  <em>{{ item.price === 0 ? 'Gratis' : '$' + item.price }}</em>
+                  <em>{{ item.price === 0 ? 'Gratis' : '$' + item.price.toLocaleString('es-CL') }}</em>
                   @if (order.status === 'paid') {
                     <a class="btn sm dl" [href]="checkout.downloadUrl(order.orderId, item.id)">
                       Descargar
@@ -46,7 +46,7 @@
             }
             <li class="total">
               <span>Total pagado</span>
-              <b>${{ order.amount }}</b>
+              <b>${{ order.amount.toLocaleString('es-CL') }}</b>
             </li>
           </ul>
         </article>

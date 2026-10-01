@@ -17,7 +17,7 @@ const esc = (s) =>
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
-function run(text, { sz = 1800, b = false, color = '000000', font = 'Arial', i = false } = {}) {
+function run(text, { sz = 1800, b = false, color = '000000', font = 'Calibri', i = false } = {}) {
   const iAttr = i ? ' i="1"' : '';
   return `<a:r><a:rPr lang="es-CL" altLang="en-US" sz="${sz}" b="${b ? 1 : 0}"${iAttr} dirty="0"><a:solidFill><a:srgbClr val="${color}"/></a:solidFill><a:latin typeface="${font}"/><a:ea typeface="${font}"/><a:cs typeface="${font}"/></a:rPr><a:t>${esc(text)}</a:t></a:r>`;
 }
@@ -34,7 +34,7 @@ function par(runsXml, { align, bullet = false, before = 0, after = 0, indent = 0
     (before ? `</a:spcBef>` : '') +
     (after ? `<a:spcAft><a:spcPts val="${after}"/></a:spcAft>` : '') +
     (bullet
-      ? `<a:buFont typeface="Arial"/><a:buChar char="•"/>`
+      ? `<a:buFont typeface="Calibri"/><a:buChar char="•"/>`
       : '<a:buNone/>');
   return `<a:p><a:pPr${al} marL="${indent}" indent="${bullet ? -342900 : indent}" lvl="0">${pPrEls}</a:pPr>${runsXml}<a:endParaRPr lang="es-CL" sz="1800"/></a:p>`;
 }
@@ -290,7 +290,7 @@ function buildSlides(t) {
     return [
       rectShape('Kicker', padX, 914400 + 320000, 139700, 13970, A),
       textShape('Kicker-t', padX + 228600, 914400, 5000000, 400000, [
-        par(run(text.toUpperCase(), { sz: 1200, b: true, color: A, font: 'Arial' }), { after: 0 }),
+        par(run(text.toUpperCase(), { sz: 1200, b: true, color: A, font: 'Calibri' }), { after: 0 }),
       ], { anchor: 'ctr' }),
     ];
   }
@@ -298,7 +298,7 @@ function buildSlides(t) {
   function title(text, size = 4400) {
     return [
       textShape('Titulo', padX, 1400000, 10000000, 1000000, [
-        par(run(text, { sz: size, b: true, color: INK, font: 'Arial' }), { after: 0 }),
+        par(run(text, { sz: size, b: true, color: INK, font: 'Calibri' }), { after: 0 }),
       ], { anchor: 'ctr' }),
     ];
   }
@@ -314,22 +314,21 @@ function buildSlides(t) {
   // 1 — portada
   const s1 = [
     ...base,
-    rectShape('Bloque marca', 0, 0, 182880, SLIDE_H, A),
-    rectShape('Ficha', SLIDE_W - 2600000 - 120000, 1260000, 2600000, 4300000, A2, { alpha: 12000 }),
-    rectShape('Ficha', SLIDE_W - 5000000 - 160000, 2300000, 5000000, 2600000, A, { alpha: 9000 }),
-    textShape('Kicker-portada', padX, 2250000, 9000000, 400000, [
-      par(run(t.cap.toUpperCase(), { sz: 1300, b: true, color: A, font: 'Arial' }), { after: 0 }),
-    ], { anchor: 'ctr' }),
-    textShape('Titulo-portada', padX, 2750000, 9400000, 1300000, [
-      par(run(t.hero, { sz: 5200, b: true, color: INK, font: 'Arial' }), { after: 0 }),
-    ], { anchor: 'ctr' }),
-    textShape('Sub-portada', padX, 4200000, 9000000, 600000, [
-      par(run(t.tag, { sz: 2100, color: MUT }), { after: 0 }),
-    ], { anchor: 'ctr' }),
-    textShape('Autor', padX, 5450000, 8000000, 400000, [
-      par(run('Presentado por __tu_nombre__', { sz: 1400, color: MUT }), { after: 0 }),
-    ], { anchor: 'ctr' }),
-    footer('1'),
+    rectShape('Bloque marca', 0, 0, 228600, SLIDE_H, A),
+    rectShape('Filete', 700000, 1980000, 1600000, 42000, A),
+    textShape('Kicker-portada', 700000, 2140000, 10800000, 360000, [
+      par(run(t.cap.toUpperCase(), { sz: 1400, b: true, color: A, font: 'Calibri' }), { after: 0 }),
+    ]),
+    textShape('Titulo-portada', 700000, 2580000, 10800000, 1500000, [
+      par(run(t.hero, { sz: 5400, b: true, color: INK, font: 'Calibri' }), { after: 0 }),
+    ]),
+    textShape('Sub-portada', 700000, 4200000, 9800000, 700000, [
+      par(run(t.tag, { sz: 2000, color: MUT, font: 'Calibri' }), { after: 0 }),
+    ]),
+    textShape('Autor', 700000, 5600000, 8000000, 360000, [
+      par(run('Presentado por  ·  tu nombre', { sz: 1400, color: MUT, font: 'Calibri' }), { after: 0 }),
+    ]),
+    footer('01'),
   ];
 
   // 2 — agenda
@@ -416,10 +415,10 @@ function buildSlides(t) {
       return [
         rectShape('Stat', x, 3100000, 2350000, 1900000, i % 2 === 0 ? A : A2, { radius: 7000 }),
         textShape('Stat-n', x, 3380000, 2350000, 850000, [
-          par(run(st[0], { sz: 4200, b: true, color: onA, font: 'Arial' }), { algn: 'ctr', after: 0 }),
+          par(run(st[0], { sz: 4000, b: true, color: onA, font: 'Calibri' }), { align: 'ctr', after: 0 }),
         ], { anchor: 'ctr' }),
         textShape('Stat-t', x, 4320000, 2350000, 600000, [
-          par(run(st[1], { sz: 1300, b: true, color: onA }), { algn: 'ctr', after: 0 }),
+          par(run(st[1], { sz: 1300, b: true, color: onA, font: 'Calibri' }), { align: 'ctr', after: 0 }),
         ], { anchor: 'ctr' }),
       ];
     }).flat(),
@@ -429,10 +428,12 @@ function buildSlides(t) {
   // 7 — cita
   const s7 = [
     ...base,
-    rectShape('Comilla', padX, 1900000, 1000000, 700000, A, { radius: 0 }),
-    textShape('Quote', padX + 200000, 2850000, 9600000, 1900000, [
-      par(run(t.quote, { sz: 3000, i: true, color: INK, font: 'Arial' }), { after: 500 }),
-      par(run('— ' + t.quoteBy, { sz: 1800, b: true, color: A }), { before: 600 }),
+    textShape('Comilla', padX, 1500000, 2000000, 1200000, [
+      par(run('“', { sz: 8000, b: true, color: A, font: 'Georgia' }), { after: 0 }),
+    ]),
+    textShape('Quote', padX, 2800000, 10000000, 2000000, [
+      par(run(t.quote, { sz: 2800, i: true, color: INK, font: 'Georgia' }), { after: 400 }),
+      par(run(t.quoteBy, { sz: 1600, b: true, color: A, font: 'Calibri' }), { before: 500 }),
     ]),
     footer('7'),
   ];
@@ -450,7 +451,7 @@ function buildSlides(t) {
     ], { anchor: 'ctr' }),
     rectShape('Btn', padX, 4700000, 2800000, 800000, A, { radius: 16000 }),
     textShape('Btn-t', padX, 4700000, 2800000, 800000, [
-      par(run(t.thanksCta, { sz: 1700, b: true, color: onA, font: 'Arial' }), { algn: 'ctr', after: 0 }),
+      par(run(t.thanksCta, { sz: 1700, b: true, color: onA, font: 'Calibri' }), { align: 'ctr', after: 0 }),
     ], { anchor: 'ctr' }),
     footer('8'),
   ];
@@ -482,10 +483,14 @@ function wPPr(opts = {}) {
     font = 'Calibri',
     line = '276',
     keepNext = false,
+    border = '',
   } = opts;
   const jc = align === 'left' ? '' : `<w:jc w:val="${align}"/>`;
   const kn = keepNext ? '<w:keepNext/>' : '';
-  return `<w:pPr>${kn}<w:spacing w:before="${before}" w:after="${after}" w:line="${line}" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="${font}" w:hAnsi="${font}" w:eastAsia="${font}" w:cs="${font}"/><w:b${bold ? '' : ' w:val="0"'}/><w:i${italic ? '' : ' w:val="0"'}/><w:color w:val="${color}"/><w:sz w:val="${size * 2}"/><w:szCs w:val="${size * 2}"/></w:rPr>${jc}</w:pPr>`;
+  const bdr = border
+    ? `<w:pBdr><w:bottom w:val="single" w:sz="12" w:space="1" w:color="${border}"/></w:pBdr>`
+    : '';
+  return `<w:pPr>${kn}${bdr}<w:spacing w:before="${before}" w:after="${after}" w:line="${line}" w:lineRule="auto"/><w:rPr><w:rFonts w:ascii="${font}" w:hAnsi="${font}" w:eastAsia="${font}" w:cs="${font}"/><w:b${bold ? '' : ' w:val="0"'}/><w:i${italic ? '' : ' w:val="0"'}/><w:color w:val="${color}"/><w:sz w:val="${size * 2}"/><w:szCs w:val="${size * 2}"/></w:rPr>${jc}</w:pPr>`;
 }
 
 function wRun(text, { size = 22, bold = false, color = '22222F', italic = false, font = 'Calibri' } = {}) {
@@ -513,19 +518,23 @@ function wTbl(rows, widths) {
   return `<w:tbl><w:tblPr><w:tblStyle w:val="TableGrid"/><w:tblW w:w="0" w:type="auto"/><w:tblBorders><w:top w:val="single" w:sz="4" w:space="0" w:color="${'DBE0EC'}"/><w:left w:val="single" w:sz="4" w:space="0" w:color="${'DBE0EC'}"/><w:bottom w:val="single" w:sz="4" w:space="0" w:color="${'DBE0EC'}"/><w:right w:val="single" w:sz="4" w:space="0" w:color="${'DBE0EC'}"/><w:insideH w:val="single" w:sz="4" w:space="0" w:color="${'DBE0EC'}"/><w:insideV w:val="single" w:sz="4" w:space="0" w:color="${'DBE0EC'}"/></w:tblBorders><w:look w:val="04A0"/></w:tblPr><w:tblGrid>${grid}</w:tblGrid>${trs}</w:tbl>`;
 }
 
+function wBanner(label, fill) {
+  return `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/><w:tblBorders><w:top w:val="nil"/><w:left w:val="nil"/><w:bottom w:val="nil"/><w:right w:val="nil"/><w:insideH w:val="nil"/><w:insideV w:val="nil"/></w:tblBorders></w:tblPr><w:tblGrid><w:gridCol w:w="9360"/></w:tblGrid><w:tr><w:tc><w:tcPr><w:tcW w:w="9360" w:type="dxa"/><w:shd w:val="clear" w:color="auto" w:fill="${fill}"/></w:tcPr><w:p><w:pPr><w:spacing w:before="80" w:after="80"/></w:pPr>${wRun(label, { size: 11, bold: true, color: 'FFFFFF', font: 'Calibri' })}</w:p></w:tc></w:tr></w:tbl>`;
+}
+
 function buildDocXml(d) {
   const A = d.accent;
   const INK = d.ink || '22222F';
   const MUT = d.mut || '6B7280';
-  // encabezado con kicker + título + línea de color
   const head = [
-    wP(wRun(d.typeName.toUpperCase(), { size: 18, bold: true, color: A }), { after: 120, before: 0, spacing: '120' }),
-    wP(wRun(d.name, { size: 44, bold: true, color: INK }), { after: 60, keepNext: true }),
-    wP(wRun(d.tagline + '  ·  ' + d.meta), { size: 22, color: MUT, after: 240 }),
+    wBanner(d.typeName.toUpperCase() + '   ·   TEMPLA', A),
+    wP(wRun(d.name, { size: 28, bold: true, color: INK, font: 'Calibri' }), { after: 40, before: 200, keepNext: true }),
+    wP(wRun(d.tagline, { size: 12, color: MUT, font: 'Calibri' }), { after: 40, border: A }),
+    wP(wRun(d.meta, { size: 10, color: MUT, font: 'Calibri' }), { after: 200 }),
   ];
   const body = d.body.map((sec) => {
     const parts = [
-      wP(wRun(sec.t, { size: 28, bold: true, color: A }), { after: 180, before: 240, keepNext: true }),
+      wP(wRun(sec.t, { size: 16, bold: true, color: INK, font: 'Calibri' }), { after: 80, before: 280, keepNext: true, border: A }),
     ];
     for (const item of sec.items) {
       if (item.kind === 'text') {
@@ -826,6 +835,96 @@ const DECKS = [
     thanksSub: 'Se reciben preguntas y retroalimentación del comité',
     thanksCta: 'Abrir debate →',
   },
+  {
+    id: 'deck-launch', name: 'Lanzamiento', kind: 'pptx', accent: 'F43F5E', accent2: 'FB7185', ink: '1C1218', mut: '7A6470', bg: 'FFF7F8',
+    cap: 'Producto · Lanzamiento', hero: 'El día que sale al mundo', tag: 'Deck de go-to-market para el lanzamiento de un producto',
+    agenda: ['Promesa', 'Para quién', 'Cómo se usa', 'Precio', 'Plan de salida'],
+    sectionNum: '01', sectionTitle: 'La promesa', sectionSub: 'Qué cambia para quien lo usa',
+    bulletsKicker: 'Salida', bulletsTitle: 'Plan de lanzamiento',
+    bullets: ['Lista de espera con fecha de apertura', 'Piezas para redes y prensa', 'Onboarding de los primeros 100', 'Métrica de activación a 7 días'],
+    twoColKicker: 'Audiencia', twoColTitle: 'A quién le hablamos',
+    colAHead: 'Hoy', colABody: 'Usan tres herramientas y copian datos a mano.',
+    colBHead: 'Con el producto', colBBody: 'Una sola pantalla y el reporte sale solo.',
+    statsKicker: 'Meta', statsTitle: 'Primeros 90 días',
+    stats: [['1.000', 'Altas'], ['40%', 'Activos'], ['4.6★', 'Nota'], ['30d', 'Payback']],
+    quote: 'Un lanzamiento claro vale más que una lista larga de funciones.', quoteBy: 'Equipo de producto',
+    thanks: 'Nos vemos en el lanzamiento', thanksSub: 'Reserva el cupo de early access', thanksCta: 'Anotarme →',
+  },
+  {
+    id: 'deck-sales', name: 'Cierre', kind: 'pptx', accent: 'EA580C', accent2: 'FDBA74', ink: '1C1410', mut: '78716C', bg: 'FFFBF7',
+    cap: 'Ventas · Propuesta', hero: 'Por qué cerrar ahora', tag: 'Deck comercial para la reunión de cierre',
+    agenda: ['Situación', 'Costo de no actuar', 'Propuesta', 'Inversión', 'Próximo paso'],
+    sectionNum: '02', sectionTitle: 'La propuesta', sectionSub: 'Alcance, plazo y qué queda fuera',
+    bulletsKicker: 'Cierre', bulletsTitle: 'Lo que incluye',
+    bullets: ['Diagnóstico de dos semanas', 'Implementación en seis semanas', 'Capacitación del equipo', 'Garantía de 90 días'],
+    twoColKicker: 'Decisión', twoColTitle: 'Seguir igual o avanzar',
+    colAHead: 'Costo actual', colABody: 'Horas perdidas cada semana en el proceso manual.',
+    colBHead: 'Con el proyecto', colBBody: 'El mismo trabajo en una fracción del tiempo.',
+    statsKicker: 'Oferta', statsTitle: 'Números de la propuesta',
+    stats: [['6 sem', 'Plazo'], ['2', 'Fases'], ['90d', 'Garantía'], ['1', 'Dueño']],
+    quote: 'La mejor propuesta es la que el cliente puede repetir sin nosotros.', quoteBy: 'Equipo comercial',
+    thanks: 'Siguiente paso', thanksSub: 'Confirmamos alcance y fecha de inicio', thanksCta: 'Agendar cierre →',
+  },
+  {
+    id: 'deck-workshop', name: 'Taller', kind: 'pptx', accent: '0891B2', accent2: '67E8F9', ink: '0F172A', mut: '64748B', bg: 'F8FAFC',
+    cap: 'Formación · Taller', hero: 'Aprender haciendo', tag: 'Estructura de taller de medio día o jornada completa',
+    agenda: ['Objetivo', 'Marco', 'Ejercicio', 'Puesta en común', 'Cierre'],
+    sectionNum: '01', sectionTitle: 'El ejercicio', sectionSub: 'Qué van a producir antes del break',
+    bulletsKicker: 'Dinámica', bulletsTitle: 'Cómo trabajamos',
+    bullets: ['Grupos de cuatro personas', 'Un caso real de la empresa', '20 minutos de trabajo', '5 minutos de presentación'],
+    twoColKicker: 'Resultado', twoColTitle: 'Al salir del taller',
+    colAHead: 'Se llevan', colABody: 'Un borrador aplicable el lunes, no solo apuntes.',
+    colBHead: 'Queda pendiente', colBBody: 'El seguimiento de dos semanas con el facilitador.',
+    statsKicker: 'Formato', statsTitle: 'La jornada',
+    stats: [['4 h', 'Duración'], ['16', 'Cupos'], ['4', 'Ejercicios'], ['1', 'Caso']],
+    quote: 'Un taller funciona cuando alguien usa lo aprendido esa misma semana.', quoteBy: 'Facilitación',
+    thanks: 'Gracias por venir', thanksSub: 'El material queda en la carpeta compartida', thanksCta: 'Abrir material →',
+  },
+  {
+    id: 'deck-keynote', name: 'Keynote', kind: 'pptx', accent: 'E879F9', accent2: 'A78BFA', ink: 'F5F3FF', mut: 'C4B5FD', bg: '0C0A14', dark: true,
+    cap: 'Charla · Escenario', hero: 'Una idea, bien dicha', tag: 'Keynote oscuro para conferencias y escenarios',
+    agenda: ['Gancho', 'Historia', 'Prueba', 'Giro', 'Cierre'],
+    sectionNum: '03', sectionTitle: 'El giro', sectionSub: 'El momento en que cambia la historia',
+    bulletsKicker: 'Escena', bulletsTitle: 'Qué mostrar',
+    bullets: ['Una imagen, no una lista', 'Una cifra que sorprenda', 'Una frase que se pueda citar', 'Un silencio antes del cierre'],
+    twoColKicker: 'Ritmo', twoColTitle: 'Menos slides, más peso',
+    colAHead: 'Evitar', colABody: 'Párrafos leídos en voz alta desde la diapositiva.',
+    colBHead: 'Buscar', colBBody: 'Una idea por pantalla y la voz lleva el resto.',
+    statsKicker: 'Charla', statsTitle: 'El formato',
+    stats: [['18 min', 'Tiempo'], ['12', 'Slides'], ['1', 'Idea'], ['0', 'Viñetas']],
+    quote: 'Si la diapositiva se puede leer en silencio, sobra texto.', quoteBy: 'Escenario',
+    thanks: 'Gracias', thanksSub: 'Las preguntas quedan para el pasillo', thanksCta: 'Seguimos →',
+  },
+  {
+    id: 'deck-impact', name: 'Impacto', kind: 'pptx', accent: '059669', accent2: '6EE7B7', ink: '052E24', mut: '3F6F62', bg: 'F4FBF8',
+    cap: 'Organización · Impacto', hero: 'Lo que cambió este año', tag: 'Reporte para donantes, directorio y comunidad',
+    agenda: ['Contexto', 'Personas', 'Programas', 'Cuentas', 'Lo que sigue'],
+    sectionNum: '02', sectionTitle: 'Las personas', sectionSub: 'A quién llegó el trabajo este año',
+    bulletsKicker: 'Programas', bulletsTitle: 'Qué sostuvimos',
+    bullets: ['Acompañamiento directo', 'Formación de equipos locales', 'Alianzas con tres municipios', 'Informe público trimestral'],
+    twoColKicker: 'Cuentas', twoColTitle: 'Cómo se usó cada peso',
+    colAHead: 'Programa', colABody: 'La mayor parte fue directo a terreno y equipos.',
+    colBHead: 'Operación', colBBody: 'Una fracción chica sostuvo administración y reporte.',
+    statsKicker: 'Año', statsTitle: 'El alcance',
+    stats: [['2.400', 'Personas'], ['11', 'Comunas'], ['3', 'Programas'], ['92%', 'A terreno']],
+    quote: 'El impacto se cuenta con nombres, no solo con porcentajes.', quoteBy: 'Directorio',
+    thanks: 'Gracias por sostenerlo', thanksSub: 'El informe completo está en el anexo', thanksCta: 'Leer anexo →',
+  },
+  {
+    id: 'deck-retro', name: 'Retro', kind: 'pptx', accent: '7C3AED', accent2: 'C4B5FD', ink: '1E1B2E', mut: '6B6580', bg: 'F7F5FC',
+    cap: 'Equipo · Retrospectiva', hero: 'Qué repetir y qué soltar', tag: 'Retro de sprint o de trimestre para el equipo',
+    agenda: ['Qué funcionó', 'Qué frenó', 'Experimentos', 'Dueños', 'Próximo ciclo'],
+    sectionNum: '01', sectionTitle: 'Qué funcionó', sectionSub: 'Hábitos que queremos conservar',
+    bulletsKicker: 'Frenos', bulletsTitle: 'Qué soltar',
+    bullets: ['Reuniones sin decisión', 'Trabajo que no tenía dueño', 'Estimaciones optimistas', 'Canales de más'],
+    twoColKicker: 'Acción', twoColTitle: 'Dos experimentos',
+    colAHead: 'Esta semana', colABody: 'Una daily más corta y un tablero visible.',
+    colBHead: 'Este mes', colBBody: 'Un solo canal para pedidos nuevos.',
+    statsKicker: 'Ciclo', statsTitle: 'El sprint',
+    stats: [['2 sem', 'Largo'], ['8', 'Entregas'], ['3', 'Frenos'], ['2', 'Pruebas']],
+    quote: 'Una retro sirve si alguien sale con un dueño y una fecha.', quoteBy: 'El equipo',
+    thanks: 'Nos vemos en el próximo ciclo', thanksSub: 'Las acciones quedan en el tablero', thanksCta: 'Abrir tablero →',
+  },
 ];
 
 const DOCS = [
@@ -981,6 +1080,66 @@ const DOCS = [
           { kind: 'table', head: ['Hipótesis', 'Correlación', 'Decisión'], rows: [['H1 — Factor edad', 'r = 0.42**', 'Aceptada'], ['H2 — Factor contexto', 'r = 0.31**', 'Aceptada'], ['H3 — Factor formación', 'r = 0.12', 'Rechazada']], widths: [3000, 2400, 1800] },
         ],
       },
+    ],
+  },
+  {
+    id: 'doc-memo', name: 'Nota Interna', kind: 'docx', accent: '0F766E', ink: '14221F', mut: '5B6B6A', format: 'Memo',
+    typeName: 'Nota interna', tagline: 'Decisión, contexto y qué se espera del equipo.',
+    meta: 'De: Dirección · Para: Equipo · Fecha: hoy',
+    body: [
+      { t: 'Decisión', items: [{ kind: 'text', v: 'A partir del lunes el canal único para pedidos nuevos es el tablero. El correo deja de ser la vía de entrada.' }] },
+      { t: 'Qué cambia', items: [{ kind: 'bullet', v: 'Los pedidos se registran antes de las 16:00' }, { kind: 'bullet', v: 'Cada pedido tiene un dueño el mismo día' }] },
+      { t: 'Plazo', items: [{ kind: 'text', v: 'La norma rige desde el próximo lunes y se revisa en treinta días.' }] },
+    ],
+  },
+  {
+    id: 'doc-agreement', name: 'Acuerdo Breve', kind: 'docx', accent: '1D4ED8', ink: '172033', mut: '64748B', format: 'Acuerdo',
+    typeName: 'Acuerdo de trabajo', tagline: 'Alcance, plazo, pago y qué no incluye.',
+    meta: 'Partes: Prestador y Cliente · Vigencia: 90 días',
+    body: [
+      { t: '1. Alcance', items: [{ kind: 'bullet', v: 'Diseño y entrega del primer release' }, { kind: 'bullet', v: 'Dos rondas de ajustes incluidas' }] },
+      { t: '2. Plazo y pago', items: [{ kind: 'table', head: ['Hito', 'Fecha', 'Pago'], rows: [['Inicio', 'Día 0', '50%'], ['Entrega', 'Día 45', '50%']], widths: [3120, 3120, 3120] }] },
+      { t: '3. Fuera de alcance', items: [{ kind: 'text', v: 'Hosting, contenidos de terceros y cambios de marca no están incluidos.' }] },
+    ],
+  },
+  {
+    id: 'doc-letter', name: 'Boletín', kind: 'docx', accent: 'BE185D', ink: '3B1224', mut: '7A5A68', format: 'Boletín',
+    typeName: 'Boletín', tagline: 'Una noticia, un dato y un pedido concreto.',
+    meta: 'Edición de septiembre · Para la comunidad',
+    body: [
+      { t: 'La noticia', items: [{ kind: 'text', v: 'Abrimos inscripciones para el ciclo de octubre. Hay veinte cupos y cierran el viernes.' }] },
+      { t: 'El dato', items: [{ kind: 'bullet', v: 'El 80% de quienes terminaron el ciclo anterior repitió' }, { kind: 'bullet', v: 'La sesión dura noventa minutos' }] },
+      { t: 'El pedido', items: [{ kind: 'text', v: 'Si quieres un cupo, responde este correo con tu nombre antes del viernes.' }] },
+    ],
+  },
+  {
+    id: 'doc-minutes', name: 'Acta', kind: 'docx', accent: '334155', ink: '0F172A', mut: '64748B', format: 'Acta',
+    typeName: 'Acta de reunión', tagline: 'Asistentes, acuerdos y dueños con fecha.',
+    meta: 'Reunión semanal · Duración: 45 minutos',
+    body: [
+      { t: 'Asistentes', items: [{ kind: 'text', v: 'Ana, Bruno, Camila y Diego. Faltó Elena, con aviso.' }] },
+      { t: 'Acuerdos', items: [{ kind: 'table', head: ['Acuerdo', 'Dueño', 'Fecha'], rows: [['Publicar el tablero', 'Ana', 'Viernes'], ['Cerrar el texto', 'Bruno', 'Lunes']], widths: [4200, 2580, 2580] }] },
+      { t: 'Próxima', items: [{ kind: 'text', v: 'Misma hora la semana que viene. La pauta la manda Camila el día antes.' }] },
+    ],
+  },
+  {
+    id: 'doc-brief', name: 'Brief', kind: 'docx', accent: 'C2410C', ink: '1C1410', mut: '78716C', format: 'Brief',
+    typeName: 'Brief creativo', tagline: 'Para quién es, qué debe sentir y qué no puede pasar.',
+    meta: 'Proyecto: campaña de temporada · Versión 1',
+    body: [
+      { t: 'Para quién', items: [{ kind: 'text', v: 'Personas que ya compraron una vez y no volvieron en seis meses.' }] },
+      { t: 'Debe lograr', items: [{ kind: 'bullet', v: 'Que reconozcan la marca en tres segundos' }, { kind: 'bullet', v: 'Un solo llamado a la acción' }] },
+      { t: 'No puede', items: [{ kind: 'text', v: 'No usar descuento como gancho principal ni más de dos tipografías.' }] },
+    ],
+  },
+  {
+    id: 'doc-sop', name: 'Procedimiento', kind: 'docx', accent: '0E7490', ink: '0C1E24', mut: '5B7380', format: 'SOP',
+    typeName: 'Procedimiento', tagline: 'Pasos, responsable y qué hacer si falla.',
+    meta: 'Área: operaciones · Revisión: trimestral',
+    body: [
+      { t: 'Cuándo aplica', items: [{ kind: 'text', v: 'Cada vez que entra un pedido nuevo antes de las 16:00.' }] },
+      { t: 'Pasos', items: [{ kind: 'bullet', v: 'Registrar el pedido en el tablero' }, { kind: 'bullet', v: 'Asignar dueño el mismo día' }, { kind: 'bullet', v: 'Confirmar al cliente en menos de un día hábil' }] },
+      { t: 'Si falla', items: [{ kind: 'text', v: 'Si no hay dueño a las 18:00, lo toma la persona de turno y lo anota en el acta.' }] },
     ],
   },
 ];

@@ -14,7 +14,7 @@
         </div>
         <div>
           <small>Ingresos totales</small>
-          <b>${{ s.totalRevenue | number }}</b>
+          <b>${{ s.totalRevenue.toLocaleString('es-CL') }}</b>
         </div>
       </div>
       <div class="card">
@@ -95,7 +95,7 @@
               <tr>
                 <td class="mono">{{ o.orderId }}</td>
                 <td>{{ o.email }}</td>
-                <td class="mono">${{ o.amount | number }}</td>
+                <td class="mono">${{ o.amount.toLocaleString('es-CL') }}</td>
                 <td><span class="status-chip" [class]="statusColor(o.status)">{{ o.status }}</span></td>
                 <td class="dim">{{ o.createdAt | date: 'd/MM/yy HH:mm' }}</td>
               </tr>

@@ -74,7 +74,7 @@ const GOAL_LABELS: Record<Goal, string> = {
             <div class="card" [style.--c1]="m.colors[0]" [style.--c2]="m.colors[1]">
               <div class="mini-preview"></div>
               <div class="info">
-                <h4>{{ m.name }} · {{ m.price === 0 ? 'Gratis' : '$' + m.price }}</h4>
+                <h4>{{ m.name }} · {{ m.price === 0 ? 'Gratis' : '$' + m.price.toLocaleString('es-CL') }}</h4>
                 <p>{{ m.tagline }}</p>
                 <div class="meta">★ {{ m.rating }} · {{ m.pages }} páginas · {{ m.tech.join(' / ') }}</div>
               </div>
