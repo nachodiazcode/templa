@@ -40,8 +40,9 @@
   justify-content: space-between;
   height: 100%;
   gap: 24px;
-  padding: 0 32px; /* Margen amplio para respirar */
-  max-width: 1400px;
+  padding: 0;
+  width: min(1400px, 100% - 48px);
+  max-width: none;
   margin: 0 auto;
 }
 
@@ -65,8 +66,9 @@
   justify-content: space-between;
   gap: 16px;
   height: 34px;
-  padding: 0 32px;
-  max-width: 1400px;
+  padding: 0;
+  width: min(1400px, 100% - 48px);
+  max-width: none;
   margin: 0 auto;
 }
 
@@ -170,7 +172,7 @@
 /* ---------- nav links ---------- */
 .nav {
   display: flex;
-  gap: 32px; /* Espaciado elegante */
+  gap: 24px;
   align-items: center;
   margin-right: auto; /* Empuja las acciones a la derecha */
 }
@@ -242,7 +244,7 @@
   /* Animación de entrada más premium con escala sutil y traslación */
   transform: translateY(10px) scale(0.98);
   width: 740px;
-  max-height: calc(100vh - 110px);
+  max-height: calc((100vh - 110px) / var(--ui-zoom, 1));
   overflow-y: auto;
   /* Fondo completamente opaco para mejorar legibilidad */
   background: var(--surface);
@@ -1822,3 +1824,6 @@
   .hdr, .mark, .spark { animation: none !important; }
   * { transition-duration: 0.01ms !important; }
 }
+
+.search-trigger .st-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.search-trigger { min-width: 0; flex-shrink: 1; }

@@ -1,7 +1,7 @@
 .admin-shell {
   display: grid;
   grid-template-columns: 260px 1fr;
-  min-height: 100vh;
+  min-height: calc(100vh / var(--ui-zoom, 1));
 }
 
 /* ---------- sidebar ---------- */
@@ -185,7 +185,7 @@
 /* ---------- main ---------- */
 .admin-main {
   grid-column: 2;
-  min-height: 100vh;
+  min-height: calc(100vh / var(--ui-zoom, 1));
   background: #12101f;
 }
 

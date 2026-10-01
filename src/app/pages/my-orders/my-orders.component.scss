@@ -1,6 +1,6 @@
 .wrap {
   padding: 52px 0 40px;
-  min-height: calc(100vh - var(--header-h));
+  min-height: calc(100vh / var(--ui-zoom, 1) - var(--header-h));
 }
 
 .head {

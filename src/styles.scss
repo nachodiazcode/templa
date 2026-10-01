@@ -59,6 +59,14 @@
 
 * { box-sizing: border-box; }
 
+/* Densidad en laptops (1100–1680px, p. ej. MacBook 1440×900): escala la UI
+   al 90 % para que se vea más compacta. --ui-zoom compensa las unidades vh. */
+:root { --ui-zoom: 1; }
+@media (min-width: 1100px) and (max-width: 1680px) {
+  :root { --ui-zoom: 0.9; }
+  html { zoom: var(--ui-zoom); }
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-h) + 12px);
