@@ -2,9 +2,1324 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Templa API</title>
+    <meta
+      name="description"
+      content="API de Templa: catálogo web, plantillas de Office, checkout y descargas. Estado en vivo y referencia de rutas."
+    />
+    <meta name="theme-color" content="#0a0b10" />
+    <meta name="robots" content="index, follow" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23f43f5e'/%3E%3Cstop offset='1' stop-color='%23f59e0b'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia' font-size='16' font-weight='700' fill='white'%3ET%3C/text%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@600;700&display=swap"
+    />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('templa.theme');
+          if (t !== 'light' && t !== 'dark') {
+            t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          }
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      })();
+    </script>
+    <style>
+      :root {
+        --grad: linear-gradient(135deg, #f43f5e, #f59e0b);
+        --radius: 16px;
+        --header-h: 64px;
+        --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      [data-theme='dark'] {
+        --bg: #0a0b10;
+        --surface: #131620;
+        --surface-2: #181c29;
+        --border: rgba(255, 255, 255, 0.08);
+        --border-strong: rgba(255, 255, 255, 0.16);
+        --text: #eceef6;
+        --text-muted: #99a1b3;
+        --text-faint: #6a7183;
+        --accent: #f43f5e;
+        --success: #34d399;
+        --danger: #fb7185;
+        --info: #7dd3fc;
+        --warn: #fbbf24;
+        --soft: rgba(255, 255, 255, 0.05);
+        --soft-2: rgba(255, 255, 255, 0.09);
+        --header-bg: rgba(10, 11, 16, 0.82);
+        --grid-line: rgba(255, 255, 255, 0.045);
+        --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.55);
+        --console: #0c0e16;
+        color-scheme: dark;
+      }
+
+      [data-theme='light'] {
+        --bg: #f6f7fb;
+        --surface: #ffffff;
+        --surface-2: #f3f4fa;
+        --border: rgba(18, 22, 38, 0.1);
+        --border-strong: rgba(18, 22, 38, 0.18);
+        --text: #171a26;
+        --text-muted: #565e70;
+        --text-faint: #8b92a3;
+        --accent: #e11d48;
+        --success: #059669;
+        --danger: #e11d48;
+        --info: #0369a1;
+        --warn: #b45309;
+        --soft: rgba(18, 22, 38, 0.05);
+        --soft-2: rgba(18, 22, 38, 0.08);
+        --header-bg: rgba(255, 255, 255, 0.86);
+        --grid-line: rgba(18, 22, 38, 0.06);
+        --shadow: 0 24px 60px -28px rgba(23, 26, 38, 0.28);
+        --console: #10131c;
+        color-scheme: light;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, -apple-system, 'Segoe UI', sans-serif;
+        font-size: 15px;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
+      h1, h2, h3 {
+        font-family: Sora, Inter, sans-serif;
+        letter-spacing: -0.03em;
+        line-height: 1.15;
+        margin: 0;
+      }
+      a { color: inherit; }
+      button, input { font: inherit; color: inherit; }
+      button { cursor: pointer; }
+      :focus-visible {
+        outline: 2px solid #f59e0b;
+        outline-offset: 2px;
+      }
+
+      .wrap {
+        width: min(1120px, calc(100% - 40px));
+        margin-inline: auto;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        height: var(--header-h);
+        display: flex;
+        align-items: center;
+        backdrop-filter: blur(16px);
+        background: var(--header-bg);
+        border-bottom: 1px solid var(--border);
+      }
+      .bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        width: min(1120px, calc(100% - 40px));
+        margin-inline: auto;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        font-weight: 700;
+      }
+      .mark {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        background: var(--grad);
+        color: white;
+        font-family: Sora, serif;
+        font-size: 15px;
+      }
+      .brand small {
+        color: var(--text-faint);
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        font-size: 11px;
+      }
+      .bar-actions { display: flex; align-items: center; gap: 8px; }
+      .icon-btn, .text-btn {
+        border: 1px solid var(--border-strong);
+        background: var(--soft);
+        border-radius: 10px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 12px;
+        font-size: 13px;
+        font-weight: 650;
+      }
+      .icon-btn { width: 36px; padding: 0; }
+      .icon-btn:hover, .text-btn:hover { background: var(--soft-2); }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: 56px 0 28px;
+      }
+      .glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        pointer-events: none;
+      }
+      .glow.a {
+        width: 420px; height: 420px;
+        background: rgba(244, 63, 94, 0.22);
+        top: -160px; left: -80px;
+      }
+      .glow.b {
+        width: 380px; height: 380px;
+        background: rgba(245, 158, 11, 0.16);
+        top: -80px; right: -60px;
+      }
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(var(--grid-line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+        background-size: 56px 56px;
+        mask-image: radial-gradient(70% 70% at 40% 20%, black, transparent);
+      }
+      .hero-grid {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+        gap: 36px;
+        align-items: end;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 99px;
+        padding: 6px 12px 6px 10px;
+        font-size: 12.5px;
+        font-weight: 700;
+        border: 1px solid color-mix(in srgb, var(--success) 40%, transparent);
+        background: color-mix(in srgb, var(--success) 12%, transparent);
+        color: var(--success);
+      }
+      .pill.wait {
+        color: var(--warn);
+        border-color: color-mix(in srgb, var(--warn) 40%, transparent);
+        background: color-mix(in srgb, var(--warn) 12%, transparent);
+      }
+      .pill.down {
+        color: var(--danger);
+        border-color: color-mix(in srgb, var(--danger) 45%, transparent);
+        background: color-mix(in srgb, var(--danger) 12%, transparent);
+      }
+      .dot {
+        width: 7px; height: 7px; border-radius: 99px;
+        background: currentColor;
+        box-shadow: 0 0 0 0 currentColor;
+      }
+      .pill:not(.wait):not(.down) .dot { animation: ring 2.2s infinite; }
+      @keyframes ring {
+        70% { box-shadow: 0 0 0 7px transparent; }
+      }
+      h1 {
+        margin: 16px 0 12px;
+        font-size: clamp(34px, 4.4vw, 52px);
+        max-width: 16ch;
+      }
+      h1 span {
+        background: var(--grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .lede {
+        margin: 0 0 22px;
+        max-width: 48ch;
+        color: var(--text-muted);
+        font-size: 16.5px;
+      }
+      .origin {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: min(100%, 520px);
+        padding: 6px 6px 6px 14px;
+        border-radius: 14px;
+        border: 1px solid var(--border-strong);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+      .origin code {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: var(--mono);
+        font-size: 13px;
+      }
+      .primary {
+        border: 0;
+        border-radius: 10px;
+        padding: 10px 14px;
+        background: var(--grad);
+        color: white;
+        font-weight: 700;
+        font-size: 13.5px;
+        box-shadow: 0 10px 24px -12px rgba(244, 63, 94, 0.8);
+      }
+      .primary:hover { filter: brightness(1.05); }
+      .primary:disabled { opacity: 0.45; cursor: default; }
+
+      .board {
+        border: 1px solid var(--border);
+        background: color-mix(in srgb, var(--surface) 88%, transparent);
+        border-radius: 20px;
+        padding: 16px;
+        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow);
+      }
+      .board-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+      .board-head h2 { font-size: 14px; }
+      .metrics {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .metric {
+        background: var(--soft);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 10px 12px;
+      }
+      .metric span {
+        display: block;
+        color: var(--text-faint);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .metric b {
+        display: block;
+        margin-top: 3px;
+        font-family: Sora, Inter, sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .return-url {
+        margin: 8px 0 0;
+        color: var(--text-faint);
+        font-family: var(--mono);
+        font-size: 11.5px;
+        overflow-wrap: anywhere;
+      }
+
+      .explorer { padding: 8px 0 64px; }
+      .filters {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
+      .search {
+        flex: 1 1 220px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+        height: 40px;
+        padding: 0 12px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text-faint);
+      }
+      .search input {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        background: transparent;
+        outline: none;
+      }
+      .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+      .chip {
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text-muted);
+        border-radius: 99px;
+        padding: 7px 12px;
+        font-size: 13px;
+        font-weight: 650;
+      }
+      .chip[aria-pressed='true'] {
+        color: white;
+        border-color: transparent;
+        background: linear-gradient(135deg, rgba(244, 63, 94, 0.85), rgba(245, 158, 11, 0.85));
+      }
+      [data-theme='light'] .chip[aria-pressed='true'] { color: white; }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 320px minmax(0, 1fr);
+        gap: 16px;
+        align-items: start;
+      }
+      .routes, .detail {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        border-radius: var(--radius);
+      }
+      .routes {
+        padding: 8px;
+      }
+      .route {
+        width: 100%;
+        text-align: left;
+        border: 1px solid transparent;
+        background: transparent;
+        border-radius: 12px;
+        padding: 10px 10px;
+        display: grid;
+        gap: 3px;
+      }
+      .route:hover { background: var(--soft); }
+      .route[aria-current='true'] {
+        background: var(--soft-2);
+        border-color: var(--border-strong);
+      }
+      .route-top {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+      }
+      .method {
+        font-family: var(--mono);
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        border-radius: 6px;
+        padding: 2px 6px;
+        flex: none;
+      }
+      .method.get { color: var(--success); background: color-mix(in srgb, var(--success) 14%, transparent); }
+      .method.post { color: var(--warn); background: color-mix(in srgb, var(--warn) 16%, transparent); }
+      .method.patch { color: var(--info); background: color-mix(in srgb, var(--info) 16%, transparent); }
+      .method.put { color: var(--info); background: color-mix(in srgb, var(--info) 16%, transparent); }
+      .method.delete { color: var(--danger); background: color-mix(in srgb, var(--danger) 14%, transparent); }
+      .method.doc { color: var(--text-muted); background: var(--soft-2); }
+      .route-path {
+        font-family: var(--mono);
+        font-size: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .route small { color: var(--text-muted); font-size: 12.5px; }
+      .empty {
+        color: var(--text-muted);
+        padding: 18px 10px;
+        font-size: 13.5px;
+      }
+
+      .detail { padding: 22px; min-width: 0; }
+      .detail-kicker {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+      }
+      .lock, .tag {
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+        border-radius: 99px;
+        padding: 3px 8px;
+      }
+      .detail h2 { font-size: 26px; margin-bottom: 8px; }
+      .summary { margin: 0 0 16px; color: var(--text-muted); max-width: 62ch; }
+      .path-line {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 12px;
+        background: var(--soft);
+        border: 1px solid var(--border);
+        margin-bottom: 16px;
+        min-width: 0;
+      }
+      .path-line code {
+        font-family: var(--mono);
+        font-size: 13px;
+        overflow-wrap: anywhere;
+      }
+      .fields {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      label.field { display: grid; gap: 6px; font-size: 12.5px; font-weight: 650; color: var(--text-muted); }
+      label.field input {
+        height: 40px;
+        border-radius: 10px;
+        border: 1px solid var(--border-strong);
+        background: var(--bg);
+        padding: 0 12px;
+      }
+      .example {
+        margin: 0 0 14px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: var(--console);
+        color: #d7dbea;
+        font-family: var(--mono);
+        font-size: 12.5px;
+        overflow: auto;
+        white-space: pre;
+      }
+      .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+      .ghost {
+        height: 38px;
+        padding: 0 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border-strong);
+        background: var(--soft);
+        font-weight: 700;
+        font-size: 13.5px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+      }
+      .ghost:hover { background: var(--soft-2); }
+      .note { margin: 0 0 12px; color: var(--text-faint); font-size: 13px; }
+
+      .console {
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: var(--console);
+        color: #d7dbea;
+      }
+      .console-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 8px 12px;
+        background: rgba(255, 255, 255, 0.03);
+        color: #8b93a7;
+        font-size: 12px;
+      }
+      .lights { display: inline-flex; gap: 5px; }
+      .lights i {
+        width: 8px; height: 8px; border-radius: 99px; display: block;
+        background: #3a4158;
+      }
+      .lights.go i:nth-child(1) { background: #fb7185; }
+      .lights.go i:nth-child(2) { background: #fbbf24; }
+      .lights.go i:nth-child(3) { background: #34d399; }
+      .console pre {
+        margin: 0;
+        padding: 14px;
+        max-height: 360px;
+        overflow: auto;
+        font-family: var(--mono);
+        font-size: 12.5px;
+        line-height: 1.55;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+      .status-ok { color: #34d399; }
+      .status-bad { color: #fb7185; }
+
+      .admin-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .admin-list li {
+        border: 1px solid var(--border);
+        background: var(--soft);
+        border-radius: 12px;
+        padding: 12px;
+      }
+      .admin-list b { display: block; font-size: 13.5px; }
+      .admin-list span { color: var(--text-muted); font-size: 12.5px; }
+
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 22px 0 32px;
+        color: var(--text-faint);
+        font-size: 13px;
+      }
+      footer .wrap {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      footer a { color: var(--text-muted); }
+
+      .noscript {
+        margin: 24px auto;
+        width: min(1120px, calc(100% - 40px));
+      }
+
+      @media (min-width: 861px) {
+        .routes, .detail {
+          position: sticky;
+          top: 80px;
+          max-height: calc(100vh - 96px);
+          overflow: auto;
+        }
+      }
+      @media (max-width: 860px) {
+        .hero { padding-top: 32px; }
+        .hero-grid, .layout, .admin-list { grid-template-columns: 1fr; }
+        h1 { font-size: 34px; }
+      }
+      @media (max-width: 560px) {
+        .wrap, .bar { width: min(1120px, calc(100% - 28px)); }
+        .origin { padding-left: 12px; }
+        .detail { padding: 16px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
   </head>
   <body>
-    <p>Templa API — <a href="/api/health">/api/health</a></p>
+    <header>
+      <div class="bar">
+        <a class="brand" href="#inicio">
+          <span class="mark" aria-hidden="true">T</span>
+          Templa <small>API</small>
+        </a>
+        <div class="bar-actions">
+          <a class="text-btn" href="https://github.com/nachodiazcode/templa">GitHub</a>
+          <button class="icon-btn" id="theme" type="button" aria-pressed="false" aria-label="Cambiar tema">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="inicio">
+      <section class="hero">
+        <div class="glow a" aria-hidden="true"></div>
+        <div class="glow b" aria-hidden="true"></div>
+        <div class="grid" aria-hidden="true"></div>
+        <div class="wrap hero-grid">
+          <div>
+            <p class="pill wait" id="pill"><span class="dot" aria-hidden="true"></span><span id="pill-text">Consultando estado…</span></p>
+            <h1>La API del marketplace, <span>a la vista.</span></h1>
+            <p class="lede">
+              Catálogo web, plantillas de Office, checkout y descargas.
+              Prueba las lecturas públicas y revisa cómo responde el servidor ahora.
+            </p>
+            <div class="origin">
+              <code id="origin">…</code>
+              <button class="primary" id="copy-origin" type="button">Copiar</button>
+            </div>
+          </div>
+          <aside class="board" aria-labelledby="board-title">
+            <div class="board-head">
+              <h2 id="board-title">Estado</h2>
+              <button class="ghost" id="refresh" type="button">Actualizar</button>
+            </div>
+            <div class="metrics">
+              <div class="metric"><span>Modo</span><b id="m-mode">—</b></div>
+              <div class="metric"><span>Datos</span><b id="m-db">—</b></div>
+              <div class="metric"><span>Archivos</span><b id="m-storage">—</b></div>
+              <div class="metric"><span>Correo</span><b id="m-mail">—</b></div>
+            </div>
+            <p class="return-url" id="m-return">Retorno Webpay: —</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="explorer wrap" aria-labelledby="routes-title">
+        <h2 id="routes-title" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Rutas</h2>
+        <div class="filters">
+          <label class="search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Buscar rutas</span>
+            <input id="q" type="search" placeholder="Busca una ruta o un nombre" autocomplete="off" />
+          </label>
+          <div class="chips" id="chips" role="group" aria-label="Grupos"></div>
+        </div>
+        <div class="layout">
+          <div class="routes" id="list"></div>
+          <article class="detail" id="detail" aria-live="polite"></article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span>Templa API · Netlify Functions</span>
+        <span>
+          <a href="/api/health">JSON de estado</a>
+          ·
+          <a href="https://github.com/nachodiazcode/templa">Código</a>
+        </span>
+      </div>
+    </footer>
+
+    <noscript>
+      <p class="noscript">
+        Templa API.
+        <a href="/api/health">Estado</a> ·
+        <a href="/api/templates">Catálogo</a> ·
+        <a href="/api/office">Office</a>
+      </p>
+    </noscript>
+
+    <script>
+      const LABELS = {
+        mode: { production: 'Producción', integration: 'Integración' },
+        db: { supabase: 'Supabase', 'local-json': 'JSON local' },
+        storage: { supabase: 'Supabase', disk: 'Disco' },
+        mail: { smtp: 'SMTP', outbox: 'Bandeja local' },
+      };
+
+      const ROUTES = [
+        {
+          id: 'health',
+          group: 'Sistema',
+          method: 'GET',
+          path: '/api/health',
+          title: 'Estado del servidor',
+          summary: 'Responde si la API está viva y con qué modo, base de datos, almacenamiento y correo está corriendo.',
+          returns: '{ ok, mode, returnUrl, mail, db, storage }',
+          try: true,
+        },
+        {
+          id: 'templates',
+          group: 'Catálogo',
+          method: 'GET',
+          path: '/api/templates',
+          title: 'Catálogo web',
+          summary: 'Lista las plantillas web publicadas, con precio y rating calculado.',
+          returns: '{ items: Template[] }',
+          try: true,
+        },
+        {
+          id: 'template',
+          group: 'Catálogo',
+          method: 'GET',
+          path: '/api/templates/:id',
+          title: 'Una plantilla',
+          summary: 'Ficha de una plantilla y el resumen de sus reseñas.',
+          params: [{ key: 'id', label: 'Id', sample: 'aurora' }],
+          returns: '{ item, summary }',
+          try: true,
+        },
+        {
+          id: 'preview-html',
+          group: 'Catálogo',
+          method: 'GET',
+          path: '/api/templates/:id/preview-html',
+          title: 'Preview en JSON',
+          summary: 'HTML de la vista previa, con CSS y JS en línea. Si no hay asset publicado, responde 404.',
+          params: [{ key: 'id', label: 'Id', sample: 'aurora' }],
+          returns: '{ id, html }',
+          try: true,
+        },
+        {
+          id: 'preview',
+          group: 'Catálogo',
+          method: 'GET',
+          path: '/api/templates/:id/preview',
+          title: 'Preview como página',
+          summary: 'El mismo HTML, servido como página. Sirve para abrirlo en el navegador.',
+          params: [{ key: 'id', label: 'Id', sample: 'aurora' }],
+          open: true,
+        },
+        {
+          id: 'reviews',
+          group: 'Catálogo',
+          method: 'GET',
+          path: '/api/templates/:id/reviews',
+          title: 'Reseñas',
+          summary: 'Resumen y listado de reseñas de una plantilla.',
+          params: [{ key: 'id', label: 'Id', sample: 'aurora' }],
+          returns: '{ templateId, summary, items }',
+          try: true,
+        },
+        {
+          id: 'review-post',
+          group: 'Catálogo',
+          method: 'POST',
+          path: '/api/templates/:id/reviews',
+          title: 'Publicar reseña',
+          summary: 'Crea una reseña. Pide sesión y no permite que la misma cuenta valore dos veces.',
+          auth: true,
+          params: [{ key: 'id', label: 'Id', sample: 'aurora' }],
+          body: '{\n  "rating": 5,\n  "title": "Clara",\n  "body": "La usé en un proyecto real."\n}',
+        },
+        {
+          id: 'office',
+          group: 'Office',
+          method: 'GET',
+          path: '/api/office',
+          title: 'Catálogo Office',
+          summary: 'Presentaciones PowerPoint y documentos Word publicados.',
+          returns: '{ items: Office[] }',
+          try: true,
+        },
+        {
+          id: 'office-one',
+          group: 'Office',
+          method: 'GET',
+          path: '/api/office/:id',
+          title: 'Una plantilla Office',
+          summary: 'Metadatos de un deck o un documento.',
+          params: [{ key: 'id', label: 'Id', sample: 'deck-minimal' }],
+          try: true,
+        },
+        {
+          id: 'office-file',
+          group: 'Office',
+          method: 'GET',
+          path: '/api/office/:id/download',
+          title: 'Descargar Office',
+          summary: 'Entrega el archivo .pptx o .docx. Si el asset no está publicado, responde 404.',
+          params: [{ key: 'id', label: 'Id', sample: 'deck-minimal' }],
+          open: true,
+        },
+        {
+          id: 'register',
+          group: 'Cuenta',
+          method: 'POST',
+          path: '/api/auth/register',
+          title: 'Crear cuenta',
+          summary: 'Registra un email y una contraseña de al menos 6 caracteres. Devuelve token y usuario.',
+          body: '{\n  "name": "Ada",\n  "email": "ada@ejemplo.cl",\n  "password": "una-clave"\n}',
+        },
+        {
+          id: 'login',
+          group: 'Cuenta',
+          method: 'POST',
+          path: '/api/auth/login',
+          title: 'Iniciar sesión',
+          summary: 'Devuelve un token JWT para el header Authorization.',
+          body: '{\n  "email": "ada@ejemplo.cl",\n  "password": "una-clave"\n}',
+        },
+        {
+          id: 'me',
+          group: 'Cuenta',
+          method: 'GET',
+          path: '/api/auth/me',
+          title: 'Sesión actual',
+          summary: 'Usuario del token: id, email, nombre y rol.',
+          auth: true,
+          try: true,
+        },
+        {
+          id: 'my-orders',
+          group: 'Cuenta',
+          method: 'GET',
+          path: '/api/my/orders',
+          title: 'Mis órdenes',
+          summary: 'Órdenes de la cuenta autenticada, de la más reciente a la más antigua.',
+          auth: true,
+          try: true,
+        },
+        {
+          id: 'coupon',
+          group: 'Compra',
+          method: 'POST',
+          path: '/api/coupons/validate',
+          title: 'Validar cupón',
+          summary: 'Calcula el descuento de un código sobre un monto en CLP. No cobra.',
+          body: '{\n  "code": "CODIGO",\n  "amount": 49900\n}',
+        },
+        {
+          id: 'checkout',
+          group: 'Compra',
+          method: 'POST',
+          path: '/api/checkout',
+          title: 'Iniciar checkout',
+          summary: 'Crea una orden y una transacción Webpay. items son ids del catálogo. El cupón es opcional. El monto mínimo es 50 CLP.',
+          body: '{\n  "items": ["nexa-saas"],\n  "email": "ada@ejemplo.cl",\n  "coupon": "CODIGO"\n}',
+        },
+        {
+          id: 'order',
+          group: 'Compra',
+          method: 'GET',
+          path: '/api/order/:orderId',
+          title: 'Consultar orden',
+          summary: 'Estado público de una orden: monto, ítems, cupón y código de autorización si ya se pagó.',
+          params: [{ key: 'orderId', label: 'Orden', sample: '' }],
+          try: true,
+        },
+        {
+          id: 'free',
+          group: 'Descargas',
+          method: 'GET',
+          path: '/api/download/free/:itemId',
+          title: 'Descarga gratuita',
+          summary: 'Zip de una plantilla con precio 0. Si la plantilla es de pago, responde 403.',
+          params: [{ key: 'itemId', label: 'Id', sample: 'aurora' }],
+          open: true,
+        },
+        {
+          id: 'paid',
+          group: 'Descargas',
+          method: 'GET',
+          path: '/api/download/order/:orderId/:itemId',
+          title: 'Descarga de una compra',
+          summary: 'Zip de un ítem que pertenece a una orden pagada.',
+          params: [
+            { key: 'orderId', label: 'Orden', sample: '' },
+            { key: 'itemId', label: 'Id', sample: 'nexa-saas' },
+          ],
+          open: true,
+        },
+        {
+          id: 'admin',
+          group: 'Admin',
+          method: 'DOC',
+          path: '/api/admin/*',
+          title: 'Panel de administración',
+          summary: 'Todo este grupo pide un token con rol admin. Desde aquí no se ejecuta.',
+          auth: true,
+          admin: true,
+        },
+      ];
+
+      const GROUPS = ['Todas', ...new Set(ROUTES.map((r) => r.group))];
+      const listEl = document.getElementById('list');
+      const detailEl = document.getElementById('detail');
+      const chipsEl = document.getElementById('chips');
+      const qEl = document.getElementById('q');
+      let group = 'Todas';
+      let currentId = 'health';
+      let tokenValue = '';
+
+      function label(map, value) {
+        if (!value) return '—';
+        return map[value] || String(value);
+      }
+
+      function setPill(kind, text) {
+        const pill = document.getElementById('pill');
+        pill.className = 'pill' + (kind ? ' ' + kind : '');
+        document.getElementById('pill-text').textContent = text;
+      }
+
+      async function loadHealth() {
+        setPill('wait', 'Consultando estado…');
+        const t0 = performance.now();
+        try {
+          const res = await fetch('/api/health', { cache: 'no-store' });
+          const data = await res.json();
+          const ms = Math.round(performance.now() - t0);
+          const up = res.ok && data && data.ok === true;
+          setPill(up ? '' : 'down', up ? 'En línea · ' + ms + ' ms' : 'Respuesta inesperada');
+          document.getElementById('m-mode').textContent = label(LABELS.mode, data.mode);
+          document.getElementById('m-db').textContent = label(LABELS.db, data.db);
+          document.getElementById('m-storage').textContent = label(LABELS.storage, data.storage);
+          document.getElementById('m-mail').textContent = label(LABELS.mail, data.mail);
+          document.getElementById('m-return').textContent = 'Retorno Webpay: ' + (data.returnUrl || '—');
+        } catch (err) {
+          setPill('down', 'Sin respuesta');
+          ['m-mode', 'm-db', 'm-storage', 'm-mail'].forEach((id) => {
+            document.getElementById(id).textContent = '—';
+          });
+          document.getElementById('m-return').textContent = 'No pude leer /api/health.';
+        }
+      }
+
+      function visibleRoutes() {
+        const q = qEl.value.trim().toLowerCase();
+        return ROUTES.filter((r) => {
+          if (group !== 'Todas' && r.group !== group) return false;
+          if (!q) return true;
+          return (r.path + ' ' + r.title + ' ' + r.group).toLowerCase().includes(q);
+        });
+      }
+
+      function renderChips() {
+        chipsEl.replaceChildren();
+        GROUPS.forEach((name) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'chip';
+          b.textContent = name;
+          b.setAttribute('aria-pressed', String(name === group));
+          b.addEventListener('click', () => {
+            group = name;
+            renderChips();
+            const rows = visibleRoutes();
+            if (rows.length && !rows.some((r) => r.id === currentId)) select(rows[0].id, true);
+            else renderList();
+          });
+          chipsEl.appendChild(b);
+        });
+      }
+
+      function renderList() {
+        const rows = visibleRoutes();
+        listEl.replaceChildren();
+        if (!rows.length) {
+          const p = document.createElement('p');
+          p.className = 'empty';
+          p.textContent = 'Ninguna ruta coincide.';
+          listEl.appendChild(p);
+          return;
+        }
+        rows.forEach((r) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'route';
+          if (r.id === currentId) b.setAttribute('aria-current', 'true');
+          const top = document.createElement('span');
+          top.className = 'route-top';
+          const method = document.createElement('span');
+          method.className = 'method ' + r.method.toLowerCase();
+          method.textContent = r.method;
+          const path = document.createElement('span');
+          path.className = 'route-path';
+          path.textContent = r.path;
+          top.append(method, path);
+          const small = document.createElement('small');
+          small.textContent = r.title;
+          b.append(top, small);
+          b.addEventListener('click', () => select(r.id));
+          listEl.appendChild(b);
+        });
+      }
+
+      function fieldValues(route) {
+        const values = {};
+        (route.params || []).forEach((p) => {
+          const input = detailEl.querySelector('[data-param="' + p.key + '"]');
+          values[p.key] = input ? input.value.trim() : p.sample || '';
+        });
+        const token = detailEl.querySelector('[data-token]');
+        if (token) tokenValue = token.value.trim();
+        return values;
+      }
+
+      function buildPath(route, values) {
+        let path = route.path;
+        (route.params || []).forEach((p) => {
+          const raw = values[p.key] || p.sample || '';
+          path = path.replace(':' + p.key, encodeURIComponent(raw));
+        });
+        return path;
+      }
+
+      function curl(route, values) {
+        const path = buildPath(route, values);
+        const headers = route.auth && tokenValue ? ' \\\n  -H "Authorization: Bearer ' + tokenValue.replace(/"/g, '') + '"' : '';
+        const body = route.body ? ' \\\n  -H "Content-Type: application/json" \\\n  -d \'' + route.body.replace(/\s+/g, ' ') + '\'' : '';
+        return 'curl -X ' + route.method + headers + body + ' \\\n  "' + location.origin + path + '"';
+      }
+
+      function select(id, keepScroll) {
+        const route = ROUTES.find((r) => r.id === id) || ROUTES[0];
+        currentId = route.id;
+        history.replaceState(null, '', '#' + route.id);
+        renderList();
+        paintDetail(route);
+        if (!keepScroll && matchMedia('(max-width: 860px)').matches) {
+          detailEl.scrollIntoView({ block: 'nearest' });
+        }
+      }
+
+      function paintDetail(route) {
+        detailEl.replaceChildren();
+        const kicker = document.createElement('div');
+        kicker.className = 'detail-kicker';
+        const method = document.createElement('span');
+        method.className = 'method ' + route.method.toLowerCase();
+        method.textContent = route.method;
+        const tag = document.createElement('span');
+        tag.className = 'tag';
+        tag.textContent = route.group;
+        kicker.append(method, tag);
+        if (route.auth) {
+          const lock = document.createElement('span');
+          lock.className = 'lock';
+          lock.textContent = 'Bearer';
+          kicker.append(lock);
+        }
+
+        const h = document.createElement('h2');
+        h.textContent = route.title;
+        const summary = document.createElement('p');
+        summary.className = 'summary';
+        summary.textContent = route.summary;
+
+        const pathLine = document.createElement('div');
+        pathLine.className = 'path-line';
+        const pathCode = document.createElement('code');
+        pathCode.textContent = route.path;
+        pathLine.append(pathCode);
+
+        detailEl.append(kicker, h, summary, pathLine);
+
+        if (route.params?.length || route.auth) {
+          const fields = document.createElement('div');
+          fields.className = 'fields';
+          (route.params || []).forEach((p) => {
+            const labelEl = document.createElement('label');
+            labelEl.className = 'field';
+            labelEl.textContent = p.label;
+            const input = document.createElement('input');
+            input.dataset.param = p.key;
+            input.value = p.sample || '';
+            input.spellcheck = false;
+            input.autocomplete = 'off';
+            input.setAttribute('aria-label', p.label);
+            labelEl.append(input);
+            fields.append(labelEl);
+          });
+          if (route.auth && route.try) {
+            const labelEl = document.createElement('label');
+            labelEl.className = 'field';
+            labelEl.textContent = 'Token';
+            const input = document.createElement('input');
+            input.dataset.token = '1';
+            input.value = tokenValue;
+            input.placeholder = 'Pega el JWT';
+            input.spellcheck = false;
+            input.autocomplete = 'off';
+            input.setAttribute('aria-label', 'Token');
+            labelEl.append(input);
+            fields.append(labelEl);
+          }
+          detailEl.append(fields);
+        }
+
+        if (route.body) {
+          const pre = document.createElement('pre');
+          pre.className = 'example';
+          pre.textContent = route.body;
+          detailEl.append(pre);
+          const note = document.createElement('p');
+          note.className = 'note';
+          note.textContent = 'Ejemplo de referencia. Esta ruta no se ejecuta desde la página.';
+          detailEl.append(note);
+        }
+
+        if (route.admin) {
+          const ul = document.createElement('ul');
+          ul.className = 'admin-list';
+          [
+            ['Órdenes', 'Listado, detalle y cambio de estado'],
+            ['Plantillas', 'Alta, edición, archivos y publicación'],
+            ['Usuarios', 'Cuentas y roles'],
+            ['Auditoría', 'Registro de acciones del panel'],
+            ['Reseñas', 'Moderación'],
+            ['Cupones', 'Alta, edición y baja'],
+            ['Ajustes', 'Estado de la configuración'],
+            ['Dashboard', 'Totales del día y del mes'],
+          ].forEach(([title, text]) => {
+            const li = document.createElement('li');
+            const b = document.createElement('b');
+            b.textContent = title;
+            const span = document.createElement('span');
+            span.textContent = text;
+            li.append(b, span);
+            ul.append(li);
+          });
+          detailEl.append(ul);
+        }
+
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+        if (route.try) {
+          const run = document.createElement('button');
+          run.className = 'primary';
+          run.type = 'button';
+          run.textContent = 'Probar';
+          run.addEventListener('click', () => execute(route));
+          actions.append(run);
+        }
+        if (route.method !== 'DOC') {
+          const copy = document.createElement('button');
+          copy.className = 'ghost';
+          copy.type = 'button';
+          copy.textContent = 'Copiar cURL';
+          copy.addEventListener('click', async () => {
+            const values = fieldValues(route);
+            await copyText(curl(route, values), copy, 'Copiar cURL');
+          });
+          actions.append(copy);
+        }
+        if (route.open) {
+          const a = document.createElement('a');
+          a.className = 'ghost';
+          a.dataset.open = '1';
+          a.target = '_blank';
+          a.rel = 'noreferrer';
+          a.textContent = 'Abrir';
+          a.href = buildPath(route, fieldValues(route));
+          actions.append(a);
+        }
+        if (actions.childNodes.length) detailEl.append(actions);
+
+        if (route.returns) {
+          const note = document.createElement('p');
+          note.className = 'note';
+          note.textContent = 'Respuesta: ' + route.returns;
+          detailEl.append(note);
+        }
+
+        if (route.try || route.id === 'health') {
+          const box = document.createElement('div');
+          box.className = 'console';
+          const bar = document.createElement('div');
+          bar.className = 'console-bar';
+          const lights = document.createElement('span');
+          lights.className = 'lights';
+          lights.innerHTML = '<i></i><i></i><i></i>';
+          const meta = document.createElement('span');
+          meta.id = 'console-meta';
+          meta.textContent = 'Listo para probar';
+          bar.append(lights, meta);
+          const pre = document.createElement('pre');
+          pre.id = 'console-out';
+          pre.textContent = route.try
+            ? 'Pulsa Probar para ver la respuesta de esta ruta.'
+            : '';
+          box.append(bar, pre);
+          detailEl.append(box);
+        }
+      }
+
+      async function execute(route) {
+        const values = fieldValues(route);
+        const missing = (route.params || []).find((p) => !(values[p.key] || p.sample));
+        const out = document.getElementById('console-out');
+        const meta = document.getElementById('console-meta');
+        const lights = detailEl.querySelector('.lights');
+        if (missing) {
+          out.textContent = 'Falta ' + missing.label.toLowerCase() + '.';
+          meta.textContent = 'Incompleto';
+          meta.className = 'status-bad';
+          return;
+        }
+        const path = buildPath(route, values);
+        meta.className = '';
+        meta.textContent = 'Consultando…';
+        lights.classList.add('go');
+        const headers = {};
+        if (route.auth && tokenValue) headers.Authorization = 'Bearer ' + tokenValue;
+        const t0 = performance.now();
+        try {
+          const res = await fetch(path, { headers, cache: 'no-store' });
+          const ms = Math.round(performance.now() - t0);
+          const text = await res.text();
+          let shown = text;
+          try {
+            shown = JSON.stringify(JSON.parse(text), null, 2);
+          } catch (e) {
+            /* texto plano */
+          }
+          if (shown.length > 12000) {
+            shown = shown.slice(0, 12000) + '\n\n… recortado. La respuesta sigue en el servidor.';
+          }
+          out.textContent = shown || '(sin cuerpo)';
+          meta.textContent = res.status + ' · ' + ms + ' ms';
+          meta.className = res.ok ? 'status-ok' : 'status-bad';
+        } catch (err) {
+          out.textContent = 'No hubo respuesta.';
+          meta.textContent = 'Error de red';
+          meta.className = 'status-bad';
+        }
+      }
+
+      async function copyText(text, button, restore) {
+        try {
+          await navigator.clipboard.writeText(text);
+          button.textContent = 'Copiado';
+          setTimeout(() => { button.textContent = restore; }, 1400);
+        } catch (err) {
+          button.textContent = 'No se pudo copiar';
+          setTimeout(() => { button.textContent = restore; }, 1400);
+        }
+      }
+
+      function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('templa.theme', theme);
+        const dark = theme === 'dark';
+        document.getElementById('theme').setAttribute('aria-pressed', String(!dark));
+        document.getElementById('theme').setAttribute('aria-label', dark ? 'Usar tema claro' : 'Usar tema oscuro');
+        const color = document.querySelector('meta[name="theme-color"]');
+        if (color) color.setAttribute('content', dark ? '#0a0b10' : '#f6f7fb');
+      }
+
+      document.getElementById('theme').addEventListener('click', () => {
+        const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        applyTheme(next);
+      });
+      document.getElementById('copy-origin').addEventListener('click', (event) => {
+        copyText(location.origin, event.currentTarget, 'Copiar');
+      });
+      document.getElementById('refresh').addEventListener('click', loadHealth);
+      qEl.addEventListener('input', renderList);
+      detailEl.addEventListener('input', () => {
+        const route = ROUTES.find((r) => r.id === currentId);
+        const link = detailEl.querySelector('[data-open]');
+        if (route && link) link.href = buildPath(route, fieldValues(route));
+      });
+
+      document.getElementById('origin').textContent = location.origin;
+      applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+      renderChips();
+      const fromHash = location.hash.replace('#', '');
+      if (ROUTES.some((r) => r.id === fromHash)) currentId = fromHash;
+      select(currentId, true);
+      loadHealth();
+    </script>
   </body>
 </html>
